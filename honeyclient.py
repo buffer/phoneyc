@@ -122,6 +122,7 @@ function object() {
         this.appVersion = '';
         this.platform = 'Win32';
     }
+    this.open=function(url) { return; }
 }
 
 var window = new object();
