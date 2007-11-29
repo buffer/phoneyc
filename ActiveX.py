@@ -34,6 +34,7 @@ class ActiveX(object):
         self.clsname['kweditcontrol.kwedit.1'] = EnjoySAP()
         self.clsname['PPlayer.XPPlayer.1'] = PPlayer()
         self.clsname['IERPCTL.IERPCTL'] = RealPlayer()
+        self.clsname['IERPCTL.IERPCTL.1'] = RealPlayer()
 
         # set up the pure JScript version
         self.allobj = {}

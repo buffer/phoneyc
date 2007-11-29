@@ -138,6 +138,7 @@ var productVersion = '';
 navigator.appName="Microsoft Internet Explorer"
 navigator.appVersion="4.0 (compatible; MSIE 6.0; Windows NT 5.1)"
 navigator.userAgent="Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)"
+navigator.userLanguage = 'en-us';
 var self = new object();
 var productVersion = '';
 var clientInformation = new object()
