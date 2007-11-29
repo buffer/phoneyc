@@ -14,30 +14,6 @@ try:
 except ImportError:
     VBS_ENABLED = False
 
-# peacomm, and a lot of these are from metasploit
-CLSIDS = {'02BF25D5-8C17-4B23-BC80-D3488ABDDC6B': ('QuickTime', 'CVE-2007-0015'),
-          'A09AE68F-B14D-43ED-B713-BA413F034904': ('WinZip', 'CVE-2006-5198'),
-          'BD96C556-65A3-11D0-983A-00C04FC29E30': ('MDAC MS06-014', 'CVE-2006-0003'),
-          'BD96C556-65A3-11D0-983A-00C04FC29E36': ('RDS.Dataspace MS06-014', 'CVE-2006-0003'),
-          'AB9BCEDD-EC7E-47E1-9322-D4A210617116': ('Business Object Factory', 'CVE-NOMATCH'),
-          '0006F033-0000-0000-C000-000000000046': ('Outlook Data Object', 'CVE-NOMATCH'),
-          '0006F03A-0000-0000-C000-000000000046': ('Outlook.Application', 'CVE-NOMATCH'),
-          '6e32070a-766d-4ee6-879c-dc1fa91d2fc3': ('SoftwareDistribution.MicrosoftUpdateWebControl.1', 'CVE-NOMATCH'),
-          '6414512B-B978-451D-A0D8-FCFDF33E833C': ('SoftwareDistribution.WebControl.1', 'CVE-NOMATCH'),
-          '7F5B7F63-F06F-4331-8A26-339E03C0AE3D': ('WMIScriptUtils.WMIObjectBroker2.1', 'CVE-NOMATCH'),
-          '06723E09-F4C2-43c8-8358-09FCD1DB0766': ('VsmIDE.DTE', 'CVE-NOMATCH'),
-          '639F725F-1B2D-4831-A9FD-874847682010': ('DExplore.AppObj.8.0', 'CVE-NOMATCH'),
-          'BA018599-1DB3-44f9-83B4-461454C84BF8': ('VisualStudio.DTE.8.0', 'CVE-NOMATCH'),
-          'D0C07D56-7C69-43F1-B4A0-25F5A11FAB19': ('Microsoft.DbgClr.DTE.8.0', 'CVE-NOMATCH'),
-          'E8CCCDDF-CA28-496b-B050-6C07C962476B': ('VsaIDE.DTE', 'CVE-NOMATCH'),
-          '6DA9275C-64E5-42A1-879C-D90B5F0DC5B4': ('IE Cryptomathic ActiveX createPKCS10 Access', 'CVE-2006-1172'),
-          'D7A7D7C3-D47F-11D0-89D3-00A0C90833E6': ('Microsoft Multimedia Controls - ActiveX controls spline function', 'CVE-2006-4446'),
-          '7F5B7F63-F06F-4331-8A26-339E03C0AE3D': ('Microsoft WMIScriptUtils.WMIObjectBroker', 'CVE-2006-4704'),
-          '201EA564-A6F6-11D1-811D-00C04FB6BD36': ('Microsoft DXMedia SDK 6 "SourceUrl" ActiveX 0day', 'CVE-NOMATCH'), 
-          '7EC7B6C5-25BD-4586-A641-D2ACBB6629DD': ("Yahoo! Widgets Buffer Overflow in 'YDPCTL.dll'", 'CVE-2007-4034'),
-          '0DDF3C0B-E692-11D1-AB06-00AA00BDD685': ('Microsoft Visual Studio 6.0 PDWizard Arbitrary Command Exploit', 'CVE-2007-4891'),
-          '7EEA39E3-41D1-11D2-AB3B-00AA00BDD685': ('Microsoft Visual Studio 6.0 VB To VSI Support Library Arbitrary File Overwrite', 'CVE-2007-4890'),
-          'D45FD31B-5C6E-11D1-9EC1-00C04FD7081F': ("Microsoft Windows 2000 Agent URL Canonicalizing Stack Based Buffer Overflow", 'CVE-2007-3040') , }
 
 
 JS_DOCUMENT = """
@@ -359,12 +335,6 @@ class HttpHoneyClient(object):
         if err != '':
             if self.pages[url].js_run_cnt > 3: 
                 return out, err, h
-            out = out.replace('< script', '<script')
-            out = out.replace('< Script', '<script')
-            out = out.replace('< SCRIPT', '<script')
-            out = out.replace('< /sc', '</sc')
-            out = out.replace('< /SCRIPT', '</SCRIPT')
-            out = out.replace('< /Sc', '</sc')
             out, err, av = self.js_eval(url=url, html='%s\n%s' % (Page(out, '').contents, body))
         return out, err, h
 
@@ -400,22 +370,6 @@ class HttpHoneyClient(object):
         w.close()
         e.close()
         return out, err 
-
-    def extract_clsids(self, script_body):
-        """
-        look for what exploits this will launch
-        """
-        body = script_body.upper()
-        # restore some split string
-        body = re.sub('" *\+ *"', '', body)
-        body = re.sub("' *\+ *'", '', body)
-        keys = [ x.upper() for x in CLSIDS.keys() ]
-        clsids = []
-        for key, v in CLSIDS.iteritems():
-            key = key.upper()
-            if body.find(key) > -1:
-                if v not in clsids: clsids.append(v)
-        return clsids
 
 class Page(object):
     # use the self.url to handle relative path for script srcs
@@ -638,14 +592,7 @@ class PageParser(SGMLParser):
         if self.vbs_inScript: self.vbs_body.append(text)
 
 
-LINKS = ('http://plymouth:8081/download/55889/56834', 
-         'http://plymouth:8081/download/41133/41887',
-         'http://plymouth:8081/download/35121/35729',
-         'http://plymouth:8081/download/34107/34661',
-         'http://plymouth:8081/download/33649/34153',
-         'http://plymouth:8081/download/54982/55908',
-         'http://plymouth:8081/download/33123/33595', )
-
+LINKS = ('http://www.google.com/', )
 
 # basic tests, demo, etc
 if __name__ == '__main__':
