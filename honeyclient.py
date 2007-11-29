@@ -602,7 +602,7 @@ if __name__ == '__main__':
         try: hc.get(l)
         except: pass
     for l in LINKS:
-        print l
+        print '==>', l
         try: print 'JS EVAL', hc.js_eval(l)[0]
         except Exception: pass
         try: print 'VBS EVAL', hc.vbs_eval(l)[0]
@@ -610,6 +610,10 @@ if __name__ == '__main__':
         try: print 'IFRAMES', hc.pages[l].iframes
         except Exception: pass
         try: print 'HREFS', hc.pages[l].hrefs
+        except Exception: pass
+        try: print 'FRAMES', hc.pages[l].frames
+        except Exception: pass
+        try: print 'IMAGES', hc.pages[l].imgs
         except Exception: pass
 
         print '\n\n-----\n\n'
