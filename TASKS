@@ -6,3 +6,19 @@ requirements for 1.0
   + queue
   + results
 - finish up VB analysis
+
+
+
+DATABASE schema thoughts
+- use SQLObect so it's backend agnostic
+- Queue table
+  URL - string 
+  priority - int
+- URL table
+  URL - string
+- Aert table
+  url_id - ForeignKey(URL)
+  referrer - ForeignKey(URL)
+  source - string (ie 'clamav', 'vuln_module')
+  message - string (ie 'HTML.Exploit-Gen4')
+  timestame - TimeDateCol()
