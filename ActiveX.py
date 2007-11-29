@@ -174,7 +174,7 @@ class RealPlayer(ActiveX):
     def __init__(self):
         self.js_src = self.load_js_src('RealPlayer.js')
         self.classname = 'RealPlayer'
-        self.cve_id = ('CVE-NOMATCH', '')
+        self.cve_id = ('CVE-2007-5601', )
         self.description = 'RealMedia RealPlayer Ierpplug.DLL ActiveX Control'
 
 class YahooMessengerCyft(ActiveX):
