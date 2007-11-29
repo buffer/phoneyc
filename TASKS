@@ -2,11 +2,19 @@ requirements for 1.0
 - integrate libEmu for shellcode analysis
   + understand what the shellcode does, akin to nepenthes/mwcollect
 - be able to inspect spidermonkey variables (ie heapspray) from honeyclient
+  + will require better spidermonkey bindings
+  + will require spidermonkey instrumentation
+    + ie 'list all local variables', 'inspect variable FOO'
 - database integration
   + queue
   + results
 - finish up VB analysis
-
+  + make it on par with the JS detection
+  + vuln module support
+- more alerting modules
+  + snort
+  + heuristics (ie multiple decodes)
+  + shellcode detection via libEmu
 
 
 DATABASE schema thoughts
