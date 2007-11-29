@@ -1,0 +1,8 @@
+requirements for 1.0
+- integrate libEmu for shellcode analysis
+  + understand what the shellcode does, akin to nepenthes/mwcollect
+- be able to inspect spidermonkey variables (ie heapspray) from honeyclient
+- database integration
+  + queue
+  + results
+- finish up VB analysis
