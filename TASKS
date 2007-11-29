@@ -8,6 +8,11 @@ requirements for 1.0
 - database integration
   + queue
   + results
+- proxy integration
+  + Tor
+  + generic proxies
+- handle POSTs in <form /> stuff ..
+  + what data to submit?
 - finish up VB analysis
   + make it on par with the JS detection
   + vuln module support
