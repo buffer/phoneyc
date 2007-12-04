@@ -26,6 +26,7 @@ class ActiveX(object):
         self.clsid['6BE52E1D-E586-474F-A6E2-1A85A9B4D9FB'] = PPStream()
         self.clsid['FDC7A535-4070-4B92-A0EA-D9994BCC0DC5'] = RealPlayer()
         self.clsid['5D86DDB5-BDF9-441B-9E9E-D4730F4EE499'] = BitDefender()
+        self.clsid['E23FE9C6-778E-49D4-B537-38FCDE4887D8'] = VLC()
 
         self.clsname = {}
         self.clsname['WebViewFolderIcon.WebViewFolderIcon.1'] = WebViewFolderIcon()
@@ -189,4 +190,11 @@ class BitDefender(ActiveX):
         self.js_src = self.load_js_src('BitDefender.js')
         self.classname = 'BitDefender'
         self.cve_id = ('CVE-2007-5775', )
-        self.descriptin = 'BitDefender Online Scanner ActiveX Control'
+        self.description = 'BitDefender Online Scanner ActiveX Control'
+
+class VLC(ActiveX):
+    def __init__(self):
+        self.js_src = self.load_js_src('VLC.js')
+        self.classname = 'VLC'
+        self.cve_id = ('CVE-NOMATCH', )
+        self.description = 'VLC ActiveX Control'
