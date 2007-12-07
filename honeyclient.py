@@ -378,6 +378,7 @@ class Page(object):
     # use the self.url to handle relative path for script srcs
     # build, store, return js and vbs content
     def __init__(self, contents, url):
+        url = self.fixup(url)
         self.url = url
         self.baseurl = '/'.join(url.split('/')[:-1])  # for relative links
         self.site = '/'.join(url.split('/')[:3])      # for absolute URIs (not URLs)
@@ -441,6 +442,16 @@ class Page(object):
                 else: self.vbs_script_srcs.append('%s/%s' % (self.baseurl, i))
         self.links = self.hrefs + self.iframes + self.objects + self.imgs + self.frames
 
+    def fixup(self, url):
+        """
+        fixes a URL that may lack a required trailing slash. without it
+        we don't get proper relative URLs.
+        """
+        c = 0
+        for i in url:
+            if i == '/': c += 1
+        if c < 3: return '%s/' % url
+        else: return url
 
 class PageParser(SGMLParser):
     def reset(self):                              
@@ -521,6 +532,19 @@ class PageParser(SGMLParser):
     def end_a(self):
         pass
 
+    def start_meta(self, attrs):
+        for k, v in attrs:
+            if k.lower() == 'content' and 'url=' in v.lower():
+                url = v.split(';')
+                for u in url:
+                    if u.lower().startswith('url='):
+                        url = re.sub('URL=', '', u, re.IGNORECASE)
+                        url = url.replace('"', '')
+                        if url not in self.hrefs: self.hrefs.append(url)
+
+    def end_meta(self):
+        pass
+
     def start_img(self, attrs):
         for k, v in attrs:
             if k.lower() == 'src':
@@ -591,7 +615,6 @@ class PageParser(SGMLParser):
     def handle_data(self, text):           
         if self.js_inScript: self.js_body.append(text)
         if self.vbs_inScript: self.vbs_body.append(text)
-
 
 LINKS = ('http://www.google.com/', )
 
