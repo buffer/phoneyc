@@ -4,6 +4,7 @@
 # javascript: handler
 
 import md5, popen2, os, re, sets
+from sgmllib import SGMLParser, SGMLParseError
 import magic
 from ActiveX import *
 try:
@@ -312,7 +313,7 @@ class HttpHoneyClient(object):
                 raise Exception, 'No page in cache for %s' % url
         else:
             try: page = Page(html, '')
-            except sgmllib.SGMLParseError: page = Page('', '')
+            except SGMLParseError: page = Page('', '')
             self.pages[url].js_script_srcs.extend(page.js_script_srcs)
             body = page.js_body
 
@@ -440,8 +441,6 @@ class Page(object):
                 else: self.vbs_script_srcs.append('%s/%s' % (self.baseurl, i))
         self.links = self.hrefs + self.iframes + self.objects + self.imgs + self.frames
 
-
-from sgmllib import SGMLParser, SGMLParseError
 
 class PageParser(SGMLParser):
     def reset(self):                              
