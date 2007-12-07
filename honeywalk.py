@@ -1,12 +1,24 @@
 #!/usr/bin/env python
 
 from honeyclient import *
-import md5, popen2, sys, time
+import getopt, md5, popen2, sys, time
 
 hc = HttpHoneyClient()
 hc.ignore_domain('.google.com')
 hc.maxdepth = 4
 hc.cnt = 0
+hc.digraph = []
+
+def usage(progname):
+    usagestr = """%s [-d] url
+HoneyClient spider tool
+
+OPTIONS:
+    -d 		output a Graphviz directed graph
+		of URLs walked
+""" % progname
+    print usagestr
+    sys.exit(1)
 
 def scan(body):
     c = {'ClamAV': clamscan(body)}
@@ -34,6 +46,8 @@ def walk(hc, URL, referrer, visited, depth):
         depth[URL] = depth[referrer] + 1
     if depth[URL] > hc.maxdepth: return
     hc.cnt += 1
+    if referrer: hc.digraph.append('\t"%s" -> "%s";' % (referrer, URL))
+    else: hc.digraph.append('\t%s [shape=box, color=lightblue, style=filled];' % URL)
 
     print "===> %s " % URL,
     visited.append(URL)
@@ -66,15 +80,27 @@ def walk(hc, URL, referrer, visited, depth):
             if not hc.ignored(host):
                 walk(hc, url, URL, visited, depth)
 
-def main():
+def main(argv):
+    try: opts, args = getopt.getopt(argv[1:], 'dh')
+    except: usage(sys.argv[0])
+
+    do_dot = False
+    for o, a in opts:
+        if o == '-d': do_dot = True
+        else: usage(sys.argv[0])
+    url = args[0]
+
     start = time.time()
     print 'HoneyWalk started at %s UTC' % time.asctime(time.gmtime())
-    try: walk(hc, sys.argv[1], False, [], {sys.argv[1]: 0})
+    try: walk(hc, url, False, [], {url: 0})
     except KeyboardInterrupt: print ''
     end = time.time()
 
-    print 'walked %d URLs in %f seconds' % (hc.cnt, end-start)
+    if do_dot:
+        print 'walked %d URLs in %f seconds' % (hc.cnt, end-start)
+        print '\n\ndigraph "%s" {' % url
+        print '%s\n}' % '\n'.join(hc.digraph)
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv)
 
