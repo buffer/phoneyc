@@ -27,6 +27,7 @@ class ActiveX(object):
         self.clsid['FDC7A535-4070-4B92-A0EA-D9994BCC0DC5'] = RealPlayer()
         self.clsid['5D86DDB5-BDF9-441B-9E9E-D4730F4EE499'] = BitDefender()
         self.clsid['E23FE9C6-778E-49D4-B537-38FCDE4887D8'] = VLC()
+        self.clsid['62DDEB79-15B2-41E3-8834-D3B80493887A'] = HPInfo()
 
         self.clsname = {}
         self.clsname['WebViewFolderIcon.WebViewFolderIcon.1'] = WebViewFolderIcon()
@@ -36,6 +37,7 @@ class ActiveX(object):
         self.clsname['PPlayer.XPPlayer.1'] = PPlayer()
         self.clsname['IERPCTL.IERPCTL'] = RealPlayer()
         self.clsname['IERPCTL.IERPCTL.1'] = RealPlayer()
+        self.clsname['HPInfoDLL.HPInfo.1'] = HPInfo()
 
         # set up the pure JScript version
         self.allobj = {}
@@ -198,3 +200,10 @@ class VLC(ActiveX):
         self.classname = 'VLC'
         self.cve_id = ('CVE-NOMATCH', )
         self.description = 'VLC ActiveX Control'
+
+class HPInfo(ActiveX):
+    def __init__(self):
+        self.js_src = self.load_js_src('HPInfo.js')
+        self.classname = 'HPInfo'
+        self.cve_id = ('CVE-NOMATCH', )
+        self.description = 'HP Info Center ActiveX Control'
