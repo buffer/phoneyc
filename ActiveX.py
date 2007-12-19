@@ -28,6 +28,7 @@ class ActiveX(object):
         self.clsid['5D86DDB5-BDF9-441B-9E9E-D4730F4EE499'] = BitDefender()
         self.clsid['E23FE9C6-778E-49D4-B537-38FCDE4887D8'] = VLC()
         self.clsid['62DDEB79-15B2-41E3-8834-D3B80493887A'] = HPInfo()
+        self.clsid['7CB9D4F5-C492-42A4-93B1-3F7D6946470D'] = HPInfo()
 
         self.clsname = {}
         self.clsname['WebViewFolderIcon.WebViewFolderIcon.1'] = WebViewFolderIcon()
