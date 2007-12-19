@@ -11,6 +11,9 @@ function HPInfo() {
 	this.GetRegValue=function(key, section, keyname) {
 		add_alert("HP Info Center GetRegValue, reading: " + key + "/" + section + "/" + keyname);
 	}
+	this.EvaluateRules=function() {
+		return;
+	}
 	this.SaveToFile=function(path) {
 		add_alert("HP Software Update SaveToFile(), writes to " + path);
 	}
