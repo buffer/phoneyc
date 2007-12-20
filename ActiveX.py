@@ -39,6 +39,7 @@ class ActiveX(object):
         self.clsname['IERPCTL.IERPCTL'] = RealPlayer()
         self.clsname['IERPCTL.IERPCTL.1'] = RealPlayer()
         self.clsname['HPInfoDLL.HPInfo.1'] = HPInfo()
+        self.clsname['HPRulesEngine.ContentCollection.1'] = HPInfo()
 
         # set up the pure JScript version
         self.allobj = {}
