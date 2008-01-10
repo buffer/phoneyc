@@ -29,6 +29,7 @@ class ActiveX(object):
         self.clsid['E23FE9C6-778E-49D4-B537-38FCDE4887D8'] = VLC()
         self.clsid['62DDEB79-15B2-41E3-8834-D3B80493887A'] = HPInfo()
         self.clsid['7CB9D4F5-C492-42A4-93B1-3F7D6946470D'] = HPInfo()
+        self.clsid['A7CD2320-6117-11D7-8096-0050042A4CD2'] = MSVFP()
 
         self.clsname = {}
         self.clsname['WebViewFolderIcon.WebViewFolderIcon.1'] = WebViewFolderIcon()
@@ -209,3 +210,10 @@ class HPInfo(ActiveX):
         self.classname = 'HPInfo'
         self.cve_id = ('CVE-NOMATCH', )
         self.description = 'HP Info Center ActiveX Control'
+
+class MSVFP(ActiveX):
+    def __init__(self):
+        self.js_src = self.load_js_src('MSVFP.js')
+        self.classname = 'MSVFP'
+        self.cve_id = ('CVE-NOMATCH', )
+        self.description = 'Microsoft VFP_OLE_Server'
