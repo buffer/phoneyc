@@ -30,6 +30,8 @@ class ActiveX(object):
         self.clsid['62DDEB79-15B2-41E3-8834-D3B80493887A'] = HPInfo()
         self.clsid['7CB9D4F5-C492-42A4-93B1-3F7D6946470D'] = HPInfo()
         self.clsid['A7CD2320-6117-11D7-8096-0050042A4CD2'] = MSVFP()
+        self.clsid['3B7C8860-D78F-101B-B9B5-04021C009402'] = MSRICHTXT()
+        self.clsid['B617B991-A767-4F05-99BA-AC6FCABB102E'] = MSRICHTXT()
 
         self.clsname = {}
         self.clsname['WebViewFolderIcon.WebViewFolderIcon.1'] = WebViewFolderIcon()
@@ -217,3 +219,10 @@ class MSVFP(ActiveX):
         self.classname = 'MSVFP'
         self.cve_id = ('CVE-NOMATCH', )
         self.description = 'Microsoft VFP_OLE_Server'
+
+class MSRICHTXT(ActiveX):
+    def __init__(self):
+        self.js_src = self.load_js_src('MSRICHTXT.js')
+        self.classname = 'MSRICHTXT'
+        self.cve_id = ('CVE-NOMATCH', )
+        self.description = 'Microsoft Rich Textbox Control 6.0 (SP6)'
