@@ -572,7 +572,7 @@ class PageParser(SGMLParser):
                 elif self.vbs_inScript:
                     if v not in self.vbs_script_srcs: self.vbs_script_srcs.append(v)
         # force a newline before the next script body
-        self.js_body.append('\n')
+        self.js_body.append(';\n')
         self.vbs_body.append('\n')
         # when in a script body, set literal to be True. this is because
         # SGML parsers will intercept things like foo<bar and '<v:rect' 
