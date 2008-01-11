@@ -32,6 +32,7 @@ class ActiveX(object):
         self.clsid['A7CD2320-6117-11D7-8096-0050042A4CD2'] = MSVFP()
         self.clsid['3B7C8860-D78F-101B-B9B5-04021C009402'] = MSRICHTXT()
         self.clsid['B617B991-A767-4F05-99BA-AC6FCABB102E'] = MSRICHTXT()
+        self.clsid['77829F14-D911-40FF-A2F0-D11DB8D6D0BC'] = NCTAudioFile2()
 
         self.clsname = {}
         self.clsname['WebViewFolderIcon.WebViewFolderIcon.1'] = WebViewFolderIcon()
@@ -43,6 +44,7 @@ class ActiveX(object):
         self.clsname['IERPCTL.IERPCTL.1'] = RealPlayer()
         self.clsname['HPInfoDLL.HPInfo.1'] = HPInfo()
         self.clsname['HPRulesEngine.ContentCollection.1'] = HPInfo()
+        self.clsname['NCTAudioFile2.AudioFile.1'] = NCTAudioFile2()
 
         # set up the pure JScript version
         self.allobj = {}
@@ -226,3 +228,10 @@ class MSRICHTXT(ActiveX):
         self.classname = 'MSRICHTXT'
         self.cve_id = ('CVE-NOMATCH', )
         self.description = 'Microsoft Rich Textbox Control 6.0 (SP6)'
+
+class NCTAudioFile2(ActiveX):
+    def __init__(self):
+        self.js_src = self.load_js_src('NCTAudioFile2.js')
+        self.classname = 'NCTAudioFile2'
+        self.cve_id = ('CVE-2007-0018', )
+        self.description = 'NCTsoft Products NCTAudioFile2 ActiveX Control'
