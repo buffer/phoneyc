@@ -36,6 +36,7 @@ class ActiveX(object):
         self.clsid['2253F320-AB68-4A07-917D-4F12D8884A06'] = StreamAudioChainCast()
         self.clsid['93CEA8A4-6059-4E0B-ADDD-73848153DD5E'] = GatewayWeblaunch()
         self.clsid['D64CF6D4-45DF-4D8F-9F14-E65FADF2777C'] = DVRHOSTWeb()
+        self.clsid['D050D736-2D21-4723-AD58-5B541FFB6C11'] = DivX()
 
         self.clsname = {}
         self.clsname['WebViewFolderIcon.WebViewFolderIcon.1'] = WebViewFolderIcon()
@@ -261,3 +262,10 @@ class DVRHOSTWeb(ActiveX):
         self.classname = 'DVRHOSTWeb'
         self.cve_id = ('CVE-NOMATCH', )
         self.description = 'DVRHOST Web CMS ActiveX Control'
+
+class DivX(ActiveX):
+    def __init__(self):
+        self.js_src = self.load_js_src('DivX.js')
+        self.classname = 'DivX'
+        self.cve_id = ('CVE-NOMATCH', )
+        self.description = 'DivX Player 6.6.0 ActiveX Control'
