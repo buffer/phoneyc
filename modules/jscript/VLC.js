@@ -1,5 +1,5 @@
 // VLC Activex Control
-// CVE-NOMATCH
+// CVE-2007-4619, CVE-2007-6262
 
 function VLC() {
 	this.getVariable=function(arg) {

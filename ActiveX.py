@@ -217,7 +217,7 @@ class VLC(ActiveX):
     def __init__(self):
         self.js_src = self.load_js_src('VLC.js')
         self.classname = 'VLC'
-        self.cve_id = ('CVE-NOMATCH', )
+        self.cve_id = ('CVE-2007-4619', 'CVE-2007-6262', )
         self.description = 'VLC ActiveX Control'
 
 class HPInfo(ActiveX):
