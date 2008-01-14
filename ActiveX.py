@@ -34,6 +34,7 @@ class ActiveX(object):
         self.clsid['B617B991-A767-4F05-99BA-AC6FCABB102E'] = MSRICHTXT()
         self.clsid['77829F14-D911-40FF-A2F0-D11DB8D6D0BC'] = NCTAudioFile2()
         self.clsid['2253F320-AB68-4A07-917D-4F12D8884A06'] = StreamAudioChainCast()
+        self.clsid['93CEA8A4-6059-4E0B-ADDD-73848153DD5E'] = GatewayWeblaunch()
 
         self.clsname = {}
         self.clsname['WebViewFolderIcon.WebViewFolderIcon.1'] = WebViewFolderIcon()
@@ -244,3 +245,10 @@ class StreamAudioChainCast(ActiveX):
         self.classname = 'StreamAudioChainCast'
         self.cve_id = ('CVE-NOMATCH', )
         self.description = 'StreamAudio ChainCast VMR Client Proxy ActiveX Control 3.x'
+
+class GatewayWeblaunch(ActiveX):
+    def __init__(self):
+        self.js_src = self.load_js_src('GatewayWeblaunch.js')
+        self.classname = 'GatewayWeblaunch'
+        self.cve_id = ('CVE-NOMATCH', )
+        self.description = 'Gateway Weblaunch ActiveX Control'
