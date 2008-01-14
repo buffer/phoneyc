@@ -496,7 +496,7 @@ class PageParser(SGMLParser):
         lang = False
         for k, v in attrs:
             if k.lower() == 'onclick':
-                if v not in self.onload: onload = v
+                if v not in self.onload: self.onload += v
             if k.lower() == 'language':
                 VBS_TYPES = [ x.lower() for x in ('VBS', 'VBScript', 'VisualBasic') ]
                 if v.lower() in VBS_TYPES: lang = 'VB'
@@ -526,8 +526,12 @@ class PageParser(SGMLParser):
 	
     def start_a(self, attrs):
         for k, v in attrs:
+            print k
 	    if k.lower() == 'href':
 	        if v not in self.hrefs: self.hrefs.append(v)
+            if k.lower() == 'onclick':
+                print 'ONCLICK FOUND'
+                if v not in self.onload: self.onload += '%s;' % v
 				
     def end_a(self):
         pass
