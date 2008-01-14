@@ -33,6 +33,7 @@ class ActiveX(object):
         self.clsid['3B7C8860-D78F-101B-B9B5-04021C009402'] = MSRICHTXT()
         self.clsid['B617B991-A767-4F05-99BA-AC6FCABB102E'] = MSRICHTXT()
         self.clsid['77829F14-D911-40FF-A2F0-D11DB8D6D0BC'] = NCTAudioFile2()
+        self.clsid['2253F320-AB68-4A07-917D-4F12D8884A06'] = StreamAudioChainCast()
 
         self.clsname = {}
         self.clsname['WebViewFolderIcon.WebViewFolderIcon.1'] = WebViewFolderIcon()
@@ -45,6 +46,7 @@ class ActiveX(object):
         self.clsname['HPInfoDLL.HPInfo.1'] = HPInfo()
         self.clsname['HPRulesEngine.ContentCollection.1'] = HPInfo()
         self.clsname['NCTAudioFile2.AudioFile.1'] = NCTAudioFile2()
+        self.clsname['Ccpm.ProxyManager.1'] = StreamAudioChainCast()
 
         # set up the pure JScript version
         self.allobj = {}
@@ -235,3 +237,10 @@ class NCTAudioFile2(ActiveX):
         self.classname = 'NCTAudioFile2'
         self.cve_id = ('CVE-2007-0018', )
         self.description = 'NCTsoft Products NCTAudioFile2 ActiveX Control'
+
+class StreamAudioChainCast(ActiveX):
+    def __init__(self):
+        self.js_src = self.load_js_src('StreamAudioChainCast.js')
+        self.classname = 'StreamAudioChainCast'
+        self.cve_id = ('CVE-NOMATCH', )
+        self.description = 'StreamAudio ChainCast VMR Client Proxy ActiveX Control 3.x'
