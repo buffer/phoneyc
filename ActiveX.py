@@ -45,6 +45,9 @@ class ActiveX(object):
 	self.clsid['C1908682-7B2C-4AB0-B98E-183649A0BF84'] = AnswerWorks()
 	self.clsid['B49C4597-8721-4789-9250-315DFBD9F525'] = AolAmpX()
 	self.clsid['FA3662C3-B8E8-11D6-A667-0010B556D978'] = AolAmpX()
+	self.clsid['FCED4482-7CCB-4E6F-86C9-DCB22B52843C'] = MacrovisionFlexNet()
+	self.clsid['85A4A99C-8C3D-499E-A386-E0743DFF8FB7'] = MacrovisionFlexNet()
+	self.clsid['E9880553-B8A7-4960-A668-95C68BED571E'] = MacrovisionFlexNet()
 
         self.clsname = {}
         self.clsname['WebViewFolderIcon.WebViewFolderIcon.1'] = WebViewFolderIcon()
@@ -314,3 +317,10 @@ class AolAmpX(ActiveX):
 	self.classname = 'AolAmpX'
 	self.cve_id = ('CVE-2007-6250', )
 	self.description = 'AOL Radio AOLMediaPlaybackControl.exe'
+
+class MacrovisionFlexNet(ActiveX):
+    def __init__(self):
+	self.js_src = self.load_js_src('MacrovisionFlexNet.js')
+	self.classname = 'MacrovisionFlexNet'
+	self.cve_id = ('CVE-2007-2419', 'CVE-2007-5660', 'CVE-2007-6654', 'CVE-2007-0321', 'CVE-2007-0328', )
+	self.description = 'Macrovision FLEXnet Connect ActiveX Control'
