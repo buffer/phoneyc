@@ -41,6 +41,7 @@ class ActiveX(object):
 	self.clsid['E008A543-CEFB-4559-912F-C27C2B89F13B'] = Domino()
 	self.clsid['3BFFE033-BF43-11d5-A271-00A024A51325'] = Domino()
 	self.clsid['983A9C21-8207-4B58-BBB8-0EBC3D7C5505'] = Domino()
+	self.clsid['E87F6C8E-16C0-11D3-BEF7-009027438003'] = XUpload()
 
         self.clsname = {}
         self.clsname['WebViewFolderIcon.WebViewFolderIcon.1'] = WebViewFolderIcon()
@@ -288,4 +289,11 @@ class Domino(ActiveX):
 	self.classname = 'Domino'
 	self.cve_id = ('CVE-2007-4474', )
 	self.description = 'IBM Lotus Domino Web Access Control ActiveX Control'
+    
+class XUpload(ActiveX):
+    def __init__(self):
+	self.js_src = self.load_js_src('XUpload.js')
+	self.classname = 'XUpload'
+	self.cve_id = ('CVE-2007-6530', )
+	self.description = 'Persits Software XUpload 2.1.0.1'
     
