@@ -37,6 +37,7 @@ class ActiveX(object):
         self.clsid['93CEA8A4-6059-4E0B-ADDD-73848153DD5E'] = GatewayWeblaunch()
         self.clsid['D64CF6D4-45DF-4D8F-9F14-E65FADF2777C'] = DVRHOSTWeb()
         self.clsid['D050D736-2D21-4723-AD58-5B541FFB6C11'] = DivX()
+	self.clsid['7C3B01BC-53A5-48A0-A43B-0C67731134B9'] = IMWebControl()
 
         self.clsname = {}
         self.clsname['WebViewFolderIcon.WebViewFolderIcon.1'] = WebViewFolderIcon()
@@ -51,6 +52,7 @@ class ActiveX(object):
         self.clsname['NCTAudioFile2.AudioFile.1'] = NCTAudioFile2()
         self.clsname['Ccpm.ProxyManager.1'] = StreamAudioChainCast()
         self.clsname['PdvrAtl.PdvrOcx.1'] = DVRHOSTWeb()
+	self.clsname['IMWeb.IMWebControl.1'] = IMWebControl()
 
         # set up the pure JScript version
         self.allobj = {}
@@ -269,3 +271,10 @@ class DivX(ActiveX):
         self.classname = 'DivX'
         self.cve_id = ('CVE-NOMATCH', )
         self.description = 'DivX Player 6.6.0 ActiveX Control'
+
+class IMWebControl(ActiveX):
+    def __init__(self):
+	self.js_src = self.load_js_src('IMWebControl.js')
+	self.classname = 'IMWebControl'
+	self.cve_id = ('CVE-2007-6493', 'CVE-2007-6492')
+	self.description = 'iMesh 7.x ActiveX control'
