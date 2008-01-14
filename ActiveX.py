@@ -38,6 +38,9 @@ class ActiveX(object):
         self.clsid['D64CF6D4-45DF-4D8F-9F14-E65FADF2777C'] = DVRHOSTWeb()
         self.clsid['D050D736-2D21-4723-AD58-5B541FFB6C11'] = DivX()
 	self.clsid['7C3B01BC-53A5-48A0-A43B-0C67731134B9'] = IMWebControl()
+	self.clsid['E008A543-CEFB-4559-912F-C27C2B89F13B'] = Domino()
+	self.clsid['3BFFE033-BF43-11d5-A271-00A024A51325'] = Domino()
+	self.clsid['983A9C21-8207-4B58-BBB8-0EBC3D7C5505'] = Domino()
 
         self.clsname = {}
         self.clsname['WebViewFolderIcon.WebViewFolderIcon.1'] = WebViewFolderIcon()
@@ -278,3 +281,11 @@ class IMWebControl(ActiveX):
 	self.classname = 'IMWebControl'
 	self.cve_id = ('CVE-2007-6493', 'CVE-2007-6492')
 	self.description = 'iMesh 7.x ActiveX control'
+
+class Domino(ActiveX):
+    def __init__(self):
+	self.js_src = self.load_js_src('Domino.js')
+	self.classname = 'Domino'
+	self.cve_id = ('CVE-2007-4474', )
+	self.description = 'IBM Lotus Domino Web Access Control ActiveX Control'
+    
