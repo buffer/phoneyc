@@ -42,6 +42,7 @@ class ActiveX(object):
 	self.clsid['3BFFE033-BF43-11d5-A271-00A024A51325'] = Domino()
 	self.clsid['983A9C21-8207-4B58-BBB8-0EBC3D7C5505'] = Domino()
 	self.clsid['E87F6C8E-16C0-11D3-BEF7-009027438003'] = XUpload()
+	self.clsid['C1908682-7B2C-4AB0-B98E-183649A0BF84'] = AnswerWorks()
 
         self.clsname = {}
         self.clsname['WebViewFolderIcon.WebViewFolderIcon.1'] = WebViewFolderIcon()
@@ -57,6 +58,7 @@ class ActiveX(object):
         self.clsname['Ccpm.ProxyManager.1'] = StreamAudioChainCast()
         self.clsname['PdvrAtl.PdvrOcx.1'] = DVRHOSTWeb()
 	self.clsname['IMWeb.IMWebControl.1'] = IMWebControl()
+	self.clsname['awApi4.AnswerWorks.1'] = AnswerWorks()
 
         # set up the pure JScript version
         self.allobj = {}
@@ -296,4 +298,10 @@ class XUpload(ActiveX):
 	self.classname = 'XUpload'
 	self.cve_id = ('CVE-2007-6530', )
 	self.description = 'Persits Software XUpload 2.1.0.1'
-    
+
+class AnswerWorks(ActiveX):
+    def __init__(self):
+	self.js_src = self.load_js_src('AnswerWorks.js')
+	self.classname = 'AnswerWorks'
+	self.cve_id = ('CVE-2007-6387', )
+	self.description = 'Vantage Linguistics AnswerWorks ActiveX Controls'
