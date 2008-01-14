@@ -43,6 +43,8 @@ class ActiveX(object):
 	self.clsid['983A9C21-8207-4B58-BBB8-0EBC3D7C5505'] = Domino()
 	self.clsid['E87F6C8E-16C0-11D3-BEF7-009027438003'] = XUpload()
 	self.clsid['C1908682-7B2C-4AB0-B98E-183649A0BF84'] = AnswerWorks()
+	self.clsid['B49C4597-8721-4789-9250-315DFBD9F525'] = AolAmpX()
+	self.clsid['FA3662C3-B8E8-11D6-A667-0010B556D978'] = AolAmpX()
 
         self.clsname = {}
         self.clsname['WebViewFolderIcon.WebViewFolderIcon.1'] = WebViewFolderIcon()
@@ -305,3 +307,10 @@ class AnswerWorks(ActiveX):
 	self.classname = 'AnswerWorks'
 	self.cve_id = ('CVE-2007-6387', )
 	self.description = 'Vantage Linguistics AnswerWorks ActiveX Controls'
+
+class AolAmpX(ActiveX):
+    def __init__(self):
+	self.js_src = self.load_js_src('AolAmpX.js')
+	self.classname = 'AolAmpX'
+	self.cve_id = ('CVE-2007-6250', )
+	self.description = 'AOL Radio AOLMediaPlaybackControl.exe'
