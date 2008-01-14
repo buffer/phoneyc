@@ -526,11 +526,9 @@ class PageParser(SGMLParser):
 	
     def start_a(self, attrs):
         for k, v in attrs:
-            print k
 	    if k.lower() == 'href':
 	        if v not in self.hrefs: self.hrefs.append(v)
             if k.lower() == 'onclick':
-                print 'ONCLICK FOUND'
                 if v not in self.onload: self.onload += '%s;' % v
 				
     def end_a(self):
