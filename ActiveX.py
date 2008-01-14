@@ -224,7 +224,7 @@ class HPInfo(ActiveX):
     def __init__(self):
         self.js_src = self.load_js_src('HPInfo.js')
         self.classname = 'HPInfo'
-        self.cve_id = ('CVE-2007-6506', )
+        self.cve_id = ('CVE-2007-6506', 'CVE-2007-6331', 'CVE-2007-6332', 'CVE-2007-6333', )
         self.description = 'HP Info Center ActiveX Control'
 
 class MSVFP(ActiveX):

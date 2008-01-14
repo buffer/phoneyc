@@ -1,5 +1,5 @@
 // HP Info Center ActiveX Control
-// CVE-NOMATCH
+// CVE-2007-6331, CVE-2007-6332, CVE-2007-6333
 
 function HPInfo() {
 	this.LaunchApp=function(prog, args, unk) {
