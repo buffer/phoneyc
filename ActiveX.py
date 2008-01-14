@@ -35,6 +35,7 @@ class ActiveX(object):
         self.clsid['77829F14-D911-40FF-A2F0-D11DB8D6D0BC'] = NCTAudioFile2()
         self.clsid['2253F320-AB68-4A07-917D-4F12D8884A06'] = StreamAudioChainCast()
         self.clsid['93CEA8A4-6059-4E0B-ADDD-73848153DD5E'] = GatewayWeblaunch()
+        self.clsid['D64CF6D4-45DF-4D8F-9F14-E65FADF2777C'] = DVRHOSTWeb()
 
         self.clsname = {}
         self.clsname['WebViewFolderIcon.WebViewFolderIcon.1'] = WebViewFolderIcon()
@@ -48,6 +49,7 @@ class ActiveX(object):
         self.clsname['HPRulesEngine.ContentCollection.1'] = HPInfo()
         self.clsname['NCTAudioFile2.AudioFile.1'] = NCTAudioFile2()
         self.clsname['Ccpm.ProxyManager.1'] = StreamAudioChainCast()
+        self.clsname['PdvrAtl.PdvrOcx.1'] = DVRHOSTWeb()
 
         # set up the pure JScript version
         self.allobj = {}
@@ -252,3 +254,10 @@ class GatewayWeblaunch(ActiveX):
         self.classname = 'GatewayWeblaunch'
         self.cve_id = ('CVE-NOMATCH', )
         self.description = 'Gateway Weblaunch ActiveX Control'
+
+class DVRHOSTWeb(ActiveX):
+    def __init__(self):
+        self.js_src = self.load_js_src('DVRHOSTWeb.js')
+        self.classname = 'DVRHOSTWeb'
+        self.cve_id = ('CVE-NOMATCH', )
+        self.description = 'DVRHOST Web CMS ActiveX Control'
