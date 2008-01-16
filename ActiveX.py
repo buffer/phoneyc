@@ -48,6 +48,7 @@ class ActiveX(object):
 	self.clsid['FCED4482-7CCB-4E6F-86C9-DCB22B52843C'] = MacrovisionFlexNet()
 	self.clsid['85A4A99C-8C3D-499E-A386-E0743DFF8FB7'] = MacrovisionFlexNet()
 	self.clsid['E9880553-B8A7-4960-A668-95C68BED571E'] = MacrovisionFlexNet()
+	self.clsid['A86934DA-C3D6-4C1C-BD83-CA4F14B362DE'] = PTZCamPanel()
 
         self.clsname = {}
         self.clsname['WebViewFolderIcon.WebViewFolderIcon.1'] = WebViewFolderIcon()
@@ -324,3 +325,11 @@ class MacrovisionFlexNet(ActiveX):
 	self.classname = 'MacrovisionFlexNet'
 	self.cve_id = ('CVE-2007-2419', 'CVE-2007-5660', 'CVE-2007-6654', 'CVE-2007-0321', 'CVE-2007-0328', )
 	self.description = 'Macrovision FLEXnet Connect ActiveX Control'
+
+class PTZCamPanel(ActiveX):
+    def __init__(self):
+        self.js_src = self.load_js_src('PTZCamPanel.js')
+        self.classname = 'PTZCamPanel'
+        self.cve_id = ('CVE-NOMATCH', )
+        self.description = 'RTS Sentry Digital Surveillance PTZCamPanel Class'
+
