@@ -65,6 +65,7 @@ class ActiveX(object):
         self.clsname['PdvrAtl.PdvrOcx.1'] = DVRHOSTWeb()
 	self.clsname['IMWeb.IMWebControl.1'] = IMWebControl()
 	self.clsname['awApi4.AnswerWorks.1'] = AnswerWorks()
+	self.clsname['QvodInsert.QvodCtrl.1'] = QvodCtrl()
 
         # set up the pure JScript version
         self.allobj = {}
@@ -332,4 +333,11 @@ class PTZCamPanel(ActiveX):
         self.classname = 'PTZCamPanel'
         self.cve_id = ('CVE-NOMATCH', )
         self.description = 'RTS Sentry Digital Surveillance PTZCamPanel Class'
+
+class QvodCtrl(ActiveX):
+    def __init__(self):
+        self.js_src = self.load_js_src('QvodCtrl.js')
+        self.classname = 'QvodCtrl'
+        self.cve_id = ('CVE-NOMATCH', )
+        self.description = 'Qvod Player QvodCtrl Class ActiveX Control'
 
