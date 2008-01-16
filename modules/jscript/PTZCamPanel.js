@@ -2,7 +2,7 @@
 // CVE-NOMATCH
 
 function PTZCamPanel() {
-    this.ConnectServer=function(server, iser) {
+    this.ConnectServer=function(server, user) {
 	if (user.length > 1024) {
 	    add_alert('PTZCamPanel ConnectServer() overflow in user arg');
 	}
