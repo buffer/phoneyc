@@ -602,6 +602,7 @@ class PageParser(SGMLParser):
                     obj_id = False
                     for i, j in attrs:
                         if i == 'id': obj_id = j
+			if i == 'name': obj_id = j
                     obj = self.a.get_obj_by_clsid(v)
                     if not obj: 
                         print 'UNKNOWN CLSID: %s' % v

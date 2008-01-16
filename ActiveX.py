@@ -49,6 +49,7 @@ class ActiveX(object):
 	self.clsid['85A4A99C-8C3D-499E-A386-E0743DFF8FB7'] = MacrovisionFlexNet()
 	self.clsid['E9880553-B8A7-4960-A668-95C68BED571E'] = MacrovisionFlexNet()
 	self.clsid['A86934DA-C3D6-4C1C-BD83-CA4F14B362DE'] = PTZCamPanel()
+	self.clsid['F3D0D36F-23F8-4682-A195-74C92B03D4AF'] = QvodCtrl()
 
         self.clsname = {}
         self.clsname['WebViewFolderIcon.WebViewFolderIcon.1'] = WebViewFolderIcon()
