@@ -50,6 +50,7 @@ class ActiveX(object):
 	self.clsid['E9880553-B8A7-4960-A668-95C68BED571E'] = MacrovisionFlexNet()
 	self.clsid['A86934DA-C3D6-4C1C-BD83-CA4F14B362DE'] = PTZCamPanel()
 	self.clsid['F3D0D36F-23F8-4682-A195-74C92B03D4AF'] = QvodCtrl()
+	self.clsid['361E6B79-4A69-4376-B0F2-3D1EBEE9D7E2'] = RtspVaPgCtrl()
 
         self.clsname = {}
         self.clsname['WebViewFolderIcon.WebViewFolderIcon.1'] = WebViewFolderIcon()
@@ -67,6 +68,7 @@ class ActiveX(object):
 	self.clsname['IMWeb.IMWebControl.1'] = IMWebControl()
 	self.clsname['awApi4.AnswerWorks.1'] = AnswerWorks()
 	self.clsname['QvodInsert.QvodCtrl.1'] = QvodCtrl()
+	self.clsname['RtspVaPgDecoder.RtspVaPgCtrl.1'] = RtspVaPgCtrl()
 
         # set up the pure JScript version
         self.allobj = {}
@@ -341,4 +343,11 @@ class QvodCtrl(ActiveX):
         self.classname = 'QvodCtrl'
         self.cve_id = ('CVE-NOMATCH', )
         self.description = 'Qvod Player QvodCtrl Class ActiveX Control'
+
+class RtspVaPgCtrl(ActiveX):
+    def __init__(self):
+        self.js_src = self.load_js_src('RtspVaPgCtrl.js')
+        self.classname = 'RtspVaPgCtrl'
+        self.cve_id = ('CVE-NOMATCH', )
+        self.description = 'RTSP MPEG4 SP Control'
 
