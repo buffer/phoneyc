@@ -52,6 +52,7 @@ class ActiveX(object):
 	self.clsid['A86934DA-C3D6-4C1C-BD83-CA4F14B362DE'] = PTZCamPanel()
 	self.clsid['F3D0D36F-23F8-4682-A195-74C92B03D4AF'] = QvodCtrl()
 	self.clsid['361E6B79-4A69-4376-B0F2-3D1EBEE9D7E2'] = RtspVaPgCtrl()
+	self.clsid['AD315309-EA00-45AE-9E8E-B6A61CE6B974'] = Toshiba()
 
         self.clsname = {}
         self.clsname['WebViewFolderIcon.WebViewFolderIcon.1'] = WebViewFolderIcon()
@@ -70,6 +71,7 @@ class ActiveX(object):
 	self.clsname['awApi4.AnswerWorks.1'] = AnswerWorks()
 	self.clsname['QvodInsert.QvodCtrl.1'] = QvodCtrl()
 	self.clsname['RtspVaPgDecoder.RtspVaPgCtrl.1'] = RtspVaPgCtrl()
+	self.clsname['MeIpCamX.RecordSend.1'] = Toshiba()
 
         # set up the pure JScript version
         self.allobj = {}
@@ -351,4 +353,11 @@ class RtspVaPgCtrl(ActiveX):
         self.classname = 'RtspVaPgCtrl'
         self.cve_id = ('CVE-NOMATCH', )
         self.description = 'RTSP MPEG4 SP Control'
+
+class Toshiba(ActiveX):
+    def __init__(self):
+        self.js_src = self.load_js_src('Toshiba.js')
+        self.classname = 'Toshiba'
+        self.cve_id = ('CVE-NOMATCH', )
+        self.description = 'Toshiba Surveillance (Surveillix) RecordSend Class (MeIpCamX.DLL 1.0.0.4)'
 
