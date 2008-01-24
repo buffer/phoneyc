@@ -54,6 +54,7 @@ class ActiveX(object):
 	self.clsid['361E6B79-4A69-4376-B0F2-3D1EBEE9D7E2'] = RtspVaPgCtrl()
 	self.clsid['AD315309-EA00-45AE-9E8E-B6A61CE6B974'] = Toshiba()
 	self.clsid['C36112BF-2FA3-4694-8603-3B510EA3B465'] = FileUploader()
+	self.clsid['DC07C721-79E0-4BD4-A89F-C90871946A31'] = GomWeb()
 
         self.clsname = {}
         self.clsname['WebViewFolderIcon.WebViewFolderIcon.1'] = WebViewFolderIcon()
@@ -74,6 +75,7 @@ class ActiveX(object):
 	self.clsname['RtspVaPgDecoder.RtspVaPgCtrl.1'] = RtspVaPgCtrl()
 	self.clsname['MeIpCamX.RecordSend.1'] = Toshiba()
 	self.clsname['FileUploader.FUploadCtl.1'] = FileUploader()
+	self.clsname['GomWebCtrl.GomManager.1'] = GomWeb()
 
         # set up the pure JScript version
         self.allobj = {}
@@ -369,4 +371,11 @@ class FileUploader(ActiveX):
         self.classname = 'FileUploader'
         self.cve_id = ('CVE-NOMATCH', )
         self.description = 'Lycos FileUploader Module 2.x'
+
+class GomWeb(ActiveX):
+    def __init__(self):
+        self.js_src = self.load_js_src('GomWeb.js')
+        self.classname = 'GomWeb'
+        self.cve_id = ('CVE-2007-5779', )
+        self.description = 'Gretech GOM Player GomWeb3.DLL'
 
