@@ -62,6 +62,7 @@ class ActiveX(object):
 	self.clsid['5C6698D9-7BE4-4122-8EC5-291D84DBD4A0'] = FacebookPhotoUploader()
 	self.clsid['BA162249-F2C5-4851-8ADC-FC58CB424243'] = FacebookPhotoUploader()
 	self.clsid['AF465549-1D22-4140-A273-386FA8877E0A'] = NamoInstaller()
+	self.clsid['309F674D-E4D3-46BD-B9E2-ED7DFD7FD176'] = Comodo()
 
         self.clsname = {}
         self.clsname['WebViewFolderIcon.WebViewFolderIcon.1'] = WebViewFolderIcon()
@@ -415,4 +416,12 @@ class NamoInstaller(ActiveX):
         self.classname = 'NamoInstaller'
         self.cve_id = ('CVE-NOMATCH', )
         self.description = 'NamoInstaller ActiveX Control 1.x-3.x'
+
+class Comodo(ActiveX):
+    def __init__(self):
+        self.js_src = self.load_js_src('Comodo.js')
+        self.classname = 'Comodo'
+        self.cve_id = ('CVE-NOMATCH', )
+        self.description = 'Comodo AntiVirus 2.0'
+
 
