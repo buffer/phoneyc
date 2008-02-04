@@ -36,6 +36,7 @@ class ActiveX(object):
         self.clsid['77829F14-D911-40FF-A2F0-D11DB8D6D0BC'] = NCTAudioFile2()
         self.clsid['2253F320-AB68-4A07-917D-4F12D8884A06'] = StreamAudioChainCast()
         self.clsid['93CEA8A4-6059-4E0B-ADDD-73848153DD5E'] = GatewayWeblaunch()
+	self.clsid['97BB6657-DC7F-4489-9067-51FAB9D8857E'] = GatewayWeblaunch()
         self.clsid['D64CF6D4-45DF-4D8F-9F14-E65FADF2777C'] = DVRHOSTWeb()
         self.clsid['D050D736-2D21-4723-AD58-5B541FFB6C11'] = DivX()
 	self.clsid['7C3B01BC-53A5-48A0-A43B-0C67731134B9'] = IMWebControl()
