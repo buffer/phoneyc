@@ -2,9 +2,14 @@
 // CVE-2007-6530
 
 function XUpload() {
-	this.AddFolder=function(arg) {
-		if (arg.length > 1024) {
-			add_alert('XUpload overflow in AddFolder()');
-		}
+    this.AddFolder=function(arg) {
+	if (arg.length > 1024) {
+	    add_alert('XUpload overflow in AddFolder()');
 	}
+    }
+    this.AddFile=function(arg) {
+	if (arg.length > 255) {
+	    add_alert('XUpload overflow in AddFile()');
+	}
+    }
 }
