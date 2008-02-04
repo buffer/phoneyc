@@ -64,6 +64,7 @@ class ActiveX(object):
 	self.clsid['BA162249-F2C5-4851-8ADC-FC58CB424243'] = FacebookPhotoUploader()
 	self.clsid['AF465549-1D22-4140-A273-386FA8877E0A'] = NamoInstaller()
 	self.clsid['309F674D-E4D3-46BD-B9E2-ED7DFD7FD176'] = Comodo()
+	self.clsid['48DD0448-9209-4F81-9F6D-D83562940134'] = MyspaceUploader()
 
         self.clsname = {}
         self.clsname['WebViewFolderIcon.WebViewFolderIcon.1'] = WebViewFolderIcon()
@@ -425,4 +426,10 @@ class Comodo(ActiveX):
         self.cve_id = ('CVE-NOMATCH', )
         self.description = 'Comodo AntiVirus 2.0'
 
+class MyspaceUploader(ActiveX):
+    def __init__(self):
+        self.js_src = self.load_js_src('MyspaceUploader.js')
+        self.classname = 'MyspaceUploader'
+        self.cve_id = ('CVE-NOMATCH', )
+        self.description = 'MySpace Uploader Control 1.x'
 
