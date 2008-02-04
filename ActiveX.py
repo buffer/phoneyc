@@ -56,6 +56,8 @@ class ActiveX(object):
 	self.clsid['C36112BF-2FA3-4694-8603-3B510EA3B465'] = FileUploader()
 	self.clsid['DC07C721-79E0-4BD4-A89F-C90871946A31'] = GomWeb()
 	self.clsid['6054D082-355D-4B47-B77C-36A778899F48'] = Move()
+	self.clsid['22FD7C0A-850C-4A53-9821-0B0915C96139'] = YahooJukebox()
+	self.clsid['5F810AFC-BB5F-4416-BE63-E01DD117BD6C'] = YahooJukebox()
 
         self.clsname = {}
         self.clsname['WebViewFolderIcon.WebViewFolderIcon.1'] = WebViewFolderIcon()
@@ -387,4 +389,11 @@ class Move(ActiveX):
         self.classname = 'Move'
         self.cve_id = ('CVE-NOMATCH', )
         self.description = 'Move Networks Upgrade Manager 1.x'
+
+class YahooJukebox(ActiveX):
+    def __init__(self):
+        self.js_src = self.load_js_src('YahooJukebox.js')
+        self.classname = 'YahooJukebox'
+        self.cve_id = ('CVE-NOMATCH', )
+        self.description = 'Yahoo! Music Jukebox 2.x'
 
