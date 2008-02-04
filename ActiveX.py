@@ -61,6 +61,7 @@ class ActiveX(object):
 	self.clsid['6E5E167B-1566-4316-B27F-0DDAB3484CF7'] = FacebookPhotoUploader()
 	self.clsid['5C6698D9-7BE4-4122-8EC5-291D84DBD4A0'] = FacebookPhotoUploader()
 	self.clsid['BA162249-F2C5-4851-8ADC-FC58CB424243'] = FacebookPhotoUploader()
+	self.clsid['AF465549-1D22-4140-A273-386FA8877E0A'] = NamoInstaller()
 
         self.clsname = {}
         self.clsname['WebViewFolderIcon.WebViewFolderIcon.1'] = WebViewFolderIcon()
@@ -407,4 +408,11 @@ class FacebookPhotoUploader(ActiveX):
         self.classname = 'FacebookPhotoUploader'
         self.cve_id = ('CVE-NOMATCH', )
         self.description = 'Facebook Photo Uploader 4.x'
+
+class NamoInstaller(ActiveX):
+    def __init__(self):
+        self.js_src = self.load_js_src('NamoInstaller.js')
+        self.classname = 'NamoInstaller'
+        self.cve_id = ('CVE-NOMATCH', )
+        self.description = 'NamoInstaller ActiveX Control 1.x-3.x'
 
