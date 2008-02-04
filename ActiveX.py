@@ -58,6 +58,9 @@ class ActiveX(object):
 	self.clsid['6054D082-355D-4B47-B77C-36A778899F48'] = Move()
 	self.clsid['22FD7C0A-850C-4A53-9821-0B0915C96139'] = YahooJukebox()
 	self.clsid['5F810AFC-BB5F-4416-BE63-E01DD117BD6C'] = YahooJukebox()
+	self.clsid['6E5E167B-1566-4316-B27F-0DDAB3484CF7'] = FacebookPhotoUploader()
+	self.clsid['5C6698D9-7BE4-4122-8EC5-291D84DBD4A0'] = FacebookPhotoUploader()
+	self.clsid['BA162249-F2C5-4851-8ADC-FC58CB424243'] = FacebookPhotoUploader()
 
         self.clsname = {}
         self.clsname['WebViewFolderIcon.WebViewFolderIcon.1'] = WebViewFolderIcon()
@@ -80,6 +83,7 @@ class ActiveX(object):
 	self.clsname['FileUploader.FUploadCtl.1'] = FileUploader()
 	self.clsname['GomWebCtrl.GomManager.1'] = GomWeb()
 	self.clsname['QMPUpgrade.Upgrade.1'] = Move()
+	self.clsname['TheFacebook.FacebookPhotoUploader4.4.1'] = FacebookPhotoUploader()
 
         # set up the pure JScript version
         self.allobj = {}
@@ -396,4 +400,11 @@ class YahooJukebox(ActiveX):
         self.classname = 'YahooJukebox'
         self.cve_id = ('CVE-NOMATCH', )
         self.description = 'Yahoo! Music Jukebox 2.x'
+
+class FacebookPhotoUploader(ActiveX):
+    def __init__(self):
+        self.js_src = self.load_js_src('FacebookPhotoUploader.js')
+        self.classname = 'FacebookPhotoUploader'
+        self.cve_id = ('CVE-NOMATCH', )
+        self.description = 'Facebook Photo Uploader 4.x'
 
