@@ -66,6 +66,7 @@ class ActiveX(object):
     	self.clsid['309F674D-E4D3-46BD-B9E2-ED7DFD7FD176'] = Comodo()
     	self.clsid['48DD0448-9209-4F81-9F6D-D83562940134'] = MyspaceUploader()
 	self.clsid['E4E2F180-CB8B-4DE9-ACBB-DA745D3BA153'] = RisingScanner()
+	self.clsid['E473A65C-8087-49A3-AFFD-C5BC4A10669B'] = QuantumStreaming()
 
         self.clsname = {}
         self.clsname['WebViewFolderIcon.WebViewFolderIcon.1'] = WebViewFolderIcon()
@@ -90,6 +91,7 @@ class ActiveX(object):
     	self.clsname['QMPUpgrade.Upgrade.1'] = Move()
     	self.clsname['TheFacebook.FacebookPhotoUploader4.4.1'] = FacebookPhotoUploader()
     	self.clsname['Aurigma.ImageUploader.4.1'] = MyspaceUploader()
+	self.clsname['QSP2IE.QSP2IE'] = QuantumStreaming()
 
         # set up the pure JScript version
         self.allobj = {}
@@ -441,3 +443,10 @@ class RisingScanner(ActiveX):
         self.classname = 'RisingScanner'
         self.cve_id = ('CVE-NOMATCH', )
         self.description = 'Rising Online Virus Scanner Web Scan ActiveX Control'
+
+class QuantumStreaming(ActiveX):
+    def __init__(self):
+        self.js_src = self.load_js_src('QuantumStreaming.js')
+        self.classname = 'QuantumStreaming'
+        self.cve_id = ('CVE-NOMATCH', )
+        self.description = 'Move Networks Quantum Streaming Player Control'
