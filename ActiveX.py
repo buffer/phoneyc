@@ -67,6 +67,7 @@ class ActiveX(object):
     	self.clsid['48DD0448-9209-4F81-9F6D-D83562940134'] = MyspaceUploader()
 	self.clsid['E4E2F180-CB8B-4DE9-ACBB-DA745D3BA153'] = RisingScanner()
 	self.clsid['E473A65C-8087-49A3-AFFD-C5BC4A10669B'] = QuantumStreaming()
+	self.clsid['A93B47FD-9BF6-4DA8-97FC-9270B9D64A6C'] = DLinkMPEG()
 
         self.clsname = {}
         self.clsname['WebViewFolderIcon.WebViewFolderIcon.1'] = WebViewFolderIcon()
@@ -450,3 +451,10 @@ class QuantumStreaming(ActiveX):
         self.classname = 'QuantumStreaming'
         self.cve_id = ('CVE-NOMATCH', )
         self.description = 'Move Networks Quantum Streaming Player Control'
+
+class DLinkMPEG(ActiveX):
+    def __init__(self):
+	self.js_src = self.load_js_src('DLinkMPEG.js')
+	self.classname = 'DLinkMPEG'
+	self.cve_id = ('CVE-NOMATCH', )
+	self.description = 'D-Link MPEG4 SHM Audio Control'
