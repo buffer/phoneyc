@@ -94,6 +94,7 @@ class ActiveX(object):
     	self.clsname['TheFacebook.FacebookPhotoUploader4.4.1'] = FacebookPhotoUploader()
     	self.clsname['Aurigma.ImageUploader.4.1'] = MyspaceUploader()
 	self.clsname['QSP2IE.QSP2IE'] = QuantumStreaming()
+	self.clsname['HanGamePluginCn18.HanGamePluginCn18.1'] = Ourgame()
 
         # set up the pure JScript version
         self.allobj = {}
@@ -466,3 +467,10 @@ class ICQToolbar(ActiveX):
 	self.classname = 'ICQToolbar'
 	self.cve_id = ('CVE-NOMATCH', )
 	self.description = 'ICQ Toolbar'
+
+class Ourgame(ActiveX):
+    def __init__(self):
+	self.js_src = self.load_js_src('Ourgame.js')
+	self.classname = 'Ourgame'
+	self.cve_id = ('CVE-NOMATCH', )
+	self.description = 'Ourgame GLWorld 2.x'
