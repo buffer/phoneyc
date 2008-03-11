@@ -69,6 +69,7 @@ class ActiveX(object):
 	self.clsid['E473A65C-8087-49A3-AFFD-C5BC4A10669B'] = QuantumStreaming()
 	self.clsid['A93B47FD-9BF6-4DA8-97FC-9270B9D64A6C'] = DLinkMPEG()
 	self.clsid['855F3B16-6D32-4FE6-8A56-BBB695989046'] = ICQToolbar()
+	self.clsid['D82303B7-A754-4DCB-8AFC-8CF99435AACE'] = Kingsoft()
 
         self.clsname = {}
         self.clsname['WebViewFolderIcon.WebViewFolderIcon.1'] = WebViewFolderIcon()
@@ -474,3 +475,10 @@ class Ourgame(ActiveX):
 	self.classname = 'Ourgame'
 	self.cve_id = ('CVE-NOMATCH', )
 	self.description = 'Ourgame GLWorld 2.x'
+
+class Kingsoft(ActiveX):
+    def __init__(self):
+	self.js_src = self.load_js_src('Kingsoft.js')
+	self.classname = 'Kingsoft'
+	self.cve_id = ('CVE-NOMATCH', )
+	self.description = 'Kingsoft Antivirus'
