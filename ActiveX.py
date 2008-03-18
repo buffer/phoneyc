@@ -70,6 +70,7 @@ class ActiveX(object):
 	self.clsid['A93B47FD-9BF6-4DA8-97FC-9270B9D64A6C'] = DLinkMPEG()
 	self.clsid['855F3B16-6D32-4FE6-8A56-BBB695989046'] = ICQToolbar()
 	self.clsid['D82303B7-A754-4DCB-8AFC-8CF99435AACE'] = Kingsoft()
+	self.clsid['BF6EFFF3-4558-4C4C-ADAF-A87891C5F3A3'] = CABrightStor()
 
         self.clsname = {}
         self.clsname['WebViewFolderIcon.WebViewFolderIcon.1'] = WebViewFolderIcon()
@@ -96,6 +97,7 @@ class ActiveX(object):
     	self.clsname['Aurigma.ImageUploader.4.1'] = MyspaceUploader()
 	self.clsname['QSP2IE.QSP2IE'] = QuantumStreaming()
 	self.clsname['HanGamePluginCn18.HanGamePluginCn18.1'] = Ourgame()
+	self.clsname['LISTCTRL.ListCtrlCtrl.1'] = CABrightStor()
 
         # set up the pure JScript version
         self.allobj = {}
@@ -482,3 +484,10 @@ class Kingsoft(ActiveX):
 	self.classname = 'Kingsoft'
 	self.cve_id = ('CVE-NOMATCH', )
 	self.description = 'Kingsoft Antivirus'
+
+class CABrightStor(ActiveX):
+    def __init__(self):
+	self.js_src = self.load_js_src('CABrightStor.js')
+	self.classname = 'CABrightStor'
+	self.cve_id = ('CVE-NOMATCH', )
+	self.description = 'CA BrightStor ARCserve Backup'
