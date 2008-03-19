@@ -71,6 +71,7 @@ class ActiveX(object):
 	self.clsid['855F3B16-6D32-4FE6-8A56-BBB695989046'] = ICQToolbar()
 	self.clsid['D82303B7-A754-4DCB-8AFC-8CF99435AACE'] = Kingsoft()
 	self.clsid['BF6EFFF3-4558-4C4C-ADAF-A87891C5F3A3'] = CABrightStor()
+	self.clsid['04FD48E6-0712-4937-B09E-F3D285B11D82'] = UniversalUpload()
 
         self.clsname = {}
         self.clsname['WebViewFolderIcon.WebViewFolderIcon.1'] = WebViewFolderIcon()
@@ -491,3 +492,10 @@ class CABrightStor(ActiveX):
 	self.classname = 'CABrightStor'
 	self.cve_id = ('CVE-NOMATCH', )
 	self.description = 'CA BrightStor ARCserve Backup'
+
+class UniversalUpload(ActiveX):
+    def __init__(self):
+	self.js_src = self.load_js_src('UniversalUpload.js')
+	self.classname = 'UniversalUpload'
+	self.cve_id = ('CVE-NOMATCH', )
+	self.description = 'Univeral HTTP File Upload (UUploaderSvrD.dll - v6.0.0.35)'
