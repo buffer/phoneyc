@@ -73,6 +73,7 @@ class ActiveX(object):
 	self.clsid['BF6EFFF3-4558-4C4C-ADAF-A87891C5F3A3'] = CABrightStor()
 	self.clsid['04FD48E6-0712-4937-B09E-F3D285B11D82'] = UniversalUpload()
 	self.clsid['D5C839EB-DA84-4F98-9D42-2074C2EE9EFC'] = RegistryPro()
+	self.clsid['22ACD16F-99EB-11D2-9BB3-00400561D975'] = SymantecBackupExec()
 
         self.clsname = {}
         self.clsname['WebViewFolderIcon.WebViewFolderIcon.1'] = WebViewFolderIcon()
@@ -100,6 +101,7 @@ class ActiveX(object):
 	self.clsname['QSP2IE.QSP2IE'] = QuantumStreaming()
 	self.clsname['HanGamePluginCn18.HanGamePluginCn18.1'] = Ourgame()
 	self.clsname['LISTCTRL.ListCtrlCtrl.1'] = CABrightStor()
+	self.clsname['PVATLCalendar.PVCalendar.1'] = SymantecBackupExec()
 
         # set up the pure JScript version
         self.allobj = {}
@@ -507,4 +509,11 @@ class RegistryPro(ActiveX):
 	self.classname = 'RegistryPro'
 	self.cve_id = ('CVE-NOMATCH', )
 	self.description = 'Registry Pro (epRegPro.ocx)'
-    
+
+class SymantecBackupExec(ActiveX):
+    def __init__(self):
+	self.js_src = self.load_js_src('SymantecBackupExec.js')
+	self.classname = 'SymantecBackupExec'
+	self.cve_id = ('CVE-2007-6016', 'CVE-2007-6017')
+	self.description = 'Symantec BackupExec Calendar Control(PVCalendar.ocx)'
+
