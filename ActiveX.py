@@ -25,6 +25,15 @@ class ActiveX(object):
         self.clsid['D27CDB6E-AE6D-11CF-96B8-444553540000'] = Flash()
         self.clsid['6BE52E1D-E586-474F-A6E2-1A85A9B4D9FB'] = PPStream()
         self.clsid['FDC7A535-4070-4B92-A0EA-D9994BCC0DC5'] = RealPlayer()
+	self.clsid['2F542A2E-EDC9-4BF7-8CB1-87C9919F7F93'] = RealPlayer()
+	self.clsid['0FDF6D6B-D672-463B-846E-C6FF49109662'] = RealPlayer()
+	self.clsid['224E833B-2CC6-42D9-AE39-90B6A38A4FA2'] = RealPlayer()
+	self.clsid['2F542A2E-EDC9-4BF7-8CB1-87C9919F7F93'] = RealPlayer()
+	self.clsid['3B46067C-FD87-49B6-8DDD-12F0D687035F'] = RealPlayer()
+	self.clsid['3B5E0503-DE28-4BE8-919C-76E0E894A3C2'] = RealPlayer()
+	self.clsid['44CCBCEB-BA7E-4C99-A078-9F683832D493'] = RealPlayer()
+	self.clsid['A1A41E11-91DB-4461-95CD-0C02327FD934'] = RealPlayer()
+	self.clsid['CFCDAA03-8BE4-11CF-B84B-0020AFBBCCFA'] = RealPlayer()
         self.clsid['5D86DDB5-BDF9-441B-9E9E-D4730F4EE499'] = BitDefender()
         self.clsid['E23FE9C6-778E-49D4-B537-38FCDE4887D8'] = VLC()
         self.clsid['62DDEB79-15B2-41E3-8834-D3B80493887A'] = HPInfo()
@@ -243,7 +252,7 @@ class RealPlayer(ActiveX):
     def __init__(self):
         self.js_src = self.load_js_src('RealPlayer.js')
         self.classname = 'RealPlayer'
-        self.cve_id = ('CVE-2007-5601', )
+        self.cve_id = ('CVE-2007-5601', 'CVE-2008-1309', )
         self.description = 'RealMedia RealPlayer Ierpplug.DLL ActiveX Control'
 
 class YahooMessengerCyft(ActiveX):
