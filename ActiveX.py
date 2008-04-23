@@ -74,6 +74,7 @@ class ActiveX(object):
 	self.clsid['04FD48E6-0712-4937-B09E-F3D285B11D82'] = UniversalUpload()
 	self.clsid['D5C839EB-DA84-4F98-9D42-2074C2EE9EFC'] = RegistryPro()
 	self.clsid['22ACD16F-99EB-11D2-9BB3-00400561D975'] = SymantecBackupExec()
+	self.clsid['61F5C358-60FB-4A23-A312-D2B556620F20'] = OurgameGLWorld()
 
         self.clsname = {}
         self.clsname['WebViewFolderIcon.WebViewFolderIcon.1'] = WebViewFolderIcon()
@@ -102,6 +103,7 @@ class ActiveX(object):
 	self.clsname['HanGamePluginCn18.HanGamePluginCn18.1'] = Ourgame()
 	self.clsname['LISTCTRL.ListCtrlCtrl.1'] = CABrightStor()
 	self.clsname['PVATLCalendar.PVCalendar.1'] = SymantecBackupExec()
+	self.clsname['HanGamePluginCn18.HanGamePluginCn18.1'] = OurgameGLWorld()
 
         # set up the pure JScript version
         self.allobj = {}
@@ -517,3 +519,9 @@ class SymantecBackupExec(ActiveX):
 	self.cve_id = ('CVE-2007-6016', 'CVE-2007-6017')
 	self.description = 'Symantec BackupExec Calendar Control(PVCalendar.ocx)'
 
+class OurgameGLWorld(ActiveX):
+    def __init__(self):
+	self.js_src = self.load_js_src('OurgameGLWorld.js')
+	self.classname = 'OurgameGLWorld'
+	self.cve_id = ('CVE-2008-0647', )
+	self.description = 'Ourgame GLWorld HanGamePluginCn18 Class ActiveX Control'
