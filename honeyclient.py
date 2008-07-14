@@ -275,14 +275,15 @@ class HttpHoneyClient(object):
         if referrer: referrer = '-e "%s"'  % referrer
         else: referrer = ""
         self.ua = self.ua.replace('"', '')
-        p, w, e = popen2.popen3('curl -s -S -A "%s" %s %s "%s"' % (self.ua, post_data, referrer, url))
+        p, w, e = popen2.popen3('curl -L -s -S -A "%s" %s %s "%s"' % (self.ua, post_data, referrer, url))
         res = p.read()
-        err = e.read()
+        err = e.read().strip()
         p.close()
         e.close()
         w.close()
-        if len(err): raise Exception, '%s -- %s' % (url, err.strip())
-        else: return res
+        #if len(err) > 0 and len(res.strip()) < 1: raise Exception, '%s -- %s' % (url, err.strip())
+        # else: return res
+	return res
 
     def get(self, url, referrer=False):
         try: res = self.__fetch(url, method="get", referrer=referrer)
@@ -626,6 +627,7 @@ LINKS = ('http://www.google.com/', )
 
 # basic tests, demo, etc
 if __name__ == '__main__':
+    print "HONEYCLIENT MODULE TEST"
     hc = HttpHoneyClient()
     for l in LINKS:
         print 'fetching %s' % l
@@ -647,3 +649,4 @@ if __name__ == '__main__':
         except Exception: pass
 
         print '\n\n-----\n\n'
+	print 'HONEYCLIENT MODULE TEST - DONE'
