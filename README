@@ -20,5 +20,9 @@ requirements
 - vb2py (see vb2py.sf.net)
   + this has several requirements, make sure you satisfy those
 
+optional
+- ClamAV
+  for content scanning
+
 todo
 - see TASKS file for plans for 1.0
