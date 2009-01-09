@@ -385,10 +385,11 @@ class Page(object):
         self.site = '/'.join(url.split('/')[:3])      # for absolute URIs (not URLs)
         self.scripturl = url.split('?')[0]            # for new script args
         self.contents = contents
-        parser = PageParser()
-        parser.feed(self.contents)
-        parser.close()
         self.content_type = magic.whatis(contents)
+	parser = PageParser()
+	if 'html' in self.content_type:
+	    parser.feed(self.contents)
+	    parser.close()
         self.vbs_body = '\n'.join(parser.vbs_body).replace('<!--', '').replace('-->','')
         self.js_body = ''.join(parser.js_body).replace('<!--', '').replace('-->','') + parser.onload
         self.js_body += '\nprint(page_alerts);\n'
