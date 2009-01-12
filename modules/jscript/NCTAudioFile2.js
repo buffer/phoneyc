@@ -3,7 +3,7 @@
 
 function NCTAudioFile2() {
 	this.SetFormatLikeSample=function(arg) {
-		if (arg.length > 4000) {
+		if (arg.length > 4124) {
 			add_alert('NCTAudioFile2 overflow in SetFormatLikeSample');
 		}
 	}
