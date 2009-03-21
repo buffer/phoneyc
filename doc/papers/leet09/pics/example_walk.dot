@@ -1,0 +1,16 @@
+digraph "rrrryyyaa.cn/1/123.htm" {
+        "rrrryyyaa.cn/1/123.htm" [shape=box, color=lightblue]; 
+        "rrrryyyaa.cn/1.exe" [shape=box, color=red];
+        "rrrryyyaa.cn/1/123.htm" -> "rrrryyyaa.cn/1/sina.htm";
+        "rrrryyyaa.cn/1/123.htm" -> "rrrryyyaa.cn/1/re11.htm";
+        "rrrryyyaa.cn/1/123.htm" -> "rrrryyyaa.cn/1/flash.htm";
+        "rrrryyyaa.cn/1/flash.htm" -> "rrrryyyaa.cn/1/fl/ffl.html";
+        "rrrryyyaa.cn/1/flash.htm" -> "rrrryyyaa.cn/1/fl/ifl.html";
+        "rrrryyyaa.cn/1/123.htm" -> "rrrryyyaa.cn/1/as.htm";
+        "rrrryyyaa.cn/1/123.htm" -> "rrrryyyaa.cn/1/office.htm";
+        "rrrryyyaa.cn/1/123.htm" -> "rrrryyyaa.cn/1/lz.htm";
+        "rrrryyyaa.cn/1/123.htm" -> "rrrryyyaa.cn/1/14.htm";
+        "rrrryyyaa.cn/1/123.htm" -> "rrrryyyaa.cn/1/NCTAudioFile.htm";
+        "rrrryyyaa.cn/1/123.htm" -> "rrrryyyaa.cn/1/re10.htm";
+	"rrrryyyaa.cn/1/NCTAudioFile.htm" -> "rrrryyyaa.cn/1.exe";
+}

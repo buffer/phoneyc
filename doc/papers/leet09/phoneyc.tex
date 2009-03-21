@@ -1,0 +1,305 @@
+% $Arbor$
+
+\documentclass[10pt,twocolumn]{article}
+\usepackage{times}
+ 
+% includes and packages
+\usepackage{wrapfig}                    %%% Wrap Text Around a Figure 
+\usepackage{units}                      %%% Make Nice Fractions
+%\usepackage{epsfig}                            %%% EPS figure support
+\usepackage{cite}                       %%% improved citation support
+\usepackage{supertabular}               %%% better table support
+\usepackage{url}
+
+%Check if we are compiling under latex or pdflatex
+\ifx\pdftexversion\undefined
+  \usepackage[dvips]{graphicx}
+\else
+  \usepackage[pdftex]{graphicx}
+\fi
+
+\clubpenalty=10000
+\widowpenalty=10000
+% need more space?
+%\linespread{0.97}
+
+
+% Set dimensions of columns, gap between columns, and paragraph indent
+\setlength{\textheight}{8.875in}
+\setlength{\textwidth}{6.875in}
+\setlength{\columnsep}{0.3125in}
+\setlength{\topmargin}{0in}
+\setlength{\headheight}{0in}
+\setlength{\headsep}{0in}
+\setlength{\parindent}{1pc}
+\setlength{\oddsidemargin}{-.1875in} % Centers text.
+\setlength{\evensidemargin}{-.1875in}
+
+% Add the period after section numbers. Adjust spacing.
+\newcommand{\Section}[1]{\vspace{-8pt}\section{\hskip -1em.~~#1}\vspace{-3pt}}
+\newcommand{\SubSection}[1]{\vspace{-3pt}\subsection{\hskip -1em.~~#1}
+\vspace{-3pt}}
+
+\begin{document}
+
+\title{PhoneyC: A Virtual Client Honeypot}
+
+\author{Jose Nazario\\jose@monkey.org}
+% for two authors ...
+%\author {\begin{tabular}[t]{c@{\extracolsep{8em}}c} 
+%Jose Nazario  \\[1.5ex]
+%        jose@monkey.org
+%\end{tabular}}
+
+\maketitle
+
+\section*{Abstract}
+
+The number of client-side attacks has grown significantly in the past few years, shifting focus away from defendable positions to a broad, poorly defended space filled with vulnerable clients. Just as honeypots enabled deep research into server-side attacks, honeyclients can permit the deep study of client-side attacks. A complement to honeypots, a honeyclient is a tool designed to mimic the behavior of a user-driven network client application, such as a web browser, and be exploited by an attacker's content. These systems are instrumented to discover what happened and how. This paper presents PhoneyC, a honeyclient tool that can provide visibility into new and complex client-side attacks. PhoneyC is a {\em virtual honeyclient}, meaning it is not a real application but rather an emulated client. By using dynamic analysis, PhoneyC is able to remove the obfuscation from many malicious pages. Furthermore, PhoneyC emulates specific vulnerabilities to pinpoint the attack vector. PhoneyC is a modular framework that enables the study of malicious HTTP pages and understands modern vulnerabilities and attacker techniques. 
+
+\section{Introduction}
+\label{intro}
+
+Client-side attacks have radically changed the information security landscape in recent years. A significant portion of attackers in the past 20 years have focused on server-side goals and vulnerabilities. With two changes in the past few years, client-side attacks have become more successful for attackers. First, the web browser has become the de-facto tool to access Internet resources and is used for banking, communications, and every day life. To accomplish this, the web client has become more feature-rich and, in parallel, more complex, leading to many security vulnerabilities for attackers to exploit. Secondly, Internet servers have become significantly more hardened in the past 5 years than they were in previous years, significantly raising the bar for attackers to gain access. The client has become the weakest part of a network. This shift in the landscape has necessitated a change in exploit discovery and analysis.
+
+An ever growing number of HTTP client-side attacks have been discovered and launched on the Internet. In this time the complexity and sophistication of attacks has also grown, including obfuscation techniques and encryption, as well as server-side counter-surveillance techniques. Also in this time we have seen the appearance of exploit ``packs'' designed to facilitate the attacker's activities~\cite{provos:ayi}. These toolkits are able to construct dynamic HTML pages that encode many exploits into a single site in an attempt to infect the host. When coupled to massive website manipulations, these toolkits can infect thousands of PCs. 
+
+One way of studying such toolkits is to use a client that is designed to be exploited so that the effects may be studied. We call such systems honeyclients~\cite{wang2005uhd}, a modification of the honeypot theme. Just as with honeypots, honeyclients can be high interaction to simulate all aspects of the client operating system, whereas a low-interaction honeypot only simulates the client application. We can also differentiate between real and virtual honeyclients. Real honeyclients use the actual application that would be attacked, whereas virtual honeyclients emulate the application in software.
+
+Virtual honeyclients are an attractive tool to use to study such content because they do not require additional computers to analyze vast amounts of malicious content and can easily scale. Using virtual honeyclients it is possible to inspect many websites in parallel with only one real system. However, to convince a website that it is talking to a legitimate client application we need to mimic the application's behavior and responses to inspection. 
+
+This paper provides a brief overview of the design and implementation of PhoneyC, a client program that emulates a fully featured HTTP client. PhoneyC supports various client emulations, dynamic languages such as JavaScript, and mimics ActiveX add-ons, as well. PhoneyC can process a suspect web page and analyze the script bodies and react to the dynamic portions of the website. PhoneyC can be configured to mimic a variety of common web clients. 
+
+To analyze the malicious content, obfuscated or encrypted JavaScript is decoded and reanalyzed, mimicking what the real web browser would do with such content. PhoneyC is the first virtual honeyclient that can perform dynamic analysis of JavaScript and Visual Basic Script to remove obfuscation. PhoneyC's virtual features are instrumented to understand their vulnerable functions and to provide alerts. Furthermore, downloaded content is scanned using an antivirus engine to look for known malicious content. PhoneyC can walk a malicious website and report on the exploit chain. We also provide an experimental evaluation of PhoneyC that shows that it can successfully decode and analyze exploit websites found in the wild. 
+
+The rest of this paper is organized as follows. Section \ref{design} gives background information on PhoneyC's design and implementation. In section \ref{example} we present an example of PhoneyC in which we demonstrate its performance against real exploit sites found in the wild. Limitations of PhoneyC and virtual honeyclients are described in section \ref{weaknesses}. In section \ref{future-work} we discuss the limitations of the current PhoneyC design and discuss how it may be improved in the future. We provide related work in section \ref{related-work} and conclude in section \ref{conclusion}.
+
+\section{Design and Implementation}
+\label{design}
+
+A virtual HTTP honeyclient is a combination of a web crawler and an analysis engine. Like a web crawler, it must be able to evaluate a web page and determine the links that lead out from the page. However, unlike a standard web crawler, it must be able to analyze the page to determine if it is malicious or benign. 
+
+PhoneyC is implemented in the Python language~\cite{vanrossum2001plw} to aid in rapid development and extendibility, as well as integration with other tools and libraries. Python was also chosen to minimize security flaws that may appear in an implementation such as C or C++. At its core, PhoneyC has two major components: an input collector and an input evaluator. The input collector is simply a call to the Curl tool~\cite{ward2003clw} together with arguments to mimic a legitimate browser's behavior.
+
+The basic requirements for PhoneyC are:
+\begin{itemize}
+	\item{PhoneyC must be able to convince a website that it is a legitimate web browser to collect the content that would be sent to an actual user.}
+	\item{Second, PhoneyC must be able to enumerate all of the links from the HTML page and visit them. This includes all common HTML tags as well as generated HTML content, IFRAMEs, and redirections.} 
+	\item{Third, PhoneyC must be able to understand and evaluate dynamic content such as JavaScript and Visual Basic Script. Fourth, PhoneyC must be able to detect malicious content and provide it for further analysis.} 
+	\item{Finally, because PhoneyC is analyzing hostile code, it must be resilient to attacks itself.}
+\end{itemize}
+
+Basic data flow through PhoneyC is shown in Figure \ref{fig:phoneyc-flow}. URLs are fed to the system to initiate the evaluation, together with a referring URL if possible. The client retrieves the data using Curl from the server and stores all of the content on disk for additional analysis, if needed, and the data is scanned using an antivirus engine (ClamAV~\cite{kojm:ch}). Curl, running as a subprocess, provides a robust HTTP client in a separate process space, effectively as a sandbox to minimize client system attacks. 
+
+If the content is HTML, the SGML parser collects the script content for JavaScript and Visual Basic Script (VBS). No restructuring of the input HTML (such as DOM validation or tag balancing) is performed which may alter the exploit. The parser also collects all of the outgoing links and normalizes them as needed. Links can be present as the common A and IMG tags, as well as IFRAME tags and redirects. The script bodies are analyzed as described below. The parsed page is stored as an object with all of its contents and attributes as a page object referenced by the origin URL. These attributes include the complete script bodies and all outgoing links. PhoneyC also understands major page events such as ``onLoad()'', but does not handle form submission or emulate mouse clicks. Once the full page has been analyzed, PhoneyC repeats the process for the next page with an outgoing link and the referring URL as inputs.
+
+\begin{figure}[tb]
+  \centering
+  \includegraphics[width=\columnwidth]{pics/phoneyc_flow}
+  \scriptsize
+  \caption{Data flow within PhoneyC. One or more URLs are used to feed the client, which retrieves the content from the server. This is then stored on disk, scanned by AV for any suspect content, and also passed to an SGML parser for evaluation if it is HTML. The SGML parser breaks out script code by language for analysis by the specific script engine. The SGML parser also collects and normalizes any of the links from the HTML page as well as the output of the script output. Foreign scripts not included in the page, using the ``src'' argument to the SCRIPT tag, may also be collected and analyzed in the context of the current page. The script engines provide alerts to the system, as well.}
+  \normalsize
+  \label{fig:phoneyc-flow}
+\end{figure}
+
+PhoneyC is provided as a honeyclient module and an HTTP client script, ``honeywalk'', which calls the core methods of the honeyclient module. Honeywalk is demonstrated below. Other HTTP honeyclient tools can be build on the existing honeyclient module. 
+
+PhoneyC is designed to crawl websites to discover exploits and also to act as a malcode collector. It is not, however, designed to extensively crawl the entire world wide web. As such, the scalability and speed deficiencies present in PhoneyC are not a pressing issue at this time. 
+
+\subsection{Anti-Analysis Techniques}
+\label{anti-analysis}
+
+With the growth of web exploits has come a growth in their analysis. To defeat such analysis, attackers have begun applying obfuscation and encryption to their web exploit pages. This can make static analysis more challenging, but not impossible. In the past year we have seen more anti-analysis techniques appear that are designed to defeat illegitimate script access by tools such as PhoneyC. 
+
+One of the major goals of PhoneyC was to ease the analysis of complex malicious websites. To do this, PhoneyC must be able to mimic a legitimate web browser to the server to receive the proper content, and to properly interpret the content to decode it. PhoneyC has been able to keep pace with most changes in the malicious website threat landscape, although some changes have been made during development. 
+
+While some sites will send all exploit pages to all visitors, many sites will selectively direct clients to specific pages on the basis of their browser software. The following JavaScript differentiates between Microsoft Internet Explorer and other browsers, incorporating an IFRAME element with Internet Explorer-specific exploits if MSIE is found in the User-agent header. 
+\scriptsize
+\begin{verbatim}
+if(navigator.userAgent.toLowerCase().indexOf("msie")>0)
+  document.write("<iframe src=fl/ifl.html width=100 
+                  height=0>");
+else
+  {document.write("<iframe src=fl/ffl.html width=100 
+                   height=0>")}
+\end{verbatim}
+\normalsize
+Obviously more sophisticated techniques to differentiate between browsers is possible. The User-agent header check may also be done on the server using, for example, a PHP script. 
+
+To thwart such counter-analysis techniques, PhoneyC attempts to mimic a legitimate web surfer using a legitimate web browser. ``Personalities'' are created through the use of the User-agent header~\cite{bernerslee:htp} to mimic Internet Explorer 6 on Windows XP (the default) or Mozilla Firefox 2 on Windows XP. The JavaScript ``navigator'' object should also correctly mimic the client browser version. Other browsers may be mimicked through additional header forgery and script responses. Furthermore, if possible referring URLs are sent to the web server in the HTTP client headers, another check that some sites perform to ensure that only legitimate victims are served malicious content.
+
+Once the content is presented by the server, additional measures may be in place to prevent detection by an external network-based tool such as an IDS or to slow down an analyst's inspection of the content. These sorts of methods often include variable name obfuscation or base-64 encoding of the content. More complicated techniques seen in the wild to thwart analysis may include:
+\begin{itemize}
+\item{Regular expression-based substitutions or removal of junk characters.}
+\item{Compression of the script code, using an openly available script compressor that is popular in the web development crowd.}
+\item{Encoding of the script code to provide some limited, basic encryption. We have seen more sophisticated sites use the page's URL as an encryption key, so that if the page is shared without the true URL it cannot be decrypted easily.}
+\item{True encryption of the code using an encryption algorithm such as RSA.}
+\end{itemize}
+Additional methods have been seen and may be layered or repeatedly applied. Multi-stage encodings are not uncommon. The browser decodes one part of the page and uses the output of that part as a component of the script for the next part, such as a decoder routine. Some of these techniques have been adopted by attackers from existing, benign JavaScript protection tools and compressors, designed to optimize page load times~\cite{packer20}. 
+
+% Anti-analysis tricks are an arms race and parallel the challenges facing Windows malicious binary analysis. In all cases, however, the script body must be executable by the browser, requiring it to be readable by a human, who can then perform analysis of it if needed.  
+
+\subsection{Script Parsing}
+\label{script-parsing}
+
+Dynamic content in the form of JavaScript and Visual Basic Script is executed in a limited environment to perform dynamic analysis. JavaScript processing is done in a subprocess using the SpiderMonkey interpreter~\cite{foundation:sjc}. The web page's script body is collected and aggregated for analysis. A basic environment is prepended to the script body to mimic the browser's features, including the {\em document} object as well as {\em window} and the {\em navigator} object. Basic DOM inspection features, such as {\em getElementById} and others are implemented as well. 
+
+Script obfuscation, very common in web page exploits~\cite{provos:ayi}, is defeated with the script interpreter and some basic overrides in the script preamble. The ``eval()'' method, common to execute a newly decoded block of code, is overridden with a modified version that can recover if an error is observed by rerunning the script code with any of the output of previous runs. This defeats multi-stage decoders or decrypters. The modified version of  the ``eval()'' method then calls the real ``eval()'' method to get the proper result and prepends it to the script body as needed.
+
+Visual Basic Script (VBS) code is analyzed using the vb2py package~\cite{vb2py} which translated VBS scripts into equivalent Python scripts. These scripts are then analyzed using a child Python interpreter process and the output is collected. The VBS subsystem is not yet as well developed as the JavaScript subsystem, but is designed to accomplish the same results.
+
+\subsection{Vulnerability Modules}
+\label{vuln-modules}
+
+Detecting specific vulnerabilities to both classify them and to respond to them is a key design goal of PhoneyC. Rather than relying on external patterns or anti-virus alone which may not completely detect malicious HTML content, PhoneyC performs dynamic analysis of the content to determine the vulnerability and analyze the next action.
+
+PhoneyC uses vulnerability modules to mimic vulnerable HTTP client extensions, including ActiveX controls and core browser functionality. These are similar to vulnerability modules in the MWCollect virtual honeypot~\cite{freiling2005bte} in that they are vulnerability-specific. However, unlike the MWCollect modules, they do not rely on shellcode matching. Instead, these modules look for generic exploit activity against a vulnerable method. In a real browser, these objects are dynamically created in the script code and provide an interface between the browser and system libraries. In PhoneyC, these objects create pure JavaScript or VBS objects that can understand the core functional methods that are likely to be attacked. 
+
+By using a virtual honeyclient and the vulnerability module architecture, PhoneyC avoids a number of real-world constraints. The primary challenge to discovering exploits on web pages with a real honeyclient is creating a vulnerable system. Often the necessary add-ons are not present. Another issue is the issue of language packs. In many cases an exploit is designed to work specifically on one Windows language pack but will not work on others. Virtual honeyclients can more quickly load more vulnerable modules than a real honeyclient, and they can analyze the exploit code for multiple language packs more easily.
+
+An example vulnerability module, implementing checks for the WebViewFolderIcon.setSlice() attack (CVE reference ID CVE-2006-3730) is shown below. In this vulnerability, a magic value of 0x7ffffffe passed as the first argument to the ``setSlice()'' method enables arbitrary code execution by the attacker~\cite{setslice}. 
+\scriptsize
+\begin{verbatim}
+function WebViewFolderIcon() {
+    this.setSlice=function(arg0, arg1, arg2, arg3) {
+        if (arg0 == 0x7ffffffe) {     // magic value
+            add_alert('WebViewFolderIcon.setSlice attack');
+        }
+    }
+}
+\end{verbatim}
+\normalsize
+This JavaScript is one of many modules prepended to the page's JavaScript code that is analyzed by the system for any web page that includes script code. In this case the code looks for a magic value in the first argument to the setSlice() method and alerts when such code is found. Similar modules for other vulnerabilities can look for overly long arguments or arbitrary file access.
+
+Creating new modules is relatively easy and requires two pieces, the vulnerability module and a reference to it via the ActiveX CLSID values. The module code itself simple creates a class and the appropriate methods and arguments together with argument inspection to determine when to alert. Furthermore, the modules can be written in the complete absence of any exploit code. All that is needed is to know the basics of the vulnerability, such as the method names and the nature of the malicious arguments, such as ``an argument longer than 400 bytes leads to a stack overflow''. Based on those conditions a simple argument scanner can be developed. The class is then referenced in the ActiveX map by the CLSID, both by hexadecimal values and by a simplified name. This provides a new HTML {\em object} is created, mapping the object ID and the CLSID to the right script class. 
+
+Such an example is the NctAudioFile2 ActiveX control buffer overflow. A vulnerability description was used to create the vulnerability module, with analysis that reads in part~\cite{secunia:nctaudiofile}:
+\begin{quote}
+The vulnerability is caused due to a boundary error in the NCTAudioFile2.AudioFile ActiveX control when handling the "SetFormatLikeSample()" method. This can be exploited to cause a stack-based buffer overflow by passing an overly long string (about 4124 bytes) as argument to the affected method.
+\end{quote}
+Based on this description, the following vulnerability module was created:
+\scriptsize
+\begin{verbatim}
+function NCTAudioFile2() {
+   this.SetFormatLikeSample=function(arg) {
+      if (arg.length > 4124) {
+         add_alert('NCTAudioFile2 overflow in 
+                    SetFormatLikeSample');
+      }
+   }
+}
+\end{verbatim}
+\normalsize
+Similar vulnerability modules can be written for exploits that use malicious object properties through the JavaScript ``watch()'' method, that handles property changes. The callback function to watch performs similar argument inspection to alert if an exploit scenario is encountered.
+
+When an unknown CLSID is found, one for which PhoneyC has no modules, a message is generated. This can be used to develop new modules which may indicate their use in exploits. 
+
+At this time over 65 unique vulnerability modules exist and are usable by PhoneyC. New modules are frequently added based on vulnerability reports and exploit code. 
+
+\section{Example}
+\label{example}
+
+This section presents a brief demonstration of PhoneyC's ability to analyze malicious websites in the wild.
+
+The output below shows a trace from the ``honeywalk'' tool, built on top of the PhoneyC core library, as it traverses one of the Waledec sites that was sent in spam~\cite{waledec}. The sites use JavaScript to include an IFRAME with exploit code to load the file ``card.exe'' onto visitors' PCs. 
+\scriptsize
+\begin{verbatim}
+HoneyWalk started at Fri Jan  9 19:23:58 2009 UTC
+===> http://topgreetingsite.com/?code=244932dc56cbd0033a  
+     ('\n<iframe src="http://seocom.name/seogo/go.xmn?eb0h" 
+       style="display:none"></iframe>\n', '', 
+      'cf8ef75809da008e40f2b957d54b842d') 
+     {'ClamAV': ('b45248fd02a94eb7920ba1341117140a', 'OK')}
+http://topgreetingsite.com/?code=244932dc56cbd0033a
+ --> card.exe
+ --> http://topgreetingsite.com/card.exe
+ --> img.gif
+ --> http://topgreetingsite.com/img.gif
+===> http://topgreetingsite.com/card.exe  ('\n', '', 
+      '9020239c1bc03ad131d080939b5bbc2a') 
+     {'ClamAV': ('68b329da9893e34099c7d8ad5cb9c940', 'OK')}
+http://topgreetingsite.com/card.exe
+===> http://topgreetingsite.com/img.gif  ('\n', '', 
+      '9020239c1bc03ad131d080939b5bbc2a') 
+     {'ClamAV': ('68b329da9893e34099c7d8ad5cb9c940', 'OK')}
+http://topgreetingsite.com/img.gif
+\end{verbatim}
+\normalsize
+
+The ``honeywalk'' tool can also analyze more complex websites and exploit kits. Shown in Figure \ref{fig:example-walk} is an example crawl of a malicious URL. In this example, each of the exploits is listed on a unique HTML page with the exploit code embedded in the page. In this case, the page ``NCTAudioFile.html'' lead to the exploit's success. This specific vulnerability (CVE ID CVE-2007-0018) is in the SetFormatLikeSample() method of the library. An overflow in this case would cause the victim machine to execute shellcode to download and launch the malicious EXE file. 
+
+\begin{figure}[tb]
+  \centering
+  \includegraphics[width=\columnwidth]{pics/example_walk}
+%%  \scriptsize
+  \caption{Example crawl of a malicious URL showing the base URL, the included exploits, and the final EXE that is sent to the victim}
+%%  \normalsize
+  \label{fig:example-walk}
+\end{figure}
+
+\section{PhoneyC Detection}
+\label{weaknesses}
+
+Virtual honeyclients are open to a number of detection techniques and attack vectors. A number of these issues are present in any virtual tool due to the limits of software emulation and will be present in any virtual honeyclient. 
+
+PhoneyC specifically is vulnerable to detection through a simple check for the ``page\_alerts'' array in any of the JavaScript code. This variable name is not hidden at all and is accessible by any of the script code. A malicious page can simple check for the existence of this variable by reference and exit if it is found. To remedy this, the variable reference can be randomly generated, for instance.
+
+PhoneyC is also much slower than a normal web browser, enabling timing attacks to be used against it. This is an extension of a simple debugger check which uses the time elapsed between two set points to detect single stepping. A malicious server that measures the time between requests that should be very short can deny the client content. Performance improvements and concurrent requests to mimic a standard web browser would remedy this issue.
+
+When impersonating Internet Explorer, PhoneyC can be detected through the SpiderMonkey JavaScript interpreter, which differs slightly from the script engine in the real Internet Explorer. Certain behaviors are well known and derive from ambiguities in the JavaScript specification, such as regular expression handling. Any virtual honeyclient that relies on SpiderMonkey will suffer the same issues. 
+
+Finally, any virtual honeyclient will always fail to emulate all aspects of a real browser. Dynamic content can be used to inspect arbitrary features of the browser using calls that may not be documented. As such, suspicious sites may be able to detect virtual honeyclients by calling methods that are not implemented. This parallels attacks to detect virtual execution environments used in malware sandboxing~\cite{natvig:2008} and is a fundamental flaw of any kind of emulation.
+
+\section{Future Work}
+\label{future-work}
+
+PhoneyC is far from complete at this point, although it is one of the tools the author uses to analyze malicious websites. Currently a number of factors are being evaluated to redesign PhoneyC to add functionality and improve reliability and performance. Minor improvements include easier configuration, proxy support, and performance enhancements. PhoneyC's vulnerability module architecture is being re-evaluated to handle previously unknown ActiveX CLSIDs and methods using a generic approach. Additionally, a generic scripting language framework is being developed to avoid having to write two vulnerability modules for any specific attack vector, one in JavaScript and one in VBS. Major PhoneyC deficiencies and improvements we are evaluating are listed below.
+
+\subsection{Exploit Enumeration}
+\label{exploit-enumeration}
+
+One major drawback to the current design of the vulnerability modules is that they can only alert for a single exploit that the system knows of. All other vulnerabilities that may be present in the web page are not analyzed and not reported. The author previously developed a version of the script analysis engine used in PhoneyC, dubbed ``Norberto'', that performed static analysis of the page to enumerate multiple exploits in the page after some basic dynamic analysis to decode the page. In the future, PhoneyC may be extended with a similar static analysis engine to enumerate the complete list of exploits in the page.
+
+\subsection{Additional Content Types}
+\label{add-content}
+
+Since PhoneyC was first developed, a number of new content types have become the focus of exploit activity, including Adobe's Portable Document Format (PDF) and their Flash format. These content types are not understood by the tool and may contain malicious content. Currently, we use manual techniques to analyze malicious Flash and PDF documents. Their increased use on the web as a means to deliver malicious executables to the end user means that we should incorporate their analysis into PhoneyC.
+
+\subsection{Shellcode Analysis}
+\label{shellcode}
+
+PhoneyC is not able to understand shellcode that may be presented in the dynamic HTML page and is currently limited to a generic alert for a vulnerable method. Because of this, an analyst must still perform follow-up analysis of the content to determine the next stage of the attack. We have been working on integrating a shellcode analysis engine, libEmu~\cite{libemu}, into the dynamic payload inspection engine to further understand the next stage of the attack. This will also require tighter integration with the SpiderMonkey script engine. 
+
+\section{Related Work}
+\label{related-work}
+
+PhoneyC is not the first such honeyclient tool and builds on a number of previous works. The vulnerability module concept was inspired by the MWCollect virtual honeypot daemon~\cite{freiling2005bte}. In PhoneyC, modules are designed to mimic vulnerable ActiveX controls and implement the methods in JavaScript. Argument checks validate the input and provide a simple alerting mechanism. 
+
+Seifert's HoneyC is a low interaction, virtual honeyclient tool~\cite{seifert2006hli}. However, it suffers from a lack of ability to analyze obfuscated dynamic HTML and reliance on Snort signatures for detection, which is easily evaded.
+
+Real honeyclients have been developed by multiple independent groups. The MITRE HoneyClient uses Internet Explorer running on Windows~\cite{wang2005uhd}. Fed a list of URLs, the system will visit the URL if needed or pull the results from a local cache. When the URL is visited, if unexpected system changes occur, the URL is marked as suspicious and the new files are made available for additional analysis. The HoneyMonkey project is another large-scale, automated web crawling effort to discover malicious website~\cite{wang2006awp}. URLs are visited both by an older version of the browser and by a newer, up-to-date version to discover previously unknown and unpatched issues. Both are limited in their attack visibility as they require vulnerable modules to be installed in the client.
+
+Not all honeyclient tools are restricted to HTTP content. The SHIELA honeyclient uses Outlook Express driven by external scripts to discover mail-based threats~\cite{rocaspana:sch}. Trigger conditions are very similar to those of the MITRE Honeyclient, namely an alert happens if one of a set of illegal operations occurs, such as Windows registry changes, file creation, or specific network traffic. 
+
+Honeyclient research is also being done using browser plug-ins. Efforts are also underway to incorporate some of the basic heuristics and detection capabilities of honeyclients into real browsers used by analysts~\cite{hallaraker2005dmj}. 
+
+\section{Conclusion}
+\label{conclusion}
+
+PhoneyC is a virtual honeyclient for analyzing websites. It mimics legitimate web browsers and can understand dynamic content, and is the first virtual honeyclient that can de-obfuscate malicious content for detection. By using vulnerability modules, specific attacks can be pinpointed and characterized much faster than with manual analysis. 
+
+We gave an overview of PhoneyC's design and architecture and showed how PhoneyC's analysis engine understands malicious websites. Our experimental evaluation showed that PhoneyC works on current, in the wild malicious websites. We demonstrated that PhoneyC can determine what malicious software may be loaded onto a system if exploits exist. 
+
+PhoneyC is publicly available as source code under a GNU Public License. The subversion repository is available at http://svn.mwcollect.org/browser/phoneyc/trunk. 
+
+\section*{Acknowledgments}
+\label{acks}
+
+I would like to thank Georg Wicherski for his review of this paper, his contributions to the PhoneyC codebase and his assistance in a re-design of the toolkit. I would also like to thank Marco Cova for helpful discussions and bugfixes with PhoneyC. Chris Lee, Adrian Wiesmann and Christian Siefert all provided a generous review of this manuscript.
+
+\scriptsize
+\bibliographystyle{abbrv}
+\bibliography{phoneyc}
+\normalsize
+
+\end{document}
