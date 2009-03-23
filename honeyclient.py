@@ -286,7 +286,8 @@ class HttpHoneyClient(object):
 	return res
 
     def get(self, url, referrer=False):
-        try: res = self.__fetch(url, method="get", referrer=referrer)
+        try:
+	    res = self.__fetch(url, method="get", referrer=referrer)
         except Exception: raise
         self.pages[url] = Page(res, url)
         self.res[url] = res
@@ -387,9 +388,10 @@ class Page(object):
         self.contents = contents
         self.content_type = magic.whatis(contents)
 	parser = PageParser()
-	if 'html' in self.content_type:
-	    parser.feed(self.contents)
-	    parser.close()
+	# if 'html' in self.content_type:
+	parser.feed(contents)
+	parser.close()
+	print parser.hrefs
         self.vbs_body = '\n'.join(parser.vbs_body).replace('<!--', '').replace('-->','')
         self.js_body = ''.join(parser.js_body).replace('<!--', '').replace('-->','') + parser.onload
         self.js_body += '\nprint(page_alerts);\n'
