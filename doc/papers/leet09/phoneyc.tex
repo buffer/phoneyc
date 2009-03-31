@@ -196,47 +196,57 @@ When an unknown CLSID is found, one for which PhoneyC has no modules, a message 
 
 At this time over 65 unique vulnerability modules exist and are usable by PhoneyC. New modules are frequently added based on vulnerability reports and exploit code. 
 
-\section{Example}
-\label{example}
+\section{Evaluation}
+\label{evaluation}
 
-This section presents a brief demonstration of PhoneyC's ability to analyze malicious websites in the wild.
+For a medium-scale evaluation of PhoneyC 470 unique URLs were gathered that were suspected drive-by download sites and web browser exploits. These URLs were gathered from various sites and materials including the URL blacklist maintained at lineage.paix.jp, the drive-by malware blog at ilion.blog47.fc2.com, and the author's own suspect URL collection. URLs were submitted to the MITRE honeyclient system run by Honeyclient.org for analysis and also run through PhoneyC. The test system for PhoneyC was a MacBook running OS X 10.4.11 on an Intel Core Duo with a 2GHz clock speed and 2GB of SDRAM using Python 2.3.5 and SpiderMonkey 1.6. To speed up performance 24 PhoneyC processes were run in parallel. Each PhoneyC process was allowed a maximum depth of 4 links from the root URL. 
 
-The output below shows a trace from the ``honeywalk'' tool, built on top of the PhoneyC core library, as it traverses one of the Waledec sites that was sent in spam~\cite{waledec}. The sites use JavaScript to include an IFRAME with exploit code to load the file ``card.exe'' onto visitors' PCs. 
+Of the 470 candidate URLs, 115 were live (yielding a 200 OK), 14 URLs yielded a 300-series redirect, 42 yielded an HTTP return code of 400 (a Bad request), 21 yielded a 401 (unauthorized) error, 149 yielded an HTTP 404 error (the URI was not found on the server), 269 were unreachable (the host was not responding), and the remaining sites' DNS names were unable to resolve. 
+
+\subsection{Performance}
+\label{performance}
+
+PhoneyC's performance is hampered by design weaknesses, including calling out to external processes such as Curl, ClamAV, and SpiderMonkey to assist with the analysis, as well as only working on one URL at a time. The 470 unique URLs analyzed in this evaluation data set provide a representative sample of PhoneyC's abilities. Some URLs were analyzed faster than others. URL evaluation took between 3 seconds at a minimum and over 3.2 hours at a maximum for any specific URL, depending on its complexity (number of outbound links and any encountered script evaluation time). The average URL took 2.1 hours to analyze all outbound links and script code at a maximum distance of 4 references. Note that PhoneyC can be slowed down dramatically if the HTTP server for the URL is unreachable. 
+
+In contrast, the MITRE honeyclient, in contrast, was able analyze the 470 URLs in approximately 14 minutes. This is due to using a native browser, working in even greater parallel, and only loading the one URL (including images and scripts) before leaving the URL. 
+
+\subsection{Accuracy and Insights}
+\label{accuracy}
+
+From the 470 URLs, 22 unique HTML pages (unique via MD5 checksums) were downloaded, of which 2 yielded hits in ClamAV (both for the signature Exploit.CVE-2006-3730).  Other scanners tested included Kaspersky Antivirus, BitDefender, Grisoft's AVG, and Fortinet's 'vscanner' tool, none of which yielded signature hits on the HTML downloaded by PhoneyC. Over 2700 script bodies were evaluated (through a series of dynamic evaluations by PhoneyC), only three of which yielded positive signature hits with ClamAV for JS.Dropper-33 and Exploit.HTML.IFrameBOF-4. 
+
+Dynamic analysis by PhoneyC revealed that the most popular exploits found in the URL corpus were for the Xunlei Thunder 5.x DownURL2() overflow (6 found in total) and the PPStream (PowerPlayer.dll 2.0.1.3829) Activex Remote Overflow Exploit in the Logo property (6 found in total). PhoneyC is able to emulate this ActiveX control that has been widely exploited as a malcode dropper. As described below, PhoneyC's limits means that it is unable to capture all exploits seen in the wild, however. 
+
+In contrast to PhoneyC's findings, the MITRE honeyclient setup found only 4 URLs that registered an alert. These differences highlight weaknesses of PhoneyC as well as some of its strengths.
+
+URLs that registered an alert in PhoneyC did not always register issues in the MITRE honeyclient setup. An example is the URL http://www.pineapple4u.com/relogonn.htm. This was flagged as containing an exploit in PhoneyC (Exploit.CVE-2006-3730) even though the JavaScript subsystem was unable to process the script correctly. This is due to the combined approach used by the tool to analyze URLs. 
+
+Another example is the URL http://www.lineagecojp.com/tmsn/StormII.htm from the feed of URLs processed by both PhoneyC and the MITRE honeyclient. In this case PhoneyC's dynamic script analyzer found an issue with the page and flagged an exploit for the PPStream (PowerPlayer.dll 2.0.1.3829) ActiveX Overflow in the rawParse() method, even though ClamAV did not register an issue. The MITRE honeyclient did not flag this host. 
+
+An example where both PhoneyC and the MITRE honeyclient agreed that a URL was malicious was with the root exploit URL http://sexbases.cn/in.cgi?16\&1dfcb2. This URL was flagged as suspicious by the MIYRE honeyclient. PhoneyC is able to reveal that through a series of scripts and IFRAMEs the real exploit URL is http://dasretokfin.com/index.php, which exploits Exploit.CVE-2006-3730. 
+
+PhoneyC missed some of the URLs flagged by the MITRE honeyclient, such as http://www.lineagecojp.com/ie/Ms06014.htm. In this case this is a commonly found exploit for an XML Request object in Internet Exploit 6. This emulation is not fully available in PhoneyC at this time, so the dynamic script analyzer was unable to correctly analyze this URL. Another URL missed by PhoneyC was http://freeonlinehostguide.com/index.php. The MITRE honeyclient correctly recognized an exploit on this page but PhoneyC was not able to fetch any HTML contents for this URL and so was not able to determine if the site was malicious. This is commonly due to poor emulation of the Internet Explorer request to a web server which looks for specific browser request features before serving the content. 
+
+Hostname blacklists were also used to compare the findings and any suspicious nature of the URLs. If a domain name for the URL appears on a blacklist the URL itself may be malicious. To test this, and to verify that the URLs were possibly malicious, three blacklists were queried for the hostnames in the URLs. The results of any blacklisting are shown in Table \ref{blacklist}. 
+
+\begin{table}
+\centering
+\begin{tabular}{r|r}
+\hline
+{\bf Blacklist domain} & {Number of domains blacklisted} \\
+\hline
+sophosxl.com & 83 \\
+SURBL.org & 102 \\
+mailshell.net & 90 \\ 
+\hline
+\end{tabular}
+\bigskip
 \scriptsize
-\begin{verbatim}
-HoneyWalk started at Fri Jan  9 19:23:58 2009 UTC
-===> http://topgreetingsite.com/?code=244932dc56cbd0033a  
-     ('\n<iframe src="http://seocom.name/seogo/go.xmn?eb0h" 
-       style="display:none"></iframe>\n', '', 
-      'cf8ef75809da008e40f2b957d54b842d') 
-     {'ClamAV': ('b45248fd02a94eb7920ba1341117140a', 'OK')}
-http://topgreetingsite.com/?code=244932dc56cbd0033a
- --> card.exe
- --> http://topgreetingsite.com/card.exe
- --> img.gif
- --> http://topgreetingsite.com/img.gif
-===> http://topgreetingsite.com/card.exe  ('\n', '', 
-      '9020239c1bc03ad131d080939b5bbc2a') 
-     {'ClamAV': ('68b329da9893e34099c7d8ad5cb9c940', 'OK')}
-http://topgreetingsite.com/card.exe
-===> http://topgreetingsite.com/img.gif  ('\n', '', 
-      '9020239c1bc03ad131d080939b5bbc2a') 
-     {'ClamAV': ('68b329da9893e34099c7d8ad5cb9c940', 'OK')}
-http://topgreetingsite.com/img.gif
-\end{verbatim}
+\caption{Number of URLs screened by PhoneyC blacklisted by major DNS-based blacklists. This indicates that these URLs are possibly suspicious based on the domain name status.}
 \normalsize
-
-The ``honeywalk'' tool can also analyze more complex websites and exploit kits. Shown in Figure \ref{fig:example-walk} is an example crawl of a malicious URL. In this example, each of the exploits is listed on a unique HTML page with the exploit code embedded in the page. In this case, the page ``NCTAudioFile.html'' lead to the exploit's success. This specific vulnerability (CVE ID CVE-2007-0018) is in the SetFormatLikeSample() method of the library. An overflow in this case would cause the victim machine to execute shellcode to download and launch the malicious EXE file. 
-
-\begin{figure}[tb]
-  \centering
-  \includegraphics[width=\columnwidth]{pics/example_walk}
-%%  \scriptsize
-  \caption{Example crawl of a malicious URL showing the base URL, the included exploits, and the final EXE that is sent to the victim}
-%%  \normalsize
-  \label{fig:example-walk}
-\end{figure}
-
+\bigskip
+\label{blacklist}
+\end{table}
 \section{PhoneyC Detection}
 \label{weaknesses}
 
@@ -288,7 +298,7 @@ Honeyclient research is also being done using browser plug-ins. Efforts are also
 
 PhoneyC is a virtual honeyclient for analyzing websites. It mimics legitimate web browsers and can understand dynamic content, and is the first virtual honeyclient that can de-obfuscate malicious content for detection. By using vulnerability modules, specific attacks can be pinpointed and characterized much faster than with manual analysis. 
 
-We gave an overview of PhoneyC's design and architecture and showed how PhoneyC's analysis engine understands malicious websites. Our experimental evaluation showed that PhoneyC works on current, in the wild malicious websites. We demonstrated that PhoneyC can determine what malicious software may be loaded onto a system if exploits exist. 
+We gave an overview of PhoneyC's design and architecture and showed how PhoneyC's analysis engine understands malicious websites. Our experimental evaluation showed that PhoneyC works on current, in the wild malicious websites, albeit with room for improvements in both performance and features. We demonstrated that PhoneyC can determine what malicious software may be loaded onto a system if exploits exist. 
 
 PhoneyC is publicly available as source code under a GNU Public License. The subversion repository is available at http://code.google.com/p/phoneyc .
 
@@ -303,3 +313,475 @@ I would like to thank Georg Wicherski for his review of this paper, his contribu
 \normalsize
 
 \end{document}
+
+% mal sites under review for evaluation, mar 31 2009
+%http://qwr1.cn
+%http://forum.csrcentre-bd.org/	
+%http://www.ranninp.com/001359/Ms06014.htm
+%http://qjwm88.cn/02/02.htm
+%http://www.qiqigm.com/04.htm
+%http://hyrzqf.cn/06014.htm
+%http://o7n9.cn/1.htm
+%http://loveuswarters.cn/1.html
+%http://q20080911.com.cn/1/04.htm
+%http://q20080911.com.cn/1/14.htm
+%http://www.worldofwarcrokft.com/1/Office1.htm
+%http://www.dao-hang8.cn/10/06014.htm
+%http://www.dao-hang8.cn/10/NCT.htm
+%http://www.dao-hang8.cn/10/bfyy.htm
+%http://www.dao-hang8.cn/10/f2.html
+%http://www.dao-hang8.cn/10/flash.htm
+%http://www.dao-hang8.cn/10/i1.html
+%http://www.dao-hang8.cn/10/index.htm
+%http://www.dao-hang8.cn/10/lz_new.htm
+%http://www.dao-hang8.cn/10/office.htm
+%http://www.dao-hang8.cn/10/real10.htm
+%http://www.dao-hang8.cn/10/real11.htm
+%http://www.dao-hang8.cn/10/sina.htm
+%http://1818666.com/111/index.htm
+%http://www.fdsfaf.cn/118.htm
+%http://www.gsafs.cn/120.htm
+%http://gt.kfjed.org.cn/14.htm
+%http://www.goooog1e.cn/2.htm
+%http://www.jhnbt.cn/31.html
+%http://o7n9.cn/456.htm
+%http://www.skjdhr.cn/54.htm
+%http://fivecq.cn/65.htm
+%http://google.nan7.cn/6666/link/06014.htm
+%http://google.nan7.cn/6666/link/Uc.htm
+%http://google.nan7.cn/6666/link/cx.htm
+%http://google.nan7.cn/6666/link/ff.htm
+%http://google.nan7.cn/6666/link/flash.htm
+%http://google.nan7.cn/6666/link/index.html
+%http://google.nan7.cn/6666/link/mi.htm
+%http://google.nan7.cn/6666/link/real10.htm
+%http://google.nan7.cn/6666/link/real11.htm
+%http://google.nan7.cn/6666/link/xl.htm
+%http://google.nan7.cn/6666/s1.html
+%http://www.kiki02.net/7.htm
+%http://loveuswarters.cn/7.html
+%http://newymdt5.cn/85.htm
+%http://333mas8d.cn/9/flink.html
+%http://333mas8d.cn/9/ilink.html
+%http://565duomayi.cn/9/sf.htm
+%http://newymdg8.cn/92.htm
+%http://www.88feel.cn/Bfyy.htm
+%http://www.coconlovely.com/Blog/06014.htm
+%http://www.bluewoon.com/Blog/0733.htm
+%http://www.skywebsv.com/Blog/1.htm
+%http://www.skywebsv.com/Blog/2.htm
+%http://www.bluewoon.com/Blog/flash.htm
+%http://www.bluewoon.com/Blog/index1.htm
+%http://www.skywebsv.com/Blog/ms06014.htm
+%http://www.bluewoon.com/Blog/real11.htm
+%http://www.coconlovely.com/Blog/realplay.htm
+%http://adlaji.cn/GLWORLD.html
+%http://bakcss.cn/Lz.htm
+%http://bakcss.cn/Main.htm
+%http://www.88feel.cn/Ms06014.htm
+%http://www.xlsf013.cn/Pps.htm
+%http://adlaji.cn/Real.html
+%http://hyrzqf.cn/Real10.htm
+%http://user1.12-71.net/Real10.html
+%http://adlaji.cn/Thunder.html
+%http://asp-17.cn/UU.htm
+%http://www.832821.cn/Webxls.htm
+%http://www.fffffffggggg.cn/a0047129/Ms06014.htm
+%http://www.fffffffggggg.cn/a0047129/a04.htm
+%http://www.fffffffggggg.cn/a0047129/flink.html
+%http://www.fffffffggggg.cn/a0047129/fx.htm
+%http://www.fffffffggggg.cn/a0047129/ilink.html
+%http://www.fffffffggggg.cn/a0047129/new.html
+%http://asp-10.cn/a1/GLWORLD.html
+%http://asp-10.cn/a1/Real.html
+%http://asp-10.cn/a1/Thunder.html
+%http://asp-10.cn/a1/flink.html
+%http://asp-10.cn/a1/fx.htm
+%http://asp-10.cn/a1/ilink.html
+%http://asp-10.cn/a1/ms06014.htm
+%http://asp-10.cn/a1/real.htm
+%http://asp-10.cn/a1/ss.html
+%http://sllwbd8.cn/a117/fxx.htm
+%http://www.jsp369.cn/a22.htm
+%http://asp-10.cn/a5/GLWORLD.html
+%http://asp-13.cn/a5/Ms06014.htm
+%http://asp-10.cn/a5/Real.html
+%http://asp-10.cn/a5/Thunder.html
+%http://asp-10.cn/a5/flink.html
+%http://asp-10.cn/a5/fx.htm
+%http://asp-10.cn/a5/fxx.htm
+%http://asp-10.cn/a5/ilink.html
+%http://asp-10.cn/a5/ms06014.htm
+%http://asp-10.cn/a5/real.htm
+%http://asp-12.cn/a5/ss.html
+%http://asp-10.cn/a5/ss1.html
+%http://asp-5.cn/a5/ss111.html
+%http://bakcss.cn/a8.htm
+%http://www.cao360cao.cn/aa2.htm
+%http://www.fdsfaf.cn/abckkk.html
+%http://jzm015.cn/ac.htm
+%http://www.751down.cn/ad.htm
+%http://www.111nv.cn/ad.html
+%http://www.stats.dl.gov.cn/admin/activity/pic/index.htm
+%http://www.jhnbt.cn/al.html
+%http://www.118bi.cn/all/aa.htm
+%http://www.118bi.cn/all/afl.htm
+%http://www.118bi.cn/all/aho.htm
+%http://www.118bi.cn/all/alz.htm
+%http://www.118bi.cn/all/anrl.htm
+%http://www.118bi.cn/all/bb.htm
+%http://www.118bi.cn/all/new.htm
+%http://www.tooplogui.com/asindex.htm
+%http://www.1ovel.cn/asp/1.htm
+%http://www.1ovel.cn/asp/as.htm
+%http://www.1ovel.cn/asp/m6.htm
+%http://www.kele88.com/av/help.htm
+%http://ph.errtys.org/ax14.htm
+%http://www.tongji123.org/axfs.htm
+%http://ph.errtys.org/axlz.htm
+%http://abca5.cn/b057850/b05.htm
+%http://abca5.cn/b057850/new.html
+%http://www.hxg001.cn/b5.htm
+%http://bg.dcjsx.cn/baofeng.htm
+%http://www.gamemmobbs.com/batteROyale/Ms06014.htm
+%http://www.mabi360.cn/bb2.htm
+%http://13n7.cn/bbs/flink.html
+%http://web.do2a.cn/bbs/fx.htm
+%http://vitas01.cn/bbs/gm.htm
+%http://k3ks.cn/bbs/ilink.html
+%http://17178bbs.cn/bbs/index.htm
+%http://www.symphones.com/bbs/index1.htm
+%http://wmnvasd4.cn/bbs/sina.htm
+%http://www.bwirx.cn/bf.html
+%http://www.puma166.com/bfyy.htm
+%http://www.taikooo.cn/bk185.htm
+%http://www.dosmov.cn/bk200.htm
+%http://www.livedoorm.com/blog.htm
+%http://www.atewikijp.com/blog/
+%http://www.nicovideojps.com/blog/13n7.cn/bbs/ilink.html
+%http://gt.fdnc.net.cn/bx14.htm
+%http://gt.fdnc.net.cn/bxlz.htm
+%http://www.832821.cn/c145.htm
+%http://www.baibaiasd.cn/c4.htm
+%http://www.maplestorfy.com/caink/caink.htm
+%http://www.grandchasse.com/caink/lin.htm
+%http://www.grandchasse.com/caink/rmtline.htm
+%http://jerikoblog88fc2.com/category2-2.html
+%http://kky66.cn/cc/z1.htm
+%http://kky66.cn/cc/zz.htm
+%http://user1.bwseo.cn/ce.htm
+%http://229dj.cn/cn4.htm
+%http://loskut.cn/cotton.html
+%http://sexbases.cn/cow.html
+%http://d.webdaa.cn/cuteqq.htm
+%http://www.bbtv-chat.com/cuvt66895/Ms06014.htm
+%http://www.webs600.cn/d1.htm
+%http://222.189.239.3/d3/123.htm
+%http://222.189.239.3/d3/zz3.htm
+%http://ymcascaws9.cn/dao/a.htm
+%http://ymvsanw16.cn/dao/d.htm
+%http://www.gogo111.net/dl6.htm
+%http://www.pang123.cn/e2.htm
+%http://sexbases.cn/edit.html
+%http://www.gamemmobbs.com/esports/Ms06014.htm
+%http://www.bjhjjl.cn/ewebeditor/Ms06014.htm
+%http://www.gamanir.com/exe/wm.htm
+%http://gt.fdnc.net.cn/f.htm
+%http://www.infosueek.com/ff11diary/index.htm
+%http://www.k5dionne.com/ffxmmi/index.htm
+%http://kk.jackkk.cn/fgame.html
+%http://www.sunwayto.com/file/file.htm
+%http://229dj.cn/flash.htm
+%http://www.playenline.com/flash/flash.htm
+%http://bczouhao.cn/flash/flink.html
+%http://bczouhao.cn/flash/ilink.html
+%http://17178bbs.cn/flash/index.htm
+%http://www.gameicity.com/flash/zuo.htm
+%http://user1.12-71.net/flink.htm
+%http://d.webdaa.cn/flink.html
+%http://www.falurl.com/flleo/usmmtupo.htm
+%http://ageofconans.net/fsb/flink.html
+%http://ageofconans.net/fsb/ilink.html
+%http://ageofconans.net/fsb/index.htm
+%http://jzm015.cn/fx.htm
+%http://jzm015.cn/fxx.htm
+%http://bakcss.cn/fzl.htm
+%http://www.playonlanei.com/game/Ms06014.htm
+%http://www.8568985.com/garegky/egk.htm
+%http://www.fdsfaf.cn/ggbbyahoo.html
+%http://www.pang357.cn/ghost.html
+%http://www.awserk.cn/go.html
+%http://ph.errtys.org/gol/am1.htm
+%http://sexbases.cn/gr.php
+%http://www.nifala01.info/hao104.htm
+%http://web.fd5a.cn/hc/fh.htm
+%http://loveuswarters.cn/hi.htm
+%http://www.maplestorfy.com/holy_immortals/tals/ff.htm
+%http://www.maplestorfy.com/holy_immortals/tals/ffn.htm
+%http://www.maplestorfy.com/holy_immortals/tals/fftu.htm
+%http://www.maplestorfy.com/holy_immortals/tals/index1.htm
+%http://www.maplestorfy.com/holy_immortals/tals1/index2.htm
+%http://www.maplestorfy.com/holy_immortals/tals1/mo.htm
+%http://www.maplestorfy.com/holy_immortals/tals1/mu.htm
+%http://www.maplestorfy.com/holy_immortals/tals1/nu.htm
+%http://www.maplestorfy.com/holy_immortals/tals2/Ms06014.htm
+%http://www.maplestorfy.com/holy_immortals/tals2/main.htm
+%http://www.playonlino.com/home/Ajax.htm
+%http://www.playonlino.com/home/Bfyy.htm
+%http://www.playonlino.com/home/XunLei.htm
+%http://wm66.8800.org/htm/06014.htm
+%http://wm66.8800.org/htm/b1.htm
+%http://wm66.8800.org/htm/bfyy.htm
+%http://wm66.8800.org/htm/f2.html
+%http://wm66.8800.org/htm/flash.htm
+%http://wm66.8800.org/htm/i1.htm
+%http://wm66.8800.org/htm/lzx.htm
+%http://wm66.8800.org/htm/net.htm
+%http://wm66.8800.org/htm/new.htm
+%http://wm66.8800.org/htm/office.htm
+%http://wm66.8800.org/htm/real10.htm
+%http://wm66.8800.org/htm/real11.htm
+%http://www.lineagecojp.com/ie/Ms06014.htm
+%http://www.lineagecojp.com/ie/Ms06046.htm
+%http://www.lineagecojp.com/ie/StormII.htm
+%http://www.lineagecojp.com/ie/Xunlei.htm
+%http://www.lineagecojp.com/ie/Yahoo.htm
+%http://www.lineagecojp.com/ie/main.htm
+%http://www.testinghua.com/ie/ragnarokonline/Ms06014.htm
+%http://www.testinghua.com/ie/wm.htm
+%http://www.xinluoqu.com/ied/index1.htm
+%http://kk.jackkk.cn/igame.html
+%http://user1.12-71.net/ilink.htm
+%http://d.webdaa.cn/ilink.html
+%http://www.imbbs2t4u.com/imbbs/imbbs.htm
+%http://www.imbbs2t4u.com/imbbs/mbb.htm
+%http://sexbases.cn/in.cgi?16&1dfcb2
+%http://boaaa.3322.org/index.htm
+%http://219.136.252.219/index.html
+%http://freeonlinehostguide.com/index.php
+%http://hostindianet.com/index.php?cocacola25
+%http://hostindianet.com/index.php?cocacola26
+%http://www.mbspro6uic.com/indexff.htm
+%http://www.mbspro6uic.com/indexm.htm
+%http://windows.loveyoushipin.com/ing/le.htm
+%http://www.lineageinfo.com/injplink/inlink.htm
+%http://www.fxfqiao.com/jp/jp.htm
+%http://www.userlg.cn/jp20.htm
+%http://www.woshijianren.com/jpjp/Ms06014.htm
+%http://www.woshijianren.com/jpjp/jpro.htm
+%http://www.fxfqiao.com/jpsk/love.htm
+%http://www.dyyh.com.cn/ktm/2.htm
+%http://www.knbyu.cn/l.html
+%http://www.aspxia.com.cn/la03.htm
+%http://loveuswarters.cn/le.htm
+%http://www.oulianyong.com/lin240/index.htm
+%http://rmtfane.com/link179700/Ms06014.htm
+%http://www.nlftweb.com/link179700/index.html
+%http://www.zgynkmq.cn/llsg/5.htm
+%http://hostindianet.com/load.php?id=0
+%http://hostindianet.com/load.php?id=4
+%http://bg.dcjsx.cn/lz.htm
+%http://www.k5dionne.com/ma/Ms06014.htm
+%http://www.k5dionne.com/ma/Yahoo.htm
+%http://www.k5dionne.com/ma/index.htm
+%http://skkustp.itgozone.com/mailing/page1.htm
+%http://newymas19.cn/main.htm
+%http://bakcss.cn/mike.htm
+%http://user1.zhong612.cn/mm/14.htm
+%http://user1.zhong686.cn/mm/flink.html
+%http://user1.zhong612.cn/mm/fx.htm
+%http://user1.zhong686.cn/mm/ilink.html
+%http://user1.zhong612.cn/mm/lz.htm
+%http://user1.zhong612.cn/mm/newlz.htm
+%http://user1.zhong612.cn/mm/real11.htm
+%http://www.jbbslivedoor.com/mmghaoyk/Ms06014.htm
+%http://www.jbbslivedoor.com/mmghaoyk/Yahoo.htm
+%http://www.gaimima130.com/mood123.htm
+%http://www.bwirx.cn/ms14.html
+%http://www.mbspro6uic.com/naizi/Ms06014.htm
+%http://www.mbspro6uic.com/naizi/Yahoo.htm
+%http://www.shagigi.net/navi/index1.htm
+%http://xxx.745970.com/newdm/new82.htm
+%http://user1.bbs221.cn/newlz.htm
+%http://8879123.cn/news.html
+%http://ho.bestbreakingfree.com/news.php
+%http://d.webdaa.cn/nlz.html
+%http://www.knbyu.cn/nr.html
+%http://www.bwirx.cn/nreal.html
+%http://www.cviog.cn/of.html
+%http://ms.stopyy.info/ok/14.htm
+%http://ms.stopyy.info/ok/ads.htm
+%http://www.awserk.cn/old.html
+%http://www.k5dionne.com/ousele/ttmm.htm
+%http://70data.cn/page/add_06667.htm
+%http://serjx.cn/page/add_1566515.htm
+%http://loveuswarters.cn/r.htm
+%http://www.knbyu.cn/r.html
+%http://loveuswarters.cn/r1.htm
+%http://gt.fdnc.net.cn/r10.htm
+%http://gt.fdnc.net.cn/r11.htm
+%http://www.playsese.com/ran898864/raun.htm
+%http://www.lineagecojp.com/rbt1/Ms06014.htm
+%http://www.lineagecojp.com/rbt1/Ms06046.htm
+%http://www.lineagecojp.com/rbt1/StormII.htm
+%http://www.lineagecojp.com/rbt1/Xunlei.htm
+%http://www.lineagecojp.com/rbt1/Yahoo.htm
+%http://www.lineagecojp.com/rbt1/main.htm
+%http://bg.dcjsx.cn/re10.htm
+%http://bg.dcjsx.cn/re11.htm
+%http://www.ragnwiki.com/read/index1.htm
+%http://www.playonlinenc.com/real.htm
+%http://www.bwirx.cn/real.html
+%http://bakcss.cn/real10.htm
+%http://bakcss.cn/real11.htm
+%http://www.playboss-jp.com/real_cgi/real.htm
+%http://www.pineapple4u.com/relogonn.htm
+%http://www.gameicity.com/rmt/index.htm
+%http://www.ff11free.com/ro_diary.htm
+%http://jinian08512.cn/root/11.htm
+%http://vip.dob3.cn/root/Real11.htm
+%http://vip.dob3.cn/root/bfyy.htm
+%http://jinian08512.cn/root/live.htm
+%http://web.do2a.cn/root/off.htm
+%http://jinian08512.cn/root/real11.htm
+%http://jnqingchuan.cn/root/rp10.htm
+%http://17178bbs.cn/root/vip.htm
+%http://vw.wd2a.cn/root/vop.htm
+%http://23411f.cn/se/zz.htm
+%http://www.hyap98.com/sha.htm
+%http://asp-15.cn/sina.htm
+%http://op13.com.cn/sky/bw.htm
+%http://www.pcutw.com/smss.htm
+%http://www.bwirx.cn/so.html
+%http://www.twyaooplay.com/sp2.htm
+%http://jzm015.cn/ss.html
+%http://www.teamerblog.com/steal/06014.htm
+%http://www.teamerblog.com/steal/0733.htm
+%http://www.teamerblog.com/steal/flash.htm
+%http://www.teamerblog.com/steal/realplay.htm
+%http://add-block-filter.info/t/?12257ff72
+%http://add-block-filter.info/t/?3172ff72
+%http://loskut.cn/tie.html
+%http://www.awserk.cn/timwp.html
+%http://dkud2.3322.org/tj/b05.htm
+%http://www.lineagecojp.com/tmsn/Ms06014.htm
+%http://www.lineagecojp.com/tmsn/Ms06046.htm
+%http://www.lineagecojp.com/tmsn/StormII.htm
+%http://www.lineagecojp.com/tmsn/Xunlei.htm
+%http://www.lineagecojp.com/tmsn/Yahoo.htm
+%http://www.lineagecojp.com/tmsn/main.htm
+%http://www.dao-hang8.cn/tong/index.htm
+%http://sammitr.co.za/toyota.htm
+%http://www.cvuio.cn/ue.html
+%http://goooodbill.cn/unig/index.php
+%http://5rublei.com/unique/index.php
+%http://loskut.cn/unisex.html
+%http://www.testinghua.com/upup.htm
+%http://www.dfdf43.cn/us.html
+%http://bg.dcjsx.cn/use.htm
+%http://bakcss.cn/uu.htm
+%http://www.bdsae.org.cn/uusee.htm
+%http://sexbases.cn/vas.php
+%http://boadongo.org/vbshokmm/Ms06014.htm
+%http://boadongo.org/vbshokmm/Yahoo.htm
+%http://www.832821.cn/vip.htm
+%http://www.aimeblog.com/watch/sm3683942/
+%http://www.gomenifty.com/web/
+%http://www.ragnwiki.com/web/1.htm
+%http://www.ragnwiki.com/web/2.htm
+%http://www.886677001.cn/web/3.htm
+%http://www.886677001.cn/web/6673202.htm
+%http://www.886677001.cn/web/htm.html
+%http://www.motewiki.net/web/index1.htm
+%http://www.886677001.cn/web/real2.htm
+%http://www.886677001.cn/web/real3.htm
+%http://www.886677001.cn/web/rl.htm
+%http://www.886677001.cn/web/swf.htm
+%http://mmpp.cqcx321.cn/wf.htm
+%http://www.gamtyblog.net/wiki/06014.htm
+%http://www.panslog.net/wiki/0733.htm
+%http://www.teamerblog.com/wiki/1.htm
+%http://www.teamerblog.com/wiki/2.htm
+%http://www.panslog.net/wiki/flash.htm
+%http://www.panslog.net/wiki/index1.htm
+%http://www.caremoon.net/wiki/main.htm
+%http://www.panslog.net/wiki/real11.htm
+%http://www.gamtyblog.net/wiki/realplay.htm
+%http://www.symphones.com/wikipedia/index1.htm
+%http://www.game-r2.com/window/index.htm
+%http://www.52yhs.cn/wm/14.htm
+%http://8879123.cn/wm/456.htm
+%http://www.52yhs.cn/wm/as.htm
+%http://8879123.cn/wm/cs.htm
+%http://8879123.cn/wm/cs1.htm
+%http://vip.dob3.cn/wm/fl/ffl.html
+%http://vip.dob3.cn/wm/fl/ifl.html
+%http://www.52yhs.cn/wm/fx.htm
+%http://baidutd.cn/wm/fyear.html
+%http://baidutd.cn/wm/iyear.html
+%http://www.52yhs.cn/wm/new.htm
+%http://baidutd.cn/wm/nlz.html
+%http://x47y.grefeswf.cn/wmcc/14.htm
+%http://vw.wd2a.cn/wmpu/1051.htm
+%http://zouhaobc.cn/wmpu/1810.htm
+%http://www.makgcat.com/woodem.htm
+%http://www.bokiao.cn/ww/Ajax.htm
+%http://www.bokiao.cn/ww/Bfyy.htm
+%http://www.bokiao.cn/ww/Lz.htm
+%http://www.bokiao.cn/ww/Ms06014.htm
+%http://www.bokiao.cn/ww/cuteqq.htm
+%http://danshkk.cn/www/M1.htm
+%http://danshkk.cn/www/M2.htm
+%http://danshkk.cn/www/M3.htm
+%http://danshkk.cn/www/M4.htm
+%http://danshkk.cn/www/fa.htm
+%http://danshkk.cn/www/flink.html
+%http://www.systemses.cn/www/games.htm
+%http://danshkk.cn/www/ilink.html
+%http://www.1ovel.cn/www/m5.htm
+%http://www.systemses.cn/www/public.html
+%http://danshkk.cn/www/uu.htm
+%http://www.qq5188.com/wz/rmht/200705/869.html
+%http://cc9jhdsa.cn/xi/14.htm
+%http://cc9jhdsa.cn/xi/NCTAudioFile.htm
+%http://niw82221.cn/xi/fgame.html
+%http://cc9jhdsa.cn/xi/flash.htm
+%http://niw82221.cn/xi/flink.html
+%http://cc9jhdsa.cn/xi/fssf.html
+%http://niw82221.cn/xi/igame.html
+%http://niw82221.cn/xi/ilink.html
+%http://cc9jhdsa.cn/xi/issf.html
+%http://cc9jhdsa.cn/xi/lz.htm
+%http://niw82221.cn/xi/ofc.htm
+%http://cc9jhdsa.cn/xi/office.htm
+%http://cc9jhdsa.cn/xi/re10.htm
+%http://cc9jhdsa.cn/xi/re11.htm
+%http://niw82221.cn/xi/sf.htm
+%http://cc9jhdsa.cn/xi/sina.htm
+%http://niw82221.cn/xi/so.htm
+%http://niw82221.cn/xi/sr.htm
+%http://niw82221.cn/xi/st.htm
+%http://niw82221.cn/xi/sz.htm
+%http://niw82221.cn/xi/xl.htm
+%http://cc9jhdsa.cn/xi/xx.htm
+%http://www.1ovel.cn/xiao.htm
+%http://maplestorfy.w16.okwit.com/xin/Ms06014.htm
+%http://www.infosueek.com/xin/Ms06014tt.htm
+%http://www.infosueek.com/xin/Ms06046.htm
+%http://www.infosueek.com/xin/Ms06046tt.htm
+%http://maplestorfy.w16.okwit.com/xin/Yahoo.htm
+%http://www.infosueek.com/xin/Yahoott.htm
+%http://maplestorfy.w16.okwit.com/xin/main.htm
+%http://jerikoblog88fc2.com/xinma/Ms06046.htm
+%http://www.twyaooplay.com/xp.htm
+%http://www.111nv.cn/xx.html
+%http://ll80.com/xx/ip.htm
+%http://www.bokiao.cn/xxx/185/bk.htm
+%http://www.bokiao.cn/xxx/185/m14.htm
+%http://d.webdaa.cn/xxx/200/bk.htm
+%http://d.webdaa.cn/xxx/200/m14.htm
+%http://www.lineagecojp.com/xzyw2/wm/main.htm
+%http://baidutd.cn/year.htm
+%http://www.fire122.cn/zi.htm
+%http://www.girl-o.com/zt.htm
+%http://gt.kfjed.org.cn/zzx/zx5.htm
