@@ -101,7 +101,7 @@ function my_document () {
 var document=new my_document();
 
 function new_location(prop, oldv, newv) {
-    print("document.write(\\"<a href=" + newv + ">" + newv + "</a>\\");");
+    print('document.write(\\"<a href=" + newv + ">" + newv + "</a>\\");');
 }
 function my_location() {
        this.href='';
