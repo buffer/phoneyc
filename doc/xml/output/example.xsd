@@ -18,32 +18,70 @@
         <xs:element name="url">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="referrer" type="xs:string" minOccurs="0" msdata:Ordinal="0" />
-              <xs:element name="httpStatus" type="xs:string" minOccurs="0" msdata:Ordinal="1" />
-              <xs:element name="serverHeaders" type="xs:string" minOccurs="0" msdata:Ordinal="2" />
-              <xs:element name="requestHeaders" type="xs:string" minOccurs="0" msdata:Ordinal="3" />
+              <xs:element name="urlString" type="xs:string" minOccurs="0" msdata:Ordinal="0" />
+              <xs:element name="referrer" type="xs:string" minOccurs="0" msdata:Ordinal="2" />
+              <xs:element name="httpStatus" type="xs:string" minOccurs="0" msdata:Ordinal="3" />
+              <xs:element name="httpRedirectedTo" type="xs:string" minOccurs="0" msdata:Ordinal="4" />
+              <xs:element name="serverHeaders" type="xs:string" minOccurs="0" msdata:Ordinal="5" />
+              <xs:element name="requestHeaders" type="xs:string" minOccurs="0" msdata:Ordinal="6" />
               <xs:element name="disposition">
-				<xs:simpleType>
-	 				<xs:restriction base="xs:string">
-						<xs:enumeration value="benign" />
-						<xs:enumeration value="malicious" />
-						<xs:enumeration value="suspicious" />
-						<xs:enumeration value="errors" />
-						<xs:enumeration value="unknown" />
-					</xs:restriction>
-				</xs:simpleType>	
-              <xs:element name="deobfuscatedScript">
-				<xs:complexType>
-					<xs:attribute name="language" type="xs:string" />
-					<xs:attribute name="layer" type="xs:string" />
-				</xs:complexType>
-			  </xs:element>
-              <xs:element name="output" type="xs:string" minOccurs="0" msdata:Ordinal="7" />
+							<xs:simpleType>
+				 				<xs:restriction base="xs:string">
+									<xs:enumeration value="benign" />
+									<xs:enumeration value="malicious" />
+									<xs:enumeration value="suspicious" />
+									<xs:enumeration value="errors" />
+									<xs:enumeration value="unknown" />
+								</xs:restriction>
+							</xs:simpleType>
+              <xs:element name="deobfuscatedScript" type="xs:string" minOccurs="0" msdata:Ordinal="8" />
+              <xs:element name="output" type="xs:string" minOccurs="0" msdata:Ordinal="9" />
+              <xs:element name="dnsResolution" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="hostname" type="xs:string" minOccurs="0" />
+                    <xs:element name="resolvesTo" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="ipAddress" nillable="true" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:simpleContent msdata:ColumnName="ipAddress_Text" msdata:Ordinal="2">
+                                <xs:extension base="xs:string">
+                                  <xs:attribute name="family" type="xs:string" />
+                                  <xs:attribute name="timestamp" type="xs:string" />
+                                </xs:extension>
+                              </xs:simpleContent>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="cname" nillable="true" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:simpleContent msdata:ColumnName="cname_Text" msdata:Ordinal="1">
+                                <xs:extension base="xs:string">
+                                  <xs:attribute name="timestamp" type="xs:string" />
+                                </xs:extension>
+                              </xs:simpleContent>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
               <xs:element name="contents" minOccurs="0" maxOccurs="unbounded">
                 <xs:complexType>
                   <xs:sequence>
                     <xs:element name="content" type="xs:string" minOccurs="0" />
                     <xs:element name="content-type" type="xs:string" minOccurs="0" />
+                    <xs:element name="content-length" nillable="true" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:simpleContent msdata:ColumnName="content-length_Text" msdata:Ordinal="1">
+                          <xs:extension base="xs:string">
+                            <xs:attribute name="units" type="xs:string" />
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
                     <xs:element name="hashes" minOccurs="0" maxOccurs="unbounded">
                       <xs:complexType>
                         <xs:sequence>
