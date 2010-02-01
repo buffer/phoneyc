@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urls>
+	<clientInfo>
+		<version>1.0</version>
+		<ipAddress>192.168.1.1</ipAddress>
+		<commandLine><![CDATA[honeywalk.py -D http://bar/]]></commandLine>
+		<startTime>2010-01-01T01:01:01</startTime>
+		<endTime>2010-01-01T02:01:01</endTime>
+	</clientInfo>
+	<url id="http://foo">
+		<referrer>http://foo/</referrer>
+		<httpStatus>200</httpStatus>
+		<serverHeaders><![CDATA[HTTP/1.1 200 OK
+		Date: Mon, 01 Feb 2010 00:58:21 GMT
+		Server: Apache/2.2.9
+		Accept-Ranges: bytes
+		Vary: Accept-Encoding
+		Connection: close
+		Content-Type: text/html]]>
+		</serverHeaders>
+		<requestHeaders><![CDATA[GET / HTTP/1.0]]></requestHeaders>
+		<contents>
+			<content><![CDATA[foo bar]]></content>
+			<hashes>
+				<md5>d3b07384d113edec49eaa6238ad5ff00</md5>
+				<sha1>f1d2d2f924e986ac86fdf7b36c94bcdf32beec15</sha1>
+			</hashes>
+			<content-type>text/html</content-type>
+		</contents>
+		<disposition>malicious</disposition>
+		<kit name="Fragus" version="1.0" />
+		<exploits>
+			<exploit>
+				<vulnerability id="CVE-2010-0001">CVE-2010-0001</vulnerability>
+				<module clsid="EIUGEWGU" clsname="FooBar.1" />
+				<consequence type="launch process">
+					<additionalData>netsh.exe allow all</additionalData>
+				</consequence>
+				<shellcode>90 90 90</shellcode>
+			</exploit>
+		</exploits>
+		<deobfuscatedScript><![CDATA[eoiehoihewoihe]]></deobfuscatedScript>
+		<output><![CDATA[Hello, i pwnt you!]]></output>
+		<classifications>
+			<classification>
+				<antivirus>
+					<engine>ClamAV</engine>
+					<version>0.99</version>
+					<datVersion>20100109-1</datVersion>
+					<timestamp>2010-01-01T01:01:01</timestamp>
+					<result>Exploit.HTML.Gen.4</result>
+				</antivirus>
+				<antivirus />
+				<urlbls>
+					<urlbl>
+						<bl>bl.google.com</bl>
+						<timestamp>2010-01-01T01:01:01</timestamp>
+						<result>127.0.0.2</result>
+					</urlbl>
+					<urlbl />
+				</urlbls>
+			</classification>
+			<classification />
+		</classifications>
+	</url>
+</urls>

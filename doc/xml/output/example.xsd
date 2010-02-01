@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+<!-- Generated using Flame-Ware Solutions XML-2-XSD v2.0 at http://www.flame-ware.com/Products/XML-2-XSD/ -->
+<xs:schema id="urls" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xs:element name="urls" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="clientInfo">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="version" type="xs:string" minOccurs="0" />
+              <xs:element name="ipAddress" type="xs:string" minOccurs="0" />
+              <xs:element name="commandLine" type="xs:string" minOccurs="0" />
+              <xs:element name="startTime" type="xs:string" minOccurs="0" />
+              <xs:element name="endTime" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="url">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="referrer" type="xs:string" minOccurs="0" msdata:Ordinal="0" />
+              <xs:element name="httpStatus" type="xs:string" minOccurs="0" msdata:Ordinal="1" />
+              <xs:element name="serverHeaders" type="xs:string" minOccurs="0" msdata:Ordinal="2" />
+              <xs:element name="requestHeaders" type="xs:string" minOccurs="0" msdata:Ordinal="3" />
+              <xs:element name="disposition" type="xs:string" minOccurs="0" msdata:Ordinal="5" />
+              <xs:element name="deobfuscatedScript" type="xs:string" minOccurs="0" msdata:Ordinal="6" />
+              <xs:element name="output" type="xs:string" minOccurs="0" msdata:Ordinal="7" />
+              <xs:element name="contents" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="content" type="xs:string" minOccurs="0" />
+                    <xs:element name="content-type" type="xs:string" minOccurs="0" />
+                    <xs:element name="hashes" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="md5" type="xs:hexBinary" minOccurs="0" />
+                          <xs:element name="sha1" type="xs:hexBinary" minOccurs="0" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="kit" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:attribute name="name" type="xs:string" />
+                  <xs:attribute name="version" type="xs:string" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="exploits" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="exploit" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="shellcode" type="xs:hexBinary" minOccurs="0" />
+                          <xs:element name="vulnerability" nillable="true" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:simpleContent msdata:ColumnName="vulnerability_Text" msdata:Ordinal="1">
+                                <xs:extension base="xs:string">
+                                  <xs:attribute name="id" type="xs:string" />
+                                </xs:extension>
+                              </xs:simpleContent>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="module" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:attribute name="clsid" type="xs:string" />
+                              <xs:attribute name="clsname" type="xs:string" />
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="consequence" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="additionalData" type="xs:string" minOccurs="0" msdata:Ordinal="0" />
+                              </xs:sequence>
+                              <xs:attribute name="type" type="xs:string" />
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="classifications" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="classification" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="antivirus" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="engine" type="xs:string" minOccurs="0" />
+                                <xs:element name="version" type="xs:string" minOccurs="0" />
+                                <xs:element name="datVersion" type="xs:string" minOccurs="0" />
+                                <xs:element name="timestamp" type="xs:string" minOccurs="0" />
+                                <xs:element name="result" type="xs:string" minOccurs="0" />
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="urlbls" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="urlbl" minOccurs="0" maxOccurs="unbounded">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:element name="bl" type="xs:string" minOccurs="0" />
+                                      <xs:element name="timestamp" type="xs:string" minOccurs="0" />
+                                      <xs:element name="result" type="xs:string" minOccurs="0" />
+                                    </xs:sequence>
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:string" />
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
