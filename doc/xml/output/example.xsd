@@ -22,8 +22,22 @@
               <xs:element name="httpStatus" type="xs:string" minOccurs="0" msdata:Ordinal="1" />
               <xs:element name="serverHeaders" type="xs:string" minOccurs="0" msdata:Ordinal="2" />
               <xs:element name="requestHeaders" type="xs:string" minOccurs="0" msdata:Ordinal="3" />
-              <xs:element name="disposition" type="xs:string" minOccurs="0" msdata:Ordinal="5" />
-              <xs:element name="deobfuscatedScript" type="xs:string" minOccurs="0" msdata:Ordinal="6" />
+              <xs:element name="disposition">
+				<xs:simpleType>
+	 				<xs:restriction base="xs:string">
+						<xs:enumeration value="benign" />
+						<xs:enumeration value="malicious" />
+						<xs:enumeration value="suspicious" />
+						<xs:enumeration value="errors" />
+						<xs:enumeration value="unknown" />
+					</xs:restriction>
+				</xs:simpleType>	
+              <xs:element name="deobfuscatedScript">
+				<xs:complexType>
+					<xs:attribute name="language" type="xs:string" />
+					<xs:attribute name="layer" type="xs:string" />
+				</xs:complexType>
+			  </xs:element>
               <xs:element name="output" type="xs:string" minOccurs="0" msdata:Ordinal="7" />
               <xs:element name="contents" minOccurs="0" maxOccurs="unbounded">
                 <xs:complexType>
