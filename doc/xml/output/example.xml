@@ -38,6 +38,10 @@
 			</hashes>
 			<content-type>text/html</content-type>
 		</contents>
+		<links>
+		  <link tag="img">http://foo.bar.com/img.png</link>
+		  <link tag="iframe">http://bad.stuff.com/foo.php</link>
+		</links>
 		<disposition>malicious</disposition>
 		<kit name="Fragus" version="1.0" />
 		<exploits>
