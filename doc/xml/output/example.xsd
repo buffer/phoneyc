@@ -20,12 +20,12 @@
             <xs:sequence>
               <xs:element name="urlString" type="xs:string" minOccurs="0" msdata:Ordinal="0" />
               <xs:element name="referrer" type="xs:string" minOccurs="0" msdata:Ordinal="2" />
-              <xs:element name="httpStatus" type="xs:string" minOccurs="0" msdata:Ordinal="3" />
+              <xs:element name="httpStatus" type="xs:decimal" minOccurs="0" msdata:Ordinal="3" />
               <xs:element name="httpRedirectedTo" type="xs:string" minOccurs="0" msdata:Ordinal="4" />
               <xs:element name="serverHeaders" type="xs:string" minOccurs="0" msdata:Ordinal="5" />
               <xs:element name="requestHeaders" type="xs:string" minOccurs="0" msdata:Ordinal="6" />
               <xs:element name="disposition">
-							<xs:simpleType>
+							<xs:simpleType name="DispositionEnum">
 				 				<xs:restriction base="xs:string">
 									<xs:enumeration value="benign" />
 									<xs:enumeration value="malicious" />
@@ -34,7 +34,7 @@
 									<xs:enumeration value="unknown" />
 								</xs:restriction>
 							</xs:simpleType>
-              <xs:element name="deobfuscatedScript" type="xs:string" minOccurs="0" msdata:Ordinal="8" />
+							</xs:element>
               <xs:element name="output" type="xs:string" minOccurs="0" msdata:Ordinal="9" />
               <xs:element name="dnsResolution" minOccurs="0" maxOccurs="unbounded">
                 <xs:complexType>
@@ -76,7 +76,7 @@
                     <xs:element name="content-length" nillable="true" minOccurs="0" maxOccurs="unbounded">
                       <xs:complexType>
                         <xs:simpleContent msdata:ColumnName="content-length_Text" msdata:Ordinal="1">
-                          <xs:extension base="xs:string">
+                          <xs:extension base="xs:decimal">
                             <xs:attribute name="units" type="xs:string" />
                           </xs:extension>
                         </xs:simpleContent>
@@ -85,18 +85,44 @@
                     <xs:element name="hashes" minOccurs="0" maxOccurs="unbounded">
                       <xs:complexType>
                         <xs:sequence>
-                          <xs:element name="md5" type="xs:hexBinary" minOccurs="0" />
-                          <xs:element name="sha1" type="xs:hexBinary" minOccurs="0" />
+                          <xs:element name="hash" nillable="true" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:simpleContent msdata:ColumnName="hash_Text" msdata:Ordinal="2">
+                                <xs:extension base="xs:string">
+                                  <xs:attribute name="algorithn" type="xs:hexBinary" />
+                                  <xs:attribute name="algorithm" type="xs:hexBinary" />
+                                </xs:extension>
+                              </xs:simpleContent>
+                            </xs:complexType>
+                          </xs:element>
                         </xs:sequence>
                       </xs:complexType>
                     </xs:element>
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
-              <xs:element name="kit" minOccurs="0" maxOccurs="unbounded">
+              <xs:element name="outgoingLinks" minOccurs="0" maxOccurs="unbounded">
                 <xs:complexType>
-                  <xs:attribute name="name" type="xs:string" />
-                  <xs:attribute name="version" type="xs:string" />
+                  <xs:sequence>
+                    <xs:element name="link" nillable="true" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:simpleContent msdata:ColumnName="link_Text" msdata:Ordinal="1">
+                          <xs:extension base="xs:string">
+                            <xs:attribute name="tag" type="xs:string" />
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="kit" nillable="true" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:simpleContent msdata:ColumnName="kit_Text" msdata:Ordinal="1">
+                    <xs:extension base="xs:string">
+                      <xs:attribute name="version" type="xs:string" />
+                    </xs:extension>
+                  </xs:simpleContent>
                 </xs:complexType>
               </xs:element>
               <xs:element name="exploits" minOccurs="0" maxOccurs="unbounded">

@@ -33,17 +33,17 @@
 			<content><![CDATA[foo bar]]></content>
 			<content-length units="bytes">31337</content-length>
 			<hashes>
-				<md5>d3b07384d113edec49eaa6238ad5ff00</md5>
-				<sha1>f1d2d2f924e986ac86fdf7b36c94bcdf32beec15</sha1>
+				<hash algorithn="md5">d3b07384d113edec49eaa6238ad5ff00</hash>
+				<hash algorithm="sha1">f1d2d2f924e986ac86fdf7b36c94bcdf32beec15</hash>
 			</hashes>
 			<content-type>text/html</content-type>
 		</contents>
-		<links>
+		<outgoingLinks>
 		  <link tag="img">http://foo.bar.com/img.png</link>
 		  <link tag="iframe">http://bad.stuff.com/foo.php</link>
-		</links>
+		</outgoingLinks>
 		<disposition>malicious</disposition>
-		<kit name="Fragus" version="1.0" />
+		<kit version="1.0">Fragus</kit>
 		<exploits>
 			<exploit>
 				<vulnerability id="CVE-2010-0001">CVE-2010-0001</vulnerability>
@@ -54,7 +54,6 @@
 				<shellcode>90 90 90</shellcode>
 			</exploit>
 		</exploits>
-		<deobfuscatedScript><![CDATA[eoiehoihewoihe]]></deobfuscatedScript>
 		<output><![CDATA[Hello, i pwnt you!]]></output>
 		<classifications>
 			<classification>
