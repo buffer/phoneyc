@@ -24,6 +24,7 @@
               <xs:element name="httpRedirectedTo" type="xs:string" minOccurs="0" msdata:Ordinal="4" />
               <xs:element name="serverHeaders" type="xs:string" minOccurs="0" msdata:Ordinal="5" />
               <xs:element name="requestHeaders" type="xs:string" minOccurs="0" msdata:Ordinal="6" />
+              <xs:element name="error" type="xs:string" minOccurs="0" />
               <xs:element name="disposition">
 							<xs:simpleType name="DispositionEnum">
 				 				<xs:restriction base="xs:string">

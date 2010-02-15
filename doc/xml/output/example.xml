@@ -28,6 +28,7 @@
 		Connection: close
 		Content-Type: text/html]]>
 		</serverHeaders>
+		<errors />
 		<requestHeaders><![CDATA[GET / HTTP/1.0]]></requestHeaders>
 		<contents>
 			<content><![CDATA[foo bar]]></content>
