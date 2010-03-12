@@ -1,44 +1,55 @@
 # Microsoft XMLHTTP
 
+content = ''
+
 def open(arg0, arg1, arg2 = True, arg3 = None, arg4 = None):
-    def cb(buf):	
-        import hashlib
-        h = hashlib.md5()
-        h.update(buf)
-        filename = h.hexdigest()
-        add_alert("Filename: " + filename)
-        fd = open("log/downloads/binaries/%s" % (filename, ), 'wb')
-        fd.write(buf)
-        fd.close()
+	def cb(buf):
+		global content
+		content += buf
 
-    _url = str(arg1)
-    add_alert('Microsoft XMLHTTP')
-    add_alert("Method : " + arg0)
-    add_alert("URL    : " + _url)
+	def store():
+		global content
+		import hashlib
+		h = hashlib.md5()
+		h.update(content)
+		filename = "log/downloads/binaries/%s" % (h.hexdigest(), )
+		add_alert("[*] Saving File: " + filename)
+		fd = open(filename, 'wb')
+		fd.write(content)
+		fd.close()
+		content = ''
 
-    ua = "Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.5) Gecko/20091109 Gentoo Firefox/3.5.5 GTB6"
-    urls = set()
-    if _url.startswith("/"):
-	for base in os.environ['PHONEYC_URLBASE'].split(";"):
-	    urls.add(base + _url) 	
-    else:
-	urls.add(_url)
+	_url = str(arg1)
+	add_alert('[*] Microsoft XMLHTTP')
+	add_alert("[*] Method : " + arg0)
+	add_alert("[*] URL    : " + _url)
 
-    import pycurl
+	ua = "Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.5) Gecko/20091109 Gentoo Firefox/3.5.5 GTB6"
+	urls = set()
+	if _url.startswith("/"):
+		for base in os.environ['PHONEYC_URLBASE'].split(";"):
+			urls.add(base + _url)       
+	else:
+		urls.add(_url)
 
-    for url in urls:
-	print url
-	try:
-	    c = pycurl.Curl()
-	    c.setopt(c.FOLLOWLOCATION, 1)
-	    c.setopt(c.WRITEFUNCTION, cb)
-	    c.setopt(c.USERAGENT, ua)
-	    #c.setopt(c.VERBOSE, 1)
-	    c.setopt(c.URL, url)
-            c.perform()
-	except:
-	    continue
-	finally:
-            c.close()
+	import pycurl
+
+	for url in urls:
+		print "[*] Fetching %s" % (url, )
+		c = pycurl.Curl()
+		c.setopt(c.FOLLOWLOCATION, 1)
+		c.setopt(c.WRITEFUNCTION, cb)
+		c.setopt(c.USERAGENT, ua)
+		#c.setopt(c.VERBOSE, 1)
+		c.setopt(c.URL, url)
+		try:
+			c.perform()
+		except:
+			continue
+		finally:
+			c.close()
+		store()
+	
+
 
 self.open = open

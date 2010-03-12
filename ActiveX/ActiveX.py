@@ -55,7 +55,7 @@ class unknownObject(object):
 
 class ActiveXObject(unknownObject):
     def __init__(self, cls, clstype = 'name'):
-        print "[DEBUG] Unknown Object: "+cls
+        print "[DEBUG] ActiveX Object: "+cls
         unknownObject.__init__(self, cls)
         filename = ''
         if clstype == 'id':
