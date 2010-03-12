@@ -1,0 +1,6 @@
+
+def GetVariable(arg):
+	if arg == "$version":
+		return("WIN 9,0,1,0")
+
+self.GetVariable = GetVariable

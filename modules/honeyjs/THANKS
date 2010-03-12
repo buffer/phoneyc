@@ -1,0 +1,41 @@
+
+Thanks For Patches and Pointers
+===============================
+
+benoitc
+    * build system tweaks, compiling on OpenBSD
+
+Mark Lee
+    * Patch for iterating JS arrays in Python
+    * Patch to allow linking against Xulrunner's libmozjs
+
+sk89q
+    * Info for FreeBSD builds
+
+spahl
+    * Heads up on the signal hack and fix for a compiler warning.
+    * Bug #16 integer property lookup failure report and fix.
+    * Bug #17 add_property segfault when value is null.
+
+Mike West
+    * Reported bug in Context.max_time
+    * Better test for test_exceeds_time
+    * Reported missing pkg-config requirement
+
+Riccardo Pelizzi
+    * Bug report for global handlers and "function foo() {}" syntax.
+
+Keiji Costantini
+    * Bug report on the memory limit test.
+
+Richard Boulton
+    * Initial patch for filtering Python access.
+
+marc
+    * Report on Context turnover causing segfaults.
+
+Scott T Silliman
+    * Provided Gentoo package names.
+
+Roberto De Almeida
+    * Pointer on MANIFEST.in

@@ -1,0 +1,9 @@
+# Microsoft Rich Textbox Control 6.0 (SP6)
+# CVE-NOMATCH
+
+self.Text = "";
+
+def SaveFile(path, arg):
+	add_alert("Writing to file " + path + " with contents: " + self.Text)
+
+self.SaveFile = SaveFile

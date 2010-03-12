@@ -1,0 +1,10 @@
+PYTHONPATH='lib/python:' python main.py http://172.31.25.227/honeyjs/realplayer-mod.html
+
+====================================
+|--------AID:1----------
+|ATYPE:ALERT_HEAPSPRAY
+|MESSAGE:Heapspray Detected!
+|HIT:400
+|LENGTH:524248
+|ENTROPY:0.0217090172502
+|MISC:{'sledge_char': '\x0c', 'sec_char_cnt': 97, 'sledge_cnt': 523594, 'sec_char': '\x00'}

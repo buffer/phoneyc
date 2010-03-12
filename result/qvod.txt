@@ -1,0 +1,35 @@
+PYTHONPATH='lib/python:' python main.py http://172.31.25.227/honeyjs/qvod.html
+
+DEBUG: Alerts:
+====================================
+|--------AID:1----------
+|ATYPE:ALERT_HEAPSPRAY
+|MESSAGE:Heapspray Detected!
+|HIT:8
+|LENGTH:4194006
+|ENTROPY:0.0
+|MISC:{'sledge_char': '\x05', 'sec_char_cnt': 0, 'sledge_cnt': 4194006, 'sec_char': '\x00'}
+====================================
+|--------AID:2----------
+|ATYPE:ALERT_HEAPSPRAY
+|MESSAGE:Heapspray Detected!
+|HIT:1
+|LENGTH:4194006
+|ENTROPY:0.0
+|MISC:{'sledge_cnt': 4194006, 'sec_char_cnt': 0, 'sec_char': '\x00', 'sledge_char': '\x05'}
+====================================
+|--------AID:3----------
+|ATYPE:ALERT_HEAPSPRAY
+|MESSAGE:Heapspray Detected!
+|HIT:1
+|LENGTH:4194248
+|ENTROPY:0.00125026921766
+|MISC:{'sledge_cnt': 4194006, 'sec_char_cnt': 7, 'sec_char': '\x03', 'sledge_char': '\x05'}
+====================================
+|--------AID:4----------
+|ATYPE:ALERT_HEAPSPRAY
+|MESSAGE:Heapspray Detected!
+|HIT:20
+|LENGTH:4194248
+|ENTROPY:0.00125026921766
+|MISC:{'sledge_char': '\x05', 'sec_char_cnt': 7, 'sledge_cnt': 4194006, 'sec_char': '\x03'}

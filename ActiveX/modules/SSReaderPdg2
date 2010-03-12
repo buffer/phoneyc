@@ -1,0 +1,8 @@
+# SSReader Pdg2 ActiveX control (pdg2.dll)
+# CVE-2007-5892
+
+def Register(arg0, arg1):
+    if len(arg1) > 256: 
+	    add_alert('SSReader Pdg2 ActiveX Register Method Overflow')
+
+self.Register = Register

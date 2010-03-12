@@ -1,0 +1,31 @@
+Structure and key points of the program:
+
+Structure:
+
+0. Preparation: Create a js runtime and a js context. Bind some classes and functions into the context which are nessesary.
+
+1. Initialize: Initialize a 'window' object with an url (read from program arguments), which stands for a webpage. Some other runtime objects such as 'document' and 'location' will be also initialized as member of 'window', and bind them to the javascript context. Then, download the html document from the given url and enter the parser stage.
+
+2. DOM-tree generation: The DOM parser we use is inherited from SGMLParser of python, since there is no available DOM parser which meets our needs. When initialized, a DOM object will be passed as the root of the generated DOM tree, 'document' object as default. Feed html document to the parser.
+
+2.1 Create a list as stack which used in DOM tree generation.
+
+2.2 Each time the parser meets with a start tag, initialize a DOM object. If 'id' or 'name' is defined, add this document Add it to the 'children' array of the last element in the DOM stack. If the tag is a tag without end tag such as <br> and <meta>, simply end the tag, or wait until the parser meet the end tag.
+
+2.3 Each time the parser meets with an end tag, pop the stack. If there is an 'onload' function defined for this object, call this function. If the end tag is a </script> tag, execute the script in the javascript context. This 'script' is the .js file downloaded from the url if the attribute 'src' is defined, or the content between <script> and </script> otherwize.
+
+3. Finalize: Execute other functions which are likely to be used to run malicious content, such as 'onmouseover' or function loaded in 'setTimeout'. Print the DOM tree.
+
+Key points:
+
+1. 'window' as global: When set the value of 'window.xxx', bind 'xxx' with the value into js context. When get the value of 'window.xxx', get 'xxx' from js context.
+
+2. Unknown member of DOM object: It is difficult and unnecessary to simulate every member of a DOM object. So when visit a member undefined, it will return an unknown object.
+
+3. document.write and innerHTML: Each time 'document.write' is called or 'innerHTML' of a DOM object is changed, the argument of document.write or changed innerHTML will be parsed by a new parser, which its root is the script object (for document.write) or the DOM object which innerHTML is changed. So the newly generated DOM tree will also be merged into the original DOM tree.
+
+4. Other things about innerHTML: innerHTML is determined by two integers, which is the begin index and the end index of the innerHTML in the html document. The two integers are generated in parser stage when the start tag and the end tag of this DOM object is parsed.
+
+5. About ActiveXObject: Both <object> tag and the class ActiveXObject is considered as an object of the unknownObject class. When visit, change its attribute or call its method, a message will be output.
+
+6. Array class: A list in python has no 'length' attribute, so it cannot precisely simulate the Array object in javascript. So a class 'Array' is defined in python.
