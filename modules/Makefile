@@ -2,7 +2,12 @@
 SUBDIRS=hcalert honeyjs libemu
 INSTHOME=../..
 
-PYTHON=python2.5
+PYTHON=python
+
+ifneq ($(PHONEYC_PYTHON),)
+        PYTHON:= $(PHONEYC_PYTHON)
+endif
+
 
 all:compile
 
@@ -14,7 +19,7 @@ compile:
 install:
 	@for i in $(SUBDIRS); do \
 	echo "install all in $$i..."; \
-	(cd $$i; $PYTHONPATH=../../lib/python ${PYTHON} setup.py install --home=$(INSTHOME)); done
+	(cd $$i; PYTHONPATH=../../lib/python ${PYTHON} setup.py install --home=$(INSTHOME)); done
 
 clean:
 	@for i in $(SUBDIRS); do \
