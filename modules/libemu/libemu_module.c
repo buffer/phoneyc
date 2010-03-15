@@ -537,9 +537,9 @@ end:
 
 static PyMethodDef libemu_EmulatorMethods[] = {
 	{ "test", (PyCFunction) libemu_Emulator_test, METH_VARARGS,
-      "Test a given buffer for presenced of a shellcode." },
+      "test(buf)\nTest a given buffer for presence of shellcode." },
 	{ "run_shellcode", (PyCFunction) libemu_Emulator_run_shellcode, METH_VARARGS,
-      "Run a shellcode and return the profile in a dict" },
+      "run_shellcode(buf[,offset])\nRun shellcode and return the profile in a dict" },
 	{ NULL, NULL, 0, NULL },
 };
 
