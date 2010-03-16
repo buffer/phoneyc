@@ -15,12 +15,23 @@ def alert(x):
 
 class Window(object):
     def __init__(self, root, url):
-        self.__init_runtime()
-        self.__init_html(url)
-        self.__init_context(url)
-        self.__dict__['__root'] = root
+        self.__dict__['__root']   = root
+        self.__dict__['__html']    = ''
+        self.__dict__['__headers'] = []
         self.__dict__['__timeout'] = []
+        self.__init_url(url)
+        self.__init_runtime()
+        self.__init_html()
+        self.__init_context()
         root.windows.append(self)
+
+    def __init_url(self, url):
+        scheme, netloc, path, query, fragment = urlparse.urlsplit(url)
+        if scheme:
+            self.__dict__['__scheme'] = str(scheme)
+            self.__dict__['__url']    = str(url)
+        else:
+            self.__init_url(str("http://" + url))
 
     def __init_runtime(self):
         self.__dict__['__rt'] = Runtime()
@@ -28,11 +39,8 @@ class Window(object):
         # functionality in honeyjs
         self.__dict__['__rt'].switch_tracing(1)
 
-    def __init_context(self, url):
-        if not url.startswith("http"):
-            url = "http://" + url
-
-        document = Document(self, url, self.__dict__['__headers'])
+    def __init_context(self):
+        document = Document(self, self.__dict__['__url'], self.__dict__['__headers'])
 
         context = self.__dict__['__rt'].new_context(alertlist = [])
         
@@ -60,11 +68,9 @@ class Window(object):
         self.__dict__['__sl'] = []
         self.__dict__['__fl'] = [document]
 
-    def __init_html(self, url):
-        hc = HttpHoneyClient()
-        scheme, netloc, path, query, fragment = urlparse.urlsplit(url)
-        self.__dict__['__html'] = ''
-        self.__dict__['__headers'] = []
+    def __init_html(self):
+        scheme = self.__dict__['__scheme']
+        url    = self.__dict__['__url']
         
         try:
             if scheme.lower() in ('file', ):
@@ -74,9 +80,11 @@ class Window(object):
 
                 f = file(filename ,'r')
                 self.__dict__['__html'] = f.read()
+                f.close()
             else:
+                hc = HttpHoneyClient()
                 self.__dict__['__html'], headers = hc.get(str(url))
-                for header in headers.split("\r\n"):
+                for header in headers.splitlines():
                     self.__dict__['__headers'].append(header)
         except Exception, e:  
             traceback.print_exc()
