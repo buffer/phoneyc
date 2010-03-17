@@ -1,4 +1,4 @@
-
+import config
 from Array import Array
 from Location import Location
 from DOMObject import DOMObject
@@ -8,7 +8,7 @@ class Document(DOMObject):
     def __init__(self, window, url, headers):
         self.tagName              = 'document'
         self.cookie               = ''
-        self.location             = ''
+        self.location             = url
         #self.implementation = unknown() # in order to skip browser detection. null and undefined in js both considered None in python, cause trouble
         self.children             = []
         self.childNodes           = Array()

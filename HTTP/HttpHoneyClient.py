@@ -11,11 +11,11 @@ import config
 # actually use the ignored domains bit
 
 class ReadCallback(object):
-	def __init__(self):
-		self.contents = ''
+    def __init__(self):
+        self.contents = ''
 	
-	def body_cb(self, buf):
-		self.contents += buf
+    def body_cb(self, buf):
+        self.contents += buf
 
 class HttpHoneyClient(object):
     def __init__(self, user_agent='"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0; .NET CLR 1.1.4322; .NET CLR 2.0.50727)"'):
@@ -26,6 +26,7 @@ class HttpHoneyClient(object):
         self.responses  = {} # for POST responses
         self.ignores    = []
         self.headers    = ""
+        self.pagecache   = {}
 
     def __saveurl(self, url):
         base = ""
@@ -52,6 +53,12 @@ class HttpHoneyClient(object):
         # TODO
         # http_proxy=http://localhost:8118  <-- not needed yet
         # auto-follow location headers (see curl -e)
+
+        if config.cache_response:
+            hashkey = url+method+str(post_data)+str(referrer)
+            if self.pagecache.has_key(hashkey):
+                return self.pagecache[hashkey]
+
         reload(sys)
         sys.setdefaultencoding('utf-8')
         _cb = ReadCallback()
@@ -60,7 +67,7 @@ class HttpHoneyClient(object):
            url += "/"
         url = urllib2.unquote(url)  
         if config.verboselevel >= config.VERBOSE_DEBUG:
-           print "[DEBUG] in HttpHoneyClient.py: Fetching "+url
+           print "[DEBUG] in HttpHoneyClient.py: Fetching "+url+' Referrer:'+str(referrer)
 
         self.__saveurl(url)
         c = pycurl.Curl()
@@ -79,7 +86,7 @@ class HttpHoneyClient(object):
                 c.setopt(pycurl.INFILESIZE, len(post_data))
 
         if referrer: 
-                c.setopt(pycurl.REFERRER, referrer)
+                c.setopt(pycurl.REFERER, referrer)
  
         try:
                 c.perform()
@@ -105,6 +112,9 @@ class HttpHoneyClient(object):
 
         #res = (res[3:] if res.startswith("\xef\xbb\xbf") else res) # "\xef\xbb\xbf" is the head of UTF-8, may cause spidermonkey to crash
         #res = res.decode('utf-8')
+
+        if config.cache_response:
+            self.pagecache[hashkey] = res
         return res
 
     def header(self, s):

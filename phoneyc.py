@@ -12,6 +12,7 @@ Options:
     -v, --verbose            Explain what is being done (DEBUG mode).
     -d <debuglevel>, --debug=<debuglevel>
     --retrieval-all          Retrieval all inline linking data.
+    --cache-response         Cache the responses from the remote sites.
 """
 
 import sys, os, shutil 
@@ -135,7 +136,7 @@ if __name__ == "__main__":
     try:
         options, args = getopt.getopt(args, 'hl:vd:',
             ['help', 'logfile=', 'verbose',
-            'debug=', 'retrieval-all',
+            'debug=', 'retrieval-all','cache-response'
             ])
     except getopt.GetoptError, exp:
         usage()
@@ -156,7 +157,8 @@ if __name__ == "__main__":
             config.verboselevel = int(option[1])
         elif option[0] == '--retrieval-all':
             config.retrieval_all = True
-
+        elif option[0] == '--cache-response':
+            config.cache_response = True
     check_logdirs()
     phoneycdom = DOM(config.initial_URL)
     alerts = phoneycdom.analyze()

@@ -4,7 +4,6 @@ import traceback, urlparse
 
 import config
 from honeyjs import Runtime
-from HTTP.HttpHoneyClient import HttpHoneyClient
 from Document import Document
 from Navigator import Navigator
 from ActiveX.ActiveX import *
@@ -43,6 +42,8 @@ class Window(object):
         self.__dict__['__rt'].switch_tracing(1)
 
     def __init_context(self):
+        if config.verboselevel >= config.VERBOSE_DEBUG:
+            print '[DEBUG] in Window.py: New Document created by Window, url='+self.__dict__['__url']
         document = Document(self, self.__dict__['__url'], self.__dict__['__headers'])
 
         context = self.__dict__['__rt'].new_context(alertlist = [])
@@ -85,8 +86,8 @@ class Window(object):
                 self.__dict__['__html'] = f.read()
                 f.close()
             else:
-                hc = HttpHoneyClient()
-                self.__dict__['__html'], headers = hc.get(str(url))
+                hc = config.honeyclient
+                self.__dict__['__html'], headers = hc.get(url)
                 for header in headers.splitlines():
                     self.__dict__['__headers'].append(header)
         except Exception, e:  

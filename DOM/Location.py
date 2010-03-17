@@ -3,8 +3,8 @@ import urlparse
 
 class Location(object):
     def __init__(self, document, url):
-        self.__dict__['href']       = url
         self.__dict__['__document'] = document
+        self.__dict__['href']       = url
 
     def toString(self):
         return self.href
@@ -14,6 +14,7 @@ class Location(object):
             from Window import Window
             self.__dict__['href'] = self.fix_url(val)
             root = self.__dict__['__document'].contentWindow.__dict__['__root']
+            #TODO: Add referrer?
             Window(root, self.__dict__['href'])
 
     def __getattr__(self, name):
@@ -36,10 +37,12 @@ class Location(object):
         from Window import Window
         from PageParser import PageParser
 
+        #TODO: Add referrer
         window = Window(self.__dict__['__document'].contentWindow.__dict__['__root'],
                         self.fix_url(url))
         parser = PageParser(window, window.document, window.__dict__['__html'])
         parser.close()
+        return url
 
     def reload(self):
         self.replace(self.__dict__['href'])

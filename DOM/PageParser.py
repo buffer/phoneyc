@@ -5,7 +5,6 @@ from sgmllib import SGMLParser, SGMLParseError
 import dataetc
 from honeyjs import Runtime
 from ActiveX.ActiveX import *  
-from HTTP.HttpHoneyClient import HttpHoneyClient
 from DOMObject import DOMObject 
 
 class PageParser(SGMLParser):
@@ -75,7 +74,7 @@ class PageParser(SGMLParser):
 
         if not domobj:
             if config.verboselevel >= config.VERBOSE_DEBUG:
-                print "[DEBUG] in PageParser.py: Ignoring(ignoreObj) start_object attrs: " +attrs
+                print "[DEBUG] in PageParser.py: Ignoring(ignoreObj) start_object attrs: " +str(attrs)
             self.ignoreObj = True
             return
 
@@ -104,14 +103,16 @@ class PageParser(SGMLParser):
         for attr in attrs: 
             if attr[0].lower() == 'language' and not attr[1].lower().startswith('javascript'):
                 if config.verboselevel >= config.VERBOSE_DEBUG:
-                    print "[DEBUG] in PageParser.py: Ignoring(ignoreScript) start_object attrs: " +attrs
+                    print "[DEBUG] in PageParser.py: Ignoring(ignoreScript) start_object attrs: " +str(attrs)
                 self.ignoreScript = True
                 return
 
         if 'src' in self.DOM_stack[-1].__dict__:
             src = self.__dict__['__window'].document.location.fix_url(self.DOM_stack[-1].src)
-            hc = HttpHoneyClient()
-            script, headers = hc.get(src)
+            hc = config.honeyclient
+            if config.verboselevel >= config.VERBOSE_DEBUG:
+                print '[DEBUG] in PageParser.py: document.location.href = '+self.__dict__['__window'].document.location.href
+            script, headers = hc.get(src, self.__dict__['__window'].document.location.href)
             self.script += script
        
         self.__dict__['__window'].__dict__['__sl'].append(self.DOM_stack[-1])
@@ -212,6 +213,7 @@ class PageParser(SGMLParser):
 
         if isinstance(src, str) or isinstance(src, unicode):
             from Window import Window
+            #TODO: Add referrer
             window = Window(self.__dict__['__window'].__dict__['__root'],
                             self.__dict__['__window'].document.location.fix_url(src))
             parser = PageParser(window, window.document, window.__dict__['__html'])
@@ -237,9 +239,9 @@ class PageParser(SGMLParser):
                 src = self.__dict__['__window'].document.location.fix_url(domobj.src)
                 if config.verboselevel >= config.VERBOSE_DEBUG:
                     print '[DEBUG] in PageParser.py: Fetching src '+src
-                hc = HttpHoneyClient()
-                script, headers = hc.get(src)
-                
+                hc = config.honeyclient
+                script, headers = hc.get(src, self.__dict__['__window'].document.location.href)
+
         self.DOM_stack[-1].appendChild(domobj)
         self.DOM_stack.append(domobj)
 
@@ -296,8 +298,8 @@ class PageParser(SGMLParser):
         for attr in attrs:
             if attr[0] == 'src':
                 src = self.__dict__['__window'].document.location.fix_url(attr[1])
-                hc = HttpHoneyClient()
-                script, headers = hc.get(src)
+                hc = config.honeyclient
+                script, headers = hc.get(src, self.__dict__['__window'].document.location.href)
 
     def end_embed(self):
         return
