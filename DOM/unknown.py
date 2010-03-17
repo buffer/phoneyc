@@ -1,4 +1,4 @@
-
+import config
 
 class unknown(object):
     # this class is used to simulate the member of DOM 
@@ -18,7 +18,8 @@ class unknown(object):
         return unknown()
 
     def __setattr__(self, name, val):
-        print "Attr %s set to: %s" % (name, val, )
+        if config.verboselevel >= config.VERBOSE_DEBUG:
+            print "[DEBUG] in unknown.py: Attr %s set to: %s" % (name, val, )
 
     def __setitem__(self, key, val): 
         pass

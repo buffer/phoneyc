@@ -4,6 +4,8 @@ import os
 import urlparse
 import urllib2
 
+import config
+
 # TODO
 # handle HTTPS by not enforcing certificate chain checks
 # actually use the ignored domains bit
@@ -57,7 +59,8 @@ class HttpHoneyClient(object):
         if url.find("/",8) < 0:
            url += "/"
         url = urllib2.unquote(url)  
-        print "[DEBUG] Fetching "+url
+        if config.verboselevel >= config.VERBOSE_DEBUG:
+           print "[DEBUG] in HttpHoneyClient.py: Fetching "+url
 
         self.__saveurl(url)
         c = pycurl.Curl()
@@ -79,9 +82,9 @@ class HttpHoneyClient(object):
                 c.setopt(pycurl.REFERRER, referrer)
  
         try:
-            c.perform()
+                c.perform()
         except Exception, e:
-            print e
+                
             return ''
 
         c.close()
@@ -116,7 +119,6 @@ class HttpHoneyClient(object):
         return (res, self.headers)
 
     def post(self, url, post_data = False, referrer = False):
-        print url
         try: 
             res = self.__fetch(url, method = "post", post_data = post_data, referrer = referrer)
         except Exception: 

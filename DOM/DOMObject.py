@@ -1,7 +1,5 @@
 import sys 
-
-print "in DOM/DOMObject.py: "+str(sys.path)
-
+import traceback
 import dataetc
 from Array import Array
 from CSSStyleDeclaration import CSSStyleDeclaration
@@ -90,7 +88,7 @@ class DOMObject(object):
                             i.end -= dev
                 self.__parser.current -= dev
             except Exception, e: 
-                print e
+                traceback.print_exc()
 
             from PageParser import PageParser
             self.parser = PageParser(self.__dict__['__window'], self, val)

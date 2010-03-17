@@ -1,11 +1,29 @@
+#!/usr/bin/env python
+"""
+Synopsis:
+    PHoneyC: Pure python honeyclient implementation.
+Usage:
+    python phoneyc.py [ options ] url
+Options:
+    -h, --help               Display this help information.
+    -l <logfilename>
+    --logfile=<logfilename>
+                             Output file name for logs.
+    -v, --verbose            Explain what is being done (DEBUG mode).
+    -d <debuglevel>, --debug=<debuglevel>
+    --retrieval-all          Retrieval all inline linking data.
+"""
+
 import sys, os, shutil 
 import pycurl
 import hashlib
 import site
+import getopt
 from binascii import hexlify
 
 site.addsitedir('lib/python')
 
+import config
 from DOM.DOM import DOM
 import magic
 
@@ -21,6 +39,12 @@ LOGDIRS       = (BINARIES_DIR,
                  MISC_DIR)
 
 DOWNLOADS_STR = ["data", ]
+
+USAGE_TEXT = __doc__
+
+def usage():
+    print USAGE_TEXT
+    sys.exit(1)
 
 def check_logdirs():
     for logdir in LOGDIRS:
@@ -48,7 +72,8 @@ def download(url):
         c.perform()
         code = c.getinfo(pycurl.HTTP_CODE) 
         if code == 404:
-            print "File Not Found"
+            if config.verboselevel >= config.VERBOSE_DEBUG:
+                print "[DEBUG] 404 File Not Found: "+url
             fd.close()
             os.remove(filename)
             return
@@ -72,7 +97,8 @@ def download(url):
     shutil.move(filename, newfilename)
     fd.close()
 
-    print "Downloaded file: %s" % (h.hexdigest(), )
+    if config.verboselevel >= config.VERBOSE_DEBUG:
+        print "[DEBUG] Downloaded File: %s from %s" % (h.hexdigest(), url)
 
 def report(alerts):
     for alert in alerts:
@@ -105,12 +131,40 @@ def report(alerts):
             print "|MISC:"        + str(alert.misc)
 
 if __name__ == "__main__":
+    args = sys.argv[1:]
+    try:
+        options, args = getopt.getopt(args, 'hl:vd:',
+            ['help', 'logfile=', 'verbose',
+            'debug=', 'retrieval-all',
+            ])
+    except getopt.GetoptError, exp:
+        usage()
+
+    if len(args) != 1:
+        usage()
+    
+    config.initial_URL = args[0]
+
+    for option in options:
+        if option[0] == '-h' or option[0] == '--help':
+            usage()
+        elif option[0] == '-l' or option[0] == '--logfile':
+            config.logfilename = option[1]
+        elif option[0] == '-v' or option[0] == '--verbose':
+            config.verbose = True
+        elif option[0] == '-d' or option[0] == '--debug':
+            config.verboselevel = int(option[1])
+        elif option[0] == '--retrieval-all':
+            config.retrieval_all = True
+
     check_logdirs()
-    phoneycdom = DOM(sys.argv[1])
+    phoneycdom = DOM(config.initial_URL)
     alerts = phoneycdom.analyze()
-    print str(alerts)
-    if alerts:
-        report(alerts)
+    if config.verboselevel >= config.VERBOSE_ALERT:
+        if alerts:
+            report(alerts)
+        else:
+            print "No Shellcode/Heapspray Alerts."
 
     binaries_dir = os.listdir(BINARIES_DIR)
     for file in binaries_dir:

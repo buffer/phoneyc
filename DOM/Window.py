@@ -1,5 +1,8 @@
 
 import sys, os
+import traceback, urlparse
+
+import config
 from honeyjs import Runtime
 from HTTP.HttpHoneyClient import HttpHoneyClient
 from Document import Document
@@ -7,11 +10,11 @@ from Navigator import Navigator
 from ActiveX.ActiveX import *
 from unknown import unknown
 from DOMObject import DOMObject
-import traceback, urlparse
 import dataetc
 
 def alert(x):
-    print x
+    if config.verboselevel >= config.VERBOSE_ALERT:
+        print '[ALERT] '+x
 
 class Window(object):
     def __init__(self, root, url):
@@ -88,7 +91,6 @@ class Window(object):
                     self.__dict__['__headers'].append(header)
         except Exception, e:  
             traceback.print_exc()
-            print e
 
     def __setattr__(self, name, val):
         if not name.startswith('__'):

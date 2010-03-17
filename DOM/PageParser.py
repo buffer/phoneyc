@@ -1,8 +1,4 @@
-
 import sys, os, re
-
-print "in PageParser.py: "+str(sys.path)
-
 import traceback
 from sgmllib import SGMLParser, SGMLParseError
 
@@ -11,9 +7,6 @@ from honeyjs import Runtime
 from ActiveX.ActiveX import *  
 from HTTP.HttpHoneyClient import HttpHoneyClient
 from DOMObject import DOMObject 
-
-options = {}
-options["print_error"] = True
 
 class PageParser(SGMLParser):
     def __init__(self, window, document, html):
@@ -81,8 +74,8 @@ class PageParser(SGMLParser):
                 # the class definition in 'ActiveX/ActiveX.py' for more.
 
         if not domobj:
-            print "[WARNING] start_object attrs: " 
-            print attrs
+            if config.verboselevel >= config.VERBOSE_DEBUG:
+                print "[DEBUG] in PageParser.py: Ignoring(ignoreObj) start_object attrs: " +attrs
             self.ignoreObj = True
             return
 
@@ -107,8 +100,8 @@ class PageParser(SGMLParser):
         self.in_Script = True
         for attr in attrs: 
             if attr[0].lower() == 'language' and not attr[1].lower().startswith('javascript'):
-                print "[WARNING] Ignoring attrs"
-                print attrs
+                if config.verboselevel >= config.VERBOSE_DEBUG:
+                    print "[DEBUG] in PageParser.py: Ignoring(ignoreScript) start_object attrs: " +attrs
                 self.ignoreScript = True
                 return
 
@@ -189,12 +182,11 @@ class PageParser(SGMLParser):
             try:
                 self.__last_try(traceback.format_exc())
             except Exception, e:
-                if options['print_error']:
-                    print 'Error executing:\n' + self.script
-                    traceback.print_exc()
+                print 'Error executing:\n' + self.script
+                traceback.print_exc()
 
-                    if isinstance(self.__dict__['__window'].__dict__['__sl'][-1].src, str): 
-                        print self.__dict__['__window'].__dict__['__sl'][-1].src
+                if isinstance(self.__dict__['__window'].__dict__['__sl'][-1].src, str): 
+                    print self.__dict__['__window'].__dict__['__sl'][-1].src
     
         try: 
             self.__dict__['__window'].__dict__['__cx'].execute('')
@@ -229,7 +221,8 @@ class PageParser(SGMLParser):
         self.unknown_endtag('iframe')
 
     def unknown_starttag(self, tag, attrs):
-        print "[DEBUG] Parsing... Got Tag "+tag
+        if config.verboselevel >= config.VERBOSE_DEBUG:
+            print "[DEBUG] in PageParser.py Parsing... Got Tag "+tag
         if self.endearly: 
             return
        
