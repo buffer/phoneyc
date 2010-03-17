@@ -232,6 +232,14 @@ class PageParser(SGMLParser):
         for k, v in attrs:
             domobj.setAttribute(dataetc.attrTrans(k, tag), v)
 
+        if config.retrieval_all:
+            if 'src' in domobj.__dict__:
+                src = self.__dict__['__window'].document.location.fix_url(domobj.src)
+                if config.verboselevel >= config.VERBOSE_DEBUG:
+                    print '[DEBUG] in PageParser.py: Fetching src '+src
+                hc = HttpHoneyClient()
+                script, headers = hc.get(src)
+                
         self.DOM_stack[-1].appendChild(domobj)
         self.DOM_stack.append(domobj)
 
@@ -287,8 +295,8 @@ class PageParser(SGMLParser):
     def start_embed(self, attrs):
         for attr in attrs:
             if attr[0] == 'src':
-                src = attr[1]
-                hc  = HttpHoneyClient()
+                src = self.__dict__['__window'].document.location.fix_url(attr[1])
+                hc = HttpHoneyClient()
                 script, headers = hc.get(src)
 
     def end_embed(self):
