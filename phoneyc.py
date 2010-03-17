@@ -151,7 +151,7 @@ if __name__ == "__main__":
         elif option[0] == '-l' or option[0] == '--logfile':
             config.logfilename = option[1]
         elif option[0] == '-v' or option[0] == '--verbose':
-            config.verbose = True
+            config.verboselevel = 1
         elif option[0] == '-d' or option[0] == '--debug':
             config.verboselevel = int(option[1])
         elif option[0] == '--retrieval-all':

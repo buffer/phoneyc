@@ -97,7 +97,10 @@ class PageParser(SGMLParser):
         self.unknown_endtag('object')
 
     def start_script(self, attrs):
+        self.unknown_starttag('script', attrs)
         self.in_Script = True
+        self.literal = 1
+
         for attr in attrs: 
             if attr[0].lower() == 'language' and not attr[1].lower().startswith('javascript'):
                 if config.verboselevel >= config.VERBOSE_DEBUG:
@@ -105,8 +108,13 @@ class PageParser(SGMLParser):
                 self.ignoreScript = True
                 return
 
-        self.literal = 1
-        self.unknown_starttag('script', attrs)
+        if 'src' in self.DOM_stack[-1].__dict__:
+            src = self.__dict__['__window'].document.location.fix_url(self.DOM_stack[-1].src)
+            hc = HttpHoneyClient()
+            script, headers = hc.get(src)
+            self.script += script
+       
+        self.__dict__['__window'].__dict__['__sl'].append(self.DOM_stack[-1])
 
     def __patch_script(self, exc):
         lineno = 0
@@ -166,14 +174,6 @@ class PageParser(SGMLParser):
 
         self.in_Script = False
         self.literal = 0
-        if 'src' in self.DOM_stack[-1].__dict__:
-            src = self.__dict__['__window'].document.location.fix_url(self.DOM_stack[-1].src)
-            hc = HttpHoneyClient()
-            script, headers = hc.get(src)
-            self.script += script
-       
-        self.__dict__['__window'].__dict__['__sl'].append(self.DOM_stack[-1])
-
         # TODO: fix the encoding error when running phoneyc on 
         # http://phoneyc.googlecode.com/svn/phoneyc/branches/phoneyc-honeyjs/test/qvodsrc.html
         try:
