@@ -1,4 +1,6 @@
 import os
+
+import config
 from binascii import hexlify
 from CLSID import clsidlist, clsnamelist
 
@@ -55,7 +57,8 @@ class unknownObject(object):
 
 class ActiveXObject(unknownObject):
     def __init__(self, cls, clstype = 'name'):
-        print "[DEBUG] ActiveX Object: "+cls
+        if config.verboselevel >= config.VERBOSE_WARNING:
+            print "[WARNING] New ActiveX Object: "+cls
         unknownObject.__init__(self, cls)
         filename = ''
         if clstype == 'id':
@@ -86,7 +89,8 @@ def load_src(filename):
         return script
 
 def add_alert(alert):
-    print alert
+    if config.verboselevel >= config.VERBOSE_ALERT:
+        print alert
 
 def add_event(target, evttype, *arg):
     invstack = [target]
@@ -111,7 +115,8 @@ def add_event(target, evttype, *arg):
 
 def write_log(filename):
     if not eventlist:
-        print 'No ActiveXObject found.'
+        if config.verboselevel >= config.VERBOSE_DEBUG:
+            print '[DEBUG] in ActiveX.py: No ActiveXObject found.'
         return
 
     try:

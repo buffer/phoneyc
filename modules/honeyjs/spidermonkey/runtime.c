@@ -110,12 +110,12 @@ Runtime_switch_tracing(Runtime* self, PyObject* args, PyObject* kwargs)
         if ( status == 0 )
         {
             JS_ClearInterrupt(self->rt,NULL,NULL);
-            fprintf(stderr,"DEBUG: Switch tracing, now is %d.\n",status);
+            //fprintf(stderr,"DEBUG: Switch tracing, now is %d.\n",status);
         }
         else
         {
             JS_SetInterrupt(self->rt,js_interrupt_handler,NULL);
-            fprintf(stderr,"DEBUG: Switch tracing, now is %d.\n",status);
+            //fprintf(stderr,"DEBUG: Switch tracing, now is %d.\n",status);
         }
     }
     self->is_traced = status;

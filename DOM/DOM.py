@@ -11,15 +11,13 @@ from ActiveX.ActiveX import *
 from Window import Window
 from PageParser import PageParser
 
-options = {}
-options["print_error"] = True
-
 class DOM:
     def __init__(self, url):
         self.windows = []
         self.url = url
 
     def parse(self):
+        #TODO: Add referrer
         window = Window(self, self.url)
         parser = PageParser(window, window.document, window.__dict__['__html'])
         parser.close()
@@ -30,7 +28,6 @@ class DOM:
 
         for window in self.windows:
             for i in window.__dict__['__timeout']:
-                print i
                 try:
                     window.__dict__['__cx'].execute(i + ";1;")
                     continue

@@ -1,12 +1,9 @@
 import sys 
-
-print "in DOM/DOMObject.py: "+str(sys.path)
-
+import traceback
 import dataetc
 from Array import Array
 from CSSStyleDeclaration import CSSStyleDeclaration
 from unknown import unknown
-from HTTP.HttpHoneyClient import *
 
 class DOMObject(object):
     def __init__(self, window, tag, parser):
@@ -51,6 +48,7 @@ class DOMObject(object):
             #content, headers = hc.get(url)
             from Window import Window
             from PageParser import PageParser
+            #TODO: Add referrer
             window = Window(self.__dict__['__window'].__dict__['__root'],
                             self.__dict__['__window'].document.location.fix_url(val))
             parser = PageParser(window, window.document, window.__dict__['__html'])
@@ -62,19 +60,17 @@ class DOMObject(object):
             
         #if it's an event, let it be a function
         if dataetc.isevent(name, self.tagName):
-            if isinstance(val, str):
-                # using 'this' in methods may cause additional problems.
-                # i think i find a way to handle this, but there could 
-                # be some cases it cannot cover.
-                try:
-                    if 'id' in self.__dict__:
-                        self.__dict__['__window'].__dict__['__cx'].execute(self.id + '.' + name + '=function(){' + val + '}')
-                    else: 
-                        self.__dict__[name] = cx.execute('function(){' + val + '}')
-                except: 
-                    pass
-            else: 
-                self.__dict__[name] = val
+            # using 'this' in methods may cause additional problems.
+            # i think i find a way to handle this, but there could 
+            # be some cases it cannot cover.
+            val = str(val)+';'
+            try:
+                if 'id' in self.__dict__:
+                    self.__dict__['__window'].__dict__['__cx'].execute(self.id + '.' + name + '=function(){' + val + '}')
+                else: 
+                    self.__dict__[name] = cx.execute('function(){' + val + '}')
+            except: 
+                pass
             return
 
         if name == 'innerHTML':
@@ -90,7 +86,7 @@ class DOMObject(object):
                             i.end -= dev
                 self.__parser.current -= dev
             except Exception, e: 
-                print e
+                traceback.print_exc()
 
             from PageParser import PageParser
             self.parser = PageParser(self.__dict__['__window'], self, val)

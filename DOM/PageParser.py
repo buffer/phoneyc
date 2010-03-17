@@ -1,19 +1,11 @@
-
 import sys, os, re
-
-print "in PageParser.py: "+str(sys.path)
-
 import traceback
 from sgmllib import SGMLParser, SGMLParseError
 
 import dataetc
 from honeyjs import Runtime
 from ActiveX.ActiveX import *  
-from HTTP.HttpHoneyClient import HttpHoneyClient
 from DOMObject import DOMObject 
-
-options = {}
-options["print_error"] = True
 
 class PageParser(SGMLParser):
     def __init__(self, window, document, html):
@@ -81,8 +73,8 @@ class PageParser(SGMLParser):
                 # the class definition in 'ActiveX/ActiveX.py' for more.
 
         if not domobj:
-            print "[WARNING] start_object attrs: " 
-            print attrs
+            if config.verboselevel >= config.VERBOSE_DEBUG:
+                print "[DEBUG] in PageParser.py: Ignoring(ignoreObj) start_object attrs: " +str(attrs)
             self.ignoreObj = True
             return
 
@@ -104,16 +96,26 @@ class PageParser(SGMLParser):
         self.unknown_endtag('object')
 
     def start_script(self, attrs):
+        self.unknown_starttag('script', attrs)
         self.in_Script = True
+        self.literal = 1
+
         for attr in attrs: 
             if attr[0].lower() == 'language' and not attr[1].lower().startswith('javascript'):
-                print "[WARNING] Ignoring attrs"
-                print attrs
+                if config.verboselevel >= config.VERBOSE_DEBUG:
+                    print "[DEBUG] in PageParser.py: Ignoring(ignoreScript) start_object attrs: " +str(attrs)
                 self.ignoreScript = True
                 return
 
-        self.literal = 1
-        self.unknown_starttag('script', attrs)
+        if 'src' in self.DOM_stack[-1].__dict__:
+            src = self.__dict__['__window'].document.location.fix_url(self.DOM_stack[-1].src)
+            hc = config.honeyclient
+            if config.verboselevel >= config.VERBOSE_DEBUG:
+                print '[DEBUG] in PageParser.py: document.location.href = '+self.__dict__['__window'].document.location.href
+            script, headers = hc.get(src, self.__dict__['__window'].document.location.href)
+            self.script += script
+       
+        self.__dict__['__window'].__dict__['__sl'].append(self.DOM_stack[-1])
 
     def __patch_script(self, exc):
         lineno = 0
@@ -173,14 +175,6 @@ class PageParser(SGMLParser):
 
         self.in_Script = False
         self.literal = 0
-        if 'src' in self.DOM_stack[-1].__dict__:
-            src = self.__dict__['__window'].document.location.fix_url(self.DOM_stack[-1].src)
-            hc = HttpHoneyClient()
-            script, headers = hc.get(src)
-            self.script += script
-       
-        self.__dict__['__window'].__dict__['__sl'].append(self.DOM_stack[-1])
-
         # TODO: fix the encoding error when running phoneyc on 
         # http://phoneyc.googlecode.com/svn/phoneyc/branches/phoneyc-honeyjs/test/qvodsrc.html
         try:
@@ -189,12 +183,11 @@ class PageParser(SGMLParser):
             try:
                 self.__last_try(traceback.format_exc())
             except Exception, e:
-                if options['print_error']:
-                    print 'Error executing:\n' + self.script
-                    traceback.print_exc()
+                print 'Error executing:\n' + self.script
+                traceback.print_exc()
 
-                    if isinstance(self.__dict__['__window'].__dict__['__sl'][-1].src, str): 
-                        print self.__dict__['__window'].__dict__['__sl'][-1].src
+                if isinstance(self.__dict__['__window'].__dict__['__sl'][-1].src, str): 
+                    print self.__dict__['__window'].__dict__['__sl'][-1].src
     
         try: 
             self.__dict__['__window'].__dict__['__cx'].execute('')
@@ -220,6 +213,7 @@ class PageParser(SGMLParser):
 
         if isinstance(src, str) or isinstance(src, unicode):
             from Window import Window
+            #TODO: Add referrer
             window = Window(self.__dict__['__window'].__dict__['__root'],
                             self.__dict__['__window'].document.location.fix_url(src))
             parser = PageParser(window, window.document, window.__dict__['__html'])
@@ -229,7 +223,8 @@ class PageParser(SGMLParser):
         self.unknown_endtag('iframe')
 
     def unknown_starttag(self, tag, attrs):
-        print "[DEBUG] Parsing... Got Tag "+tag
+        if config.verboselevel >= config.VERBOSE_DEBUG:
+            print "[DEBUG] in PageParser.py Parsing... Got Tag "+tag
         if self.endearly: 
             return
        
@@ -238,6 +233,14 @@ class PageParser(SGMLParser):
         #note that this is IE way. In firefox transform is done in DOMObject.setAttribute()
         for k, v in attrs:
             domobj.setAttribute(dataetc.attrTrans(k, tag), v)
+
+        if config.retrieval_all:
+            if 'src' in domobj.__dict__:
+                src = self.__dict__['__window'].document.location.fix_url(domobj.src)
+                if config.verboselevel >= config.VERBOSE_DEBUG:
+                    print '[DEBUG] in PageParser.py: Fetching src '+src
+                hc = config.honeyclient
+                script, headers = hc.get(src, self.__dict__['__window'].document.location.href)
 
         self.DOM_stack[-1].appendChild(domobj)
         self.DOM_stack.append(domobj)
@@ -294,9 +297,9 @@ class PageParser(SGMLParser):
     def start_embed(self, attrs):
         for attr in attrs:
             if attr[0] == 'src':
-                src = attr[1]
-                hc  = HttpHoneyClient()
-                script, headers = hc.get(src)
+                src = self.__dict__['__window'].document.location.fix_url(attr[1])
+                hc = config.honeyclient
+                script, headers = hc.get(src, self.__dict__['__window'].document.location.href)
 
     def end_embed(self):
         return
