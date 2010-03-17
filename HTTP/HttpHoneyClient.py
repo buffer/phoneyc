@@ -57,7 +57,8 @@ class HttpHoneyClient(object):
         if config.cache_response:
             hashkey = url+method+str(post_data)+str(referrer)
             if self.pagecache.has_key(hashkey):
-                return self.pagecache[hashkey]
+                self.headers = self.pagecache[hashkey][1]
+                return self.pagecache[hashkey][0]
 
         reload(sys)
         sys.setdefaultencoding('utf-8')
@@ -114,7 +115,7 @@ class HttpHoneyClient(object):
         #res = res.decode('utf-8')
 
         if config.cache_response:
-            self.pagecache[hashkey] = res
+            self.pagecache[hashkey] = (res, self.headers)
         return res
 
     def header(self, s):
