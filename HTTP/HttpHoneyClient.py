@@ -18,9 +18,8 @@ class ReadCallback(object):
         self.contents += buf
 
 class HttpHoneyClient(object):
-    def __init__(self, user_agent='"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0; .NET CLR 1.1.4322; .NET CLR 2.0.50727)"'):
-        #self.ua         = "Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.5) Gecko/20091109 Gentoo Firefox/3.5.5 GTB6"
-        self.ua         = user_agent
+    def __init__(self):
+        self.ua         = config.userAgent 
         self.pages      = {} # for HTML only
         self.res        = {} # for all data
         self.responses  = {} # for POST responses

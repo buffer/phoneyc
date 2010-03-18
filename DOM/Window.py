@@ -86,7 +86,7 @@ class Window(object):
                 self.__dict__['__html'] = f.read()
                 f.close()
             else:
-                hc = config.honeyclient
+                hc = self.__dict__['__root'].hc
                 self.__dict__['__html'], headers = hc.get(url)
                 for header in headers.splitlines():
                     self.__dict__['__headers'].append(header)

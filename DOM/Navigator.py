@@ -1,4 +1,7 @@
 
+import config
+from Array import Array
+
 class Plugin(dict):
     """A dictionary with attribute-style access. It maps attribute access to
     the real dictionary.  """
@@ -41,30 +44,30 @@ AdobePDFPlugin       = Plugin({'name'        : 'Adobe PDF',
                                'description' : 'Adobe PDF Plug-In'})
 
 
-from Array import Array
 Plugins = Array()
 Plugins.append(ShockwaveFlashPlugin)
 Plugins.append(AdobeAcrobatPlugin)
 Plugins.append(AdobePDFPlugin)
 
+
 class Navigator(object):
-    appCodeName         = "Mozilla"                                             # The internal "code" name of the current browser 
-    appName             = "Microsoft Internet Explorer"                         # The official name of the browser
-    appVersion          = "4.0 (compatible; MSIE 6.0; Windows NT 5.1)"          # The version of the browser as a string 
-    buildID             = ""                                                    # The build identifier of the browser (e.g. "2006090803") 
-    cookieEnabled       = True                                                  # A boolean indicating whether cookies are enabled    
-    language            = ""                                                    # A string representing the language version of the browser
-    mimeTypes           = []                                                    # A list of the MIME types supported by the browser     
-    onLine              = True                                                  # A boolean indicating whether the browser is working online  
-    oscpu               = ""                                                    # A string that represents the current operating system    
-    platform            = ""                                                    # A string representing the platform of the browser     
-    plugins             = Plugins                                               # An array of the plugins installed in the browser     
-    product             = ""                                                    # The product name of the current browser (e.g. "Gecko") 
-    productSub          = ""                                                    # The build number of the current browser (e.g. "20060909")       
-    securityPolicy      = ""                                                    # An empty string. In Netscape 4.7x, returns "US & CA domestic policy" or "Export policy". 
-    userAgent           = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)"  # The user agent string for the current browser   
-    vendor              = ""                                                    # The vendor name of the current browser (e.g. "Netscape6")   
-    vendorSub           = ""                                                    # The vendor version number (e.g. "6.1") 
+    appCodeName         = config.appCodeName    # The internal "code" name of the current browser 
+    appName             = config.appName        # The official name of the browser
+    appVersion          = config.appVersion     # The version of the browser as a string 
+    buildID             = ""                    # The build identifier of the browser (e.g. "2006090803") 
+    cookieEnabled       = True                  # A boolean indicating whether cookies are enabled    
+    language            = ""                    # A string representing the language version of the browser
+    mimeTypes           = []                    # A list of the MIME types supported by the browser     
+    onLine              = True                  # A boolean indicating whether the browser is working online  
+    oscpu               = ""                    # A string that represents the current operating system    
+    platform            = ""                    # A string representing the platform of the browser     
+    plugins             = Plugins               # An array of the plugins installed in the browser     
+    product             = ""                    # The product name of the current browser (e.g. "Gecko") 
+    productSub          = ""                    # The build number of the current browser (e.g. "20060909")       
+    securityPolicy      = ""                    # An empty string. In Netscape 4.7x, returns "US & CA domestic policy" or "Export policy". 
+    userAgent           = config.userAgent      # The user agent string for the current browser   
+    vendor              = ""                    # The vendor name of the current browser (e.g. "Netscape6")   
+    vendorSub           = ""                    # The vendor version number (e.g. "6.1") 
     appMinorVersion     = ""
     browserLanguage     = ""
     cpuClass            = ""

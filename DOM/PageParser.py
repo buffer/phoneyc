@@ -109,7 +109,7 @@ class PageParser(SGMLParser):
 
         if 'src' in self.DOM_stack[-1].__dict__:
             src = self.__dict__['__window'].document.location.fix_url(self.DOM_stack[-1].src)
-            hc = config.honeyclient
+            hc = self.__dict__['__window'].__dict__['__root'].hc
             if config.verboselevel >= config.VERBOSE_DEBUG:
                 print '[DEBUG] in PageParser.py: document.location.href = '+self.__dict__['__window'].document.location.href
             script, headers = hc.get(src, self.__dict__['__window'].document.location.href)
@@ -239,7 +239,7 @@ class PageParser(SGMLParser):
                 src = self.__dict__['__window'].document.location.fix_url(domobj.src)
                 if config.verboselevel >= config.VERBOSE_DEBUG:
                     print '[DEBUG] in PageParser.py: Fetching src '+src
-                hc = config.honeyclient
+                hc = self.__dict__['__window'].__dict__['__root'].hc
                 script, headers = hc.get(src, self.__dict__['__window'].document.location.href)
 
         self.DOM_stack[-1].appendChild(domobj)
@@ -298,7 +298,7 @@ class PageParser(SGMLParser):
         for attr in attrs:
             if attr[0] == 'src':
                 src = self.__dict__['__window'].document.location.fix_url(attr[1])
-                hc = config.honeyclient
+                hc = self.__dict__['__window'].__dict__['__root'].hc
                 script, headers = hc.get(src, self.__dict__['__window'].document.location.href)
 
     def end_embed(self):

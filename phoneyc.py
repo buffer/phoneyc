@@ -2,17 +2,18 @@
 """
 Synopsis:
     PHoneyC: Pure python honeyclient implementation.
+
 Usage:
     python phoneyc.py [ options ] url
+
 Options:
-    -h, --help               Display this help information.
-    -l <logfilename>
-    --logfile=<logfilename>
-                             Output file name for logs.
-    -v, --verbose            Explain what is being done (DEBUG mode).
-    -d <debuglevel>, --debug=<debuglevel>
-    --retrieval-all          Retrieval all inline linking data.
-    --cache-response         Cache the responses from the remote sites.
+    -h, --help              Display this help information.
+    -l, --logfile=          Output file name for logs.
+    -v, --verbose           Explain what is being done (DEBUG mode).
+    -d, --debug=            Debug Level.
+    -r, --retrieval-all     Retrieval all inline linking data.
+    -c, --cache-response    Cache the responses from the remote sites.
+    -u, --user-agent        Select a user agent (default: 1)
 """
 
 import sys, os, shutil 
@@ -45,6 +46,10 @@ USAGE_TEXT = __doc__
 
 def usage():
     print USAGE_TEXT
+    print "User Agents:"
+    for ua in config.UserAgents:
+        print "    [%d] %s" % (ua[0], ua[1], )
+    print ""
     sys.exit(1)
 
 def check_logdirs():
@@ -61,7 +66,7 @@ def download(url):
     filename = "%s/%s" % (BINARIES_DIR, f.hexdigest(), )
 
     fd = open(filename, 'wb')
-    ua = "Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.5) Gecko/20091109 Gentoo Firefox/3.5.5 GTB6"
+    ua = config.userAgent
     
     c = pycurl.Curl()
     c.setopt(pycurl.FOLLOWLOCATION, 1)
@@ -134,31 +139,44 @@ def report(alerts):
 if __name__ == "__main__":
     args = sys.argv[1:]
     try:
-        options, args = getopt.getopt(args, 'hl:vd:',
-            ['help', 'logfile=', 'verbose',
-            'debug=', 'retrieval-all','cache-response'
+        options, args = getopt.getopt(args, 'hu:l:vd:rc',
+            ['help', 
+             'user-agent=', 
+             'logfile=', 
+             'verbose',
+             'debug=', 
+             'retrieval-all',
+             'cache-response'
             ])
     except getopt.GetoptError, exp:
         usage()
-
-    if len(args) != 1:
+  
+    if not options:
         usage()
-    
-    config.initial_URL = args[0]
 
     for option in options:
         if option[0] == '-h' or option[0] == '--help':
             usage()
-        elif option[0] == '-l' or option[0] == '--logfile':
+        if option[0] == '-u' or option[0] == '---user-agent':
+            for ua in config.UserAgents:
+                if option[1] == str(ua[0]):
+                    config.userAgent    = str(ua[2])
+                    config.appCodeName  = str(ua[3])
+                    config.appName      = str(ua[4])
+                    config.appVersion   = str(ua[5])
+        if option[0] == '-l' or option[0] == '--logfile':
             config.logfilename = option[1]
-        elif option[0] == '-v' or option[0] == '--verbose':
+        if option[0] == '-v' or option[0] == '--verbose':
             config.verboselevel = 1
-        elif option[0] == '-d' or option[0] == '--debug':
+        if option[0] == '-d' or option[0] == '--debug':
             config.verboselevel = int(option[1])
-        elif option[0] == '--retrieval-all':
+        if option[0] == '-r' or option[0] == '--retrieval-all':
             config.retrieval_all = True
-        elif option[0] == '--cache-response':
+        if option[0] == '-c' or option[0] == '--cache-response':
             config.cache_response = True
+
+    config.initial_URL = args[0]
+    
     check_logdirs()
     phoneycdom = DOM(config.initial_URL)
     alerts = phoneycdom.analyze()

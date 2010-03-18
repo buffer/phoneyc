@@ -7,6 +7,7 @@ import traceback
 basedir = os.path.dirname(os.getcwd())
 sys.path.append(basedir)
 
+from HTTP.HttpHoneyClient import HttpHoneyClient
 from ActiveX.ActiveX import *
 from Window import Window
 from PageParser import PageParser
@@ -14,7 +15,8 @@ from PageParser import PageParser
 class DOM:
     def __init__(self, url):
         self.windows = []
-        self.url = url
+        self.hc      = HttpHoneyClient()
+        self.url     = url
 
     def parse(self):
         #TODO: Add referrer
