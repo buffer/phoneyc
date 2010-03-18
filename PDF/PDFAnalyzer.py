@@ -86,6 +86,7 @@ class PDFAnalyzer:
         Find JavaScript objects and extract the referenced script object id/ver
         """
         o = []
+        JS = []
         for r in re.finditer(r'<<(.+?)\/S\s*\/JavaScript(.+?)>>', str, re.MULTILINE | re.DOTALL):
             JS = [p for p in r.groups() if re.search(r'/JS', p)]
         for js in JS:
