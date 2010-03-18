@@ -13,7 +13,7 @@ Options:
     -d, --debug=            Debug Level.
     -r, --retrieval-all     Retrieval all inline linking data.
     -c, --cache-response    Cache the responses from the remote sites.
-    -u, --user-agent        Select a user agent (default: 1)
+    -u, --user-agent=       Select a user agent (default: 1)
 """
 
 import sys, os, shutil 
