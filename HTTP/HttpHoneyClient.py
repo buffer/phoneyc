@@ -3,6 +3,7 @@ import pycurl
 import os
 import urlparse
 import urllib2
+import traceback
 
 import config
 
@@ -87,7 +88,12 @@ class HttpHoneyClient(object):
                 c.setopt(pycurl.INFILESIZE, len(post_data))
 
         if referrer: 
-                c.setopt(pycurl.REFERER, referrer)
+                try:
+                        c.setopt(pycurl.REFERER, str(referrer))
+                except Exception, e:
+                        traceback.print_exc()
+                        if config.verboselevel >= config.VERBOSE_DEBUG:
+                                print "[DEBUG] in HttpHoneyClient.py Referrer is "+str(referrer)
  
         try:
                 c.perform()
