@@ -7,13 +7,13 @@ Usage:
     python phoneyc.py [ options ] url
 
 Options:
-    -h, --help              Display this help information.
-    -l, --logfile=          Output file name for logs.
-    -v, --verbose           Explain what is being done (DEBUG mode).
-    -d, --debug=            Debug Level.
-    -r, --retrieval-all     Retrieval all inline linking data.
-    -c, --cache-response    Cache the responses from the remote sites.
-    -u, --user-agent=       Select a user agent (default: 1)
+    -h              , --help                        Display this help information.
+    -l <filename>   , --logfile=<filename>          Output file name for logs.
+    -v              , --verbose                     Explain what is being done (DEBUG mode).
+    -d <debuglevel> , --debug=<debuglevel>          Debug Level.
+    -r              , --retrieval-all               Retrieval all inline linking data.
+    -c              , --cache-response              Cache the responses from the remote sites.
+    -u <personality>, --user-agent=<personality>    Select a user agent (see below for values, default: 1)
 """
 
 import sys, os, shutil 
@@ -150,8 +150,8 @@ if __name__ == "__main__":
             ])
     except getopt.GetoptError, exp:
         usage()
-  
-    if not options:
+
+    if not options and not args:
         usage()
 
     for option in options:
