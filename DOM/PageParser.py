@@ -248,7 +248,8 @@ class PageParser(SGMLParser):
         try:
             begin = self.html.lower()[self.current:].index('<' + tag)
             self.current += begin + self.html.lower()[self.current + begin:].index('>') + 1
-            domobj.begin = self.current
+            domobj.begin  = self.current
+            domobj.end    = self.current + self.html.lower()[self.current:].index('</'+tag)
         except: 
             pass
 
