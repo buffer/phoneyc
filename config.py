@@ -31,6 +31,13 @@ UserAgents = [
     )
     ,
     (3,
+     "Internet Explorer 8.0 (Windows XP)",
+     "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; (R1 1.5); .NET CLR 1.1.4322; .NET CLR 2.0.50727)",
+     "Mozilla",
+     "Microsoft Internet Explorer",
+     "4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; (R1 1.5); .NET CLR 1.1.4322; .NET CLR 2.0.50727)"
+    ),
+    (4,
      "Internet Explorer 6.0 (Windows 2000)",
      "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0; .NET CLR 1.1.4322; .NET CLR 2.0.50727)",
      "Mozilla",

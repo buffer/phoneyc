@@ -4,7 +4,7 @@
 content = ''
 object  = self
 
-def PrintSnapshot():
+def PrintSnapshot(SnapshotPath = None, CompressedPath = None):
 	global object
 	
 	def cb(buf):
@@ -22,6 +22,11 @@ def PrintSnapshot():
 		fd.write(content)
 		fd.close()
 		content = ''
+
+	if SnapshotPath:
+		object.SnapshotPath = SnapshotPath
+	if CompressedPath:
+		object.CompressedPath = CompressedPath
 
 	add_alert('[*] Microsoft Access Snapshot Viewer')
 	add_alert("[*] SnapshotPath     : " + object.SnapshotPath)
