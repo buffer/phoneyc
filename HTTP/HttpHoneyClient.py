@@ -53,6 +53,17 @@ class HttpHoneyClient(object):
         # http_proxy=http://localhost:8118  <-- not needed yet
         # auto-follow location headers (see curl -e)
 
+        scheme, netloc, path, query, fragment = urlparse.urlsplit(url)
+        if scheme.lower() in ('file', ):
+            filename = url[7:]
+            if filename in ["about:blank", ]:
+                return ''
+
+            f = file(filename ,'r')
+            res = f.read()
+            f.close()
+            return res
+
         if config.cache_response:
             hashkey = url+method+str(post_data)+str(referrer)
             if self.pagecache.has_key(hashkey):

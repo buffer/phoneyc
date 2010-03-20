@@ -100,8 +100,8 @@ class PageParser(SGMLParser):
         self.in_Script = True
         self.literal = 1
 
-        for attr in attrs: 
-            if attr[0].lower() == 'language' and not attr[1].lower().startswith('javascript'):
+        for k, v in attrs: 
+            if k.lower() == 'language' and not v.lower().startswith('javascript'):
                 if config.verboselevel >= config.VERBOSE_DEBUG:
                     print "[DEBUG] in PageParser.py: Ignoring(ignoreScript) start_object attrs: " +str(attrs)
                 self.ignoreScript = True
@@ -111,9 +111,11 @@ class PageParser(SGMLParser):
             src = self.__dict__['__window'].document.location.fix_url(self.DOM_stack[-1].src)
             hc = self.__dict__['__window'].__dict__['__root'].hc
             if config.verboselevel >= config.VERBOSE_DEBUG:
-                print '[DEBUG] in PageParser.py: document.location.href = '+self.__dict__['__window'].document.location.href
-            script, headers = hc.get(src, self.__dict__['__window'].document.location.href)
+                print '[DEBUG] in PageParser.py: document.location.href = ' + self.__dict__['__window'].document.location.href
+ 
+            script, headers = hc.get(src, self.__dict__['__window'].document.location.href)            
             self.script += script
+            self.literal = 0
        
         self.__dict__['__window'].__dict__['__sl'].append(self.DOM_stack[-1])
 
@@ -175,8 +177,6 @@ class PageParser(SGMLParser):
 
         self.in_Script = False
         self.literal = 0
-        # TODO: fix the encoding error when running phoneyc on 
-        # http://phoneyc.googlecode.com/svn/phoneyc/branches/phoneyc-honeyjs/test/qvodsrc.html
         try:
             self.__dict__['__window'].__dict__['__cx'].execute(self.script) # execute script here
         except Exception, e:

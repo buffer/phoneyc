@@ -77,19 +77,10 @@ class Window(object):
         url    = self.__dict__['__url']
         
         try:
-            if scheme.lower() in ('file', ):
-                filename = url[7:]
-                if filename in ["about:blank", ]:
-                    return
-
-                f = file(filename ,'r')
-                self.__dict__['__html'] = f.read()
-                f.close()
-            else:
-                hc = self.__dict__['__root'].hc
-                self.__dict__['__html'], headers = hc.get(url)
-                for header in headers.splitlines():
-                    self.__dict__['__headers'].append(header)
+            hc = self.__dict__['__root'].hc
+            self.__dict__['__html'], headers = hc.get(url)
+            for header in headers.splitlines():
+                self.__dict__['__headers'].append(header)
         except Exception, e:  
             traceback.print_exc()
 
