@@ -2,6 +2,7 @@ import sys
 import traceback
 import dataetc
 from Array import Array
+from HTTP.HttpHoneyClient import hc
 from CSSStyleDeclaration import CSSStyleDeclaration
 from unknown import unknown
 
@@ -43,7 +44,6 @@ class DOMObject(object):
         #   pass
 
         if self.tagName == "iframe" and name == 'src':
-            #hc = HttpHoneyClient()
             #url = self.__dict__['__window'].document.location.fix_url(str(val))
             #content, headers = hc.get(url)
             from Window import Window

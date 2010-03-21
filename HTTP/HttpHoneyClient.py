@@ -155,3 +155,6 @@ class HttpHoneyClient(object):
             if hostname.endswith(i): 
                 return True
         return False
+
+
+hc = HttpHoneyClient()

@@ -15,7 +15,6 @@ from PageParser import PageParser
 class DOM:
     def __init__(self, url):
         self.windows = []
-        self.hc      = HttpHoneyClient()
         self.url     = url
 
     def parse(self):

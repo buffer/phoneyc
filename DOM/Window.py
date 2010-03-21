@@ -9,6 +9,7 @@ from Navigator import Navigator
 from ActiveX.ActiveX import *
 from unknown import unknown
 from DOMObject import DOMObject
+from HTTP.HttpHoneyClient import hc
 import dataetc
 
 def alert(x):
@@ -77,7 +78,6 @@ class Window(object):
         url    = self.__dict__['__url']
         
         try:
-            hc = self.__dict__['__root'].hc
             self.__dict__['__html'], headers = hc.get(url)
             for header in headers.splitlines():
                 self.__dict__['__headers'].append(header)
@@ -122,5 +122,4 @@ class Window(object):
                     os.environ['PHONEYC_LASTSCRIPT'] = script
             except KeyError:
                 os.environ['PHONEYC_LASTSCRIPT'] = script
-
 
