@@ -24,7 +24,7 @@ class HttpHoneyClient(object):
         self.res        = {} # for all data
         self.responses  = {} # for POST responses
         self.ignores    = []
-        self.headers    = ""
+        self.headers    = ''
         self.pagecache   = {}
 
     def __saveurl(self, url):
@@ -53,6 +53,7 @@ class HttpHoneyClient(object):
         # http_proxy=http://localhost:8118  <-- not needed yet
         # auto-follow location headers (see curl -e)
 
+        self.headers = ''
         scheme, netloc, path, query, fragment = urlparse.urlsplit(url)
         if scheme.lower() in ('file', ):
             filename = url[7:]

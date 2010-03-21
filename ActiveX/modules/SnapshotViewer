@@ -1,27 +1,13 @@
 # Microsoft Access Snapshot Viewer 
 # CVE-2008-2463
 
-content = ''
-object  = self
+object = self
 
 def PrintSnapshot(SnapshotPath = None, CompressedPath = None):
 	global object
-	
-	def cb(buf):
-		global content
-		content += buf
 
-	def store():
-		global content
-		import hashlib
-		h = hashlib.md5()
-		h.update(content)
-		filename = "log/downloads/binaries/%s" % (h.hexdigest(), )
-		add_alert("[*] Saving File: " + filename)
-		fd = open(filename, 'wb')
-		fd.write(content)
-		fd.close()
-		content = ''
+	from HTTP.HttpHoneyClient import hc
+	import hashlib
 
 	if SnapshotPath:
 		object.SnapshotPath = SnapshotPath
@@ -33,7 +19,6 @@ def PrintSnapshot(SnapshotPath = None, CompressedPath = None):
 	add_alert("[*] CompressedPath   : " + object.CompressedPath)
 
 	url = object.SnapshotPath
-	ua = "Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.5) Gecko/20091109 Gentoo Firefox/3.5.5 GTB6"
 	urls = set()
 	if url.startswith("/"):
 		for base in os.environ['PHONEYC_URLBASE'].split(";"):
@@ -41,22 +26,16 @@ def PrintSnapshot(SnapshotPath = None, CompressedPath = None):
 	else:
 		urls.add(url)
 
-	import pycurl
 	for url in urls:
 		print "[*] Fetching %s" % (url, )
-		c = pycurl.Curl()
-		c.setopt(c.FOLLOWLOCATION, 1)
-		c.setopt(c.WRITEFUNCTION, cb)
-		c.setopt(c.USERAGENT, ua)
-		#c.setopt(c.VERBOSE, 1)
-		c.setopt(c.URL, str(url))
-		try:
-			c.perform()
-		except:
-			continue
-		finally:
-			c.close()
-		
-		store()
+		h = hashlib.md5()
+		content, headers = hc.get(str(url))
+		h.update(content)
+		filename = "log/downloads/binaries/%s" % (h.hexdigest(), )
+		add_alert("[*] Saving File: " + filename)
+		fd = open(filename, 'wb')
+		fd.write(content)
+		fd.close()
+		store(content)
 	
 self.PrintSnapshot = PrintSnapshot
