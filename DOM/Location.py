@@ -62,7 +62,7 @@ class Location(object):
             else:
                 _url = "%s://%s"    % (base_scheme, base_netloc, )
                 if base_path:
-                    base_path_split = base_path.strip().split('/')
+                    base_path_split = base_path.strip().split('/')[:-1]
                 else:
                     base_path_split = []
                 for directory in url.split('/'):
