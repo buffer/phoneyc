@@ -185,8 +185,8 @@ class PageParser(SGMLParser):
             try:
                 self.__last_try(traceback.format_exc())
             except Exception, e:
-                print 'Error executing:\n' + self.script
-                traceback.print_exc()
+                config.VERBOSE(config.VERBOSE_DETAIL, 'Error executing:\n' + self.script)
+                traceback.print_exc(file=sys.stdout)
 
                 if isinstance(self.__dict__['__window'].__dict__['__sl'][-1].src, str): 
                     print self.__dict__['__window'].__dict__['__sl'][-1].src
