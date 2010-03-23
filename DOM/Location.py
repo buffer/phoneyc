@@ -1,4 +1,3 @@
-
 import urlparse
 
 class Location(object):
@@ -63,8 +62,18 @@ class Location(object):
             else:
                 _url = "%s://%s"    % (base_scheme, base_netloc, )
                 if base_path:
-                    _url += '/'.join(base_path.split('/')[:-1])
-                url = _url + '/' + url
+                    base_path_split = base_path.strip().split('/')
+                else:
+                    base_path_split = []
+                for directory in url.split('/'):
+                    if directory == '.':
+                        continue
+                    elif directory == '..':
+                        if len(base_path_split) > 0:
+                            base_path_split = base_path_split[:-1]
+                    else:
+                        base_path_split.append(directory)
+                url = _url + '/'.join(base_path_split)
         
         return url
     # note that when location changes, a new document will be loaded. More will be 
