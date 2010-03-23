@@ -110,8 +110,6 @@ class PageParser(SGMLParser):
 
         if 'src' in self.DOM_stack[-1].__dict__:
             src = self.__dict__['__window'].document.location.fix_url(self.DOM_stack[-1].src)
-            if config.verboselevel >= config.VERBOSE_DEBUG:
-                print '[DEBUG] in PageParser.py: document.location.href = ' + self.__dict__['__window'].document.location.href
             script, headers = hc.get(src, self.__dict__['__window'].document.location.href)            
             if config.replace_nonascii:
                 script = re.sub('[\x80-\xff]',' ',script)
@@ -215,12 +213,14 @@ class PageParser(SGMLParser):
         src = self.DOM_stack[-1].src
 
         if isinstance(src, str) or isinstance(src, unicode):
-            from Window import Window
-            #TODO: Add referrer
-            window = Window(self.__dict__['__window'].__dict__['__root'],
-                            self.__dict__['__window'].document.location.fix_url(src))
-            parser = PageParser(window, window.document, window.__dict__['__html'])
-            parser.close()
+            config.VERBOSE(config.VERBOSE_DEBUG, 
+                           '[DEBUG] in PageParser.py: I don\'t think you should get here. in start_iframe')
+            # from Window import Window
+            # window = Window(self.__dict__['__window'].__dict__['__root'],
+            #                 self.__dict__['__window'].document.location.fix_url(src),
+            #                 self.__dict__['__window'].document.location.href)
+            # parser = PageParser(window, window.document, window.__dict__['__html'])
+            # parser.close()
 
     def end_iframe(self):
         self.unknown_endtag('iframe')

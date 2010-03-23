@@ -19,11 +19,12 @@ def alert(x):
         print '[ALERT] '+x
 
 class Window(object):
-    def __init__(self, root, url):
+    def __init__(self, root, url, referrer = False):
         self.__dict__['__root']   = root
         self.__dict__['__html']    = ''
         self.__dict__['__headers'] = []
         self.__dict__['__timeout'] = []
+        self.__dict__['__referrer'] = referrer
         self.__init_url(url)
         self.__init_runtime()
         self.__init_html()
@@ -81,7 +82,7 @@ class Window(object):
         url    = self.__dict__['__url']
         
         try:
-            self.__dict__['__html'], headers = hc.get(url)
+            self.__dict__['__html'], headers = hc.get(url, self.__dict__['__referrer'])
             if config.replace_nonascii:
                 self.__dict__['__html'] = re.sub('[\x80-\xff]',' ',self.__dict__['__html'])
             for header in headers.splitlines():

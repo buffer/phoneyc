@@ -18,8 +18,7 @@ class DOM:
         self.url     = url
 
     def parse(self):
-        #TODO: Add referrer
-        window = Window(self, self.url)
+        window = Window(self, self.url, False)
         parser = PageParser(window, window.document, window.__dict__['__html'])
         parser.close()
 

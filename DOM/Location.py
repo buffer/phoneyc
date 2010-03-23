@@ -11,10 +11,10 @@ class Location(object):
     def __setattr__(self, name, val):
         if name == 'href':
             from Window import Window
+            oldhref = self.__dict__['href']
             self.__dict__['href'] = self.fix_url(val)
             root = self.__dict__['__document'].contentWindow.__dict__['__root']
-            #TODO: Add referrer?
-            Window(root, self.__dict__['href'])
+            Window(root, self.__dict__['href'], oldhref)
 
     def __getattr__(self, name):
         url_parts = self.__dict__['href'].split('/')

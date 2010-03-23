@@ -46,9 +46,10 @@ class DOMObject(object):
         if self.tagName == "iframe" and name == 'src':
             from Window import Window
             from PageParser import PageParser
-            #TODO: Add referrer
             window = Window(self.__dict__['__window'].__dict__['__root'],
-                            self.__dict__['__window'].document.location.fix_url(val))
+                            self.__dict__['__window'].document.location.fix_url(val),
+                            self.__dict__['__window'].document.location.href
+                            )
             parser = PageParser(window, window.document, window.__dict__['__html'])
             #PageParser(self.__dict__['__window'],
             #           self.__dict__['__window'].__dict__['__sl'][-1],
