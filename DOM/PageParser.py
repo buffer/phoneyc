@@ -178,7 +178,9 @@ class PageParser(SGMLParser):
         self.in_Script = False
         self.literal = 0
         try:
-            self.__dict__['__window'].__dict__['__cx'].execute(self.script) # execute script here
+            self.__dict__['__window'].__dict__['__cx'].execute(self.script+';') # execute script here
+            config.VERBOSE(config.VERBOSE_DEBUG,'[DEBUG] in PageParser.py End SCRIPT tag, executing inline script...')
+            config.VERBOSE(config.VERBOSE_DETAIL, self.script+';')
         except Exception, e:
             try:
                 self.__last_try(traceback.format_exc())

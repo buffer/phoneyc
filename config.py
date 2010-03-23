@@ -1,3 +1,19 @@
+"""
+Explanation of VERBOSE_*
+
+VERBOSE_ALERT   : This level will print all alerted raised by phoneyc. An alert
+                  is defined as an real attack/exploit.
+                  All such lines should have "[ALERT]" as their initial headers.
+VERBOSE_WARNING : Suspicious attack/exploit behaviour. Maybe it's an attack,
+                  but not sure.
+                  All such lines should have "[WARNING]" as their initial headers.
+VERBOSE_DEBUG   : Debug information
+                  All such lines should have "[DEBUG]" as their initial headers.
+VERBOSE_DETAIL  : Detail information, e.g. dump of the document.write/eval/SCRIPT 
+                  tag codes. All printed messages that don't have a "[ALERT/WARNING/DEBUG]"
+                  header can only be included in detail.
+"""
+
 VERBOSE_ALERT   = 1
 VERBOSE_WARNING = 3
 VERBOSE_DEBUG   = 5
@@ -45,3 +61,8 @@ UserAgents = [
      "4.0 (compatible; MSIE 6.0; Windows NT 5.0; .NET CLR 1.1.4322; .NET CLR 2.0.50727)"
     )
 ]
+
+def VERBOSE(level,message):
+    global verboselevel
+    if verboselevel >= level:
+        print str(message)
