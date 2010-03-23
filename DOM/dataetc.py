@@ -11,7 +11,8 @@ def isevent(name, tag):
                 'onmouseout', 
                 'onmouseover', 
                 'onmouseup', 
-                'onload']: 
+                'onload',
+                'onunload']: 
         return True
     if tag == 'img' and name in ['onabort', 'onload']: 
         return True

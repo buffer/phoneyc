@@ -101,11 +101,13 @@ class Window(object):
             return self.__dict__['__cx'].execute(name)
 
     def attachEvent(self, sEvent, fpNotify):
-        print "********************* [WARNING] *************************"
-        print "No emulation available for window.attachEvent"
-        print "Event   : " + sEvent
-        print "Handler : " + str(fpNotify)
-        print "*********************************************************"
+        if dataetc.isevent(sEvent, 'window'):
+            self.__dict__[sEvent]=fpNotify
+        # print "********************* [WARNING] *************************"
+        # print "No emulation available for window.attachEvent"
+        # print "Event   : " + sEvent
+        # print "Handler : " + str(fpNotify)
+        # print "*********************************************************"
 
     def setTimeout(self, f, delay):
         self.__dict__['__timeout'].append(f)

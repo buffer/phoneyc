@@ -36,7 +36,11 @@ class DOM:
                     pass
 
             if 'onload' in window.__dict__:
-                window.onload()
+                try:
+                    window.onload()
+                except:
+                    traceback.print_exc(file=sys.stdout)
+                    
 
             # Added this try clause while analyzing Fragus Exploit Kit
             try:
@@ -70,6 +74,12 @@ class DOM:
                     except:
                         traceback.print_exc()
 
+            if 'onunload' in window.__dict__:
+                try:
+                    window.onunload()
+                except:
+                    traceback.print_exc(file=sys.stdout)
+                    
 
     def traverse(self, dom, k):
         for i in dom.children:
