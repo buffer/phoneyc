@@ -112,8 +112,9 @@ class PageParser(SGMLParser):
             src = self.__dict__['__window'].document.location.fix_url(self.DOM_stack[-1].src)
             if config.verboselevel >= config.VERBOSE_DEBUG:
                 print '[DEBUG] in PageParser.py: document.location.href = ' + self.__dict__['__window'].document.location.href
- 
             script, headers = hc.get(src, self.__dict__['__window'].document.location.href)            
+            if config.replace_nonascii:
+                script = re.sub('[\x80-\xff]',' ',script)
             self.script += script
             self.literal = 0
        
@@ -242,6 +243,8 @@ class PageParser(SGMLParser):
                 if config.verboselevel >= config.VERBOSE_DEBUG:
                     print '[DEBUG] in PageParser.py: Fetching src '+src
                 script, headers = hc.get(src, self.__dict__['__window'].document.location.href)
+                # if config.replace_nonascii:
+                #     script = re.sub('[\x80-\xff]',' ',script)
 
         self.DOM_stack[-1].appendChild(domobj)
         self.DOM_stack.append(domobj)
@@ -301,6 +304,8 @@ class PageParser(SGMLParser):
             if attr[0] == 'src':
                 src = self.__dict__['__window'].document.location.fix_url(attr[1])
                 script, headers = hc.get(src, self.__dict__['__window'].document.location.href)
+                # if config.replace_nonascii:
+                #     script = re.sub('[\x80-\xff]',' ',script)
 
     def end_embed(self):
         return

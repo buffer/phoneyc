@@ -24,6 +24,8 @@ verboselevel    = 0
 retrieval_all   = False
 initial_URL     = None
 cache_response  = False
+replace_nonascii= False
+
 
 userAgent       = "Mozilla/4.0 (compatible; MSIE 6.1; Windows XP; .NET CLR 1.1.4322; .NET CLR 2.0.50727)"
 appCodeName     = "Mozilla"

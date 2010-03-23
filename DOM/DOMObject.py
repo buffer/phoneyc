@@ -44,8 +44,6 @@ class DOMObject(object):
         #   pass
 
         if self.tagName == "iframe" and name == 'src':
-            #url = self.__dict__['__window'].document.location.fix_url(str(val))
-            #content, headers = hc.get(url)
             from Window import Window
             from PageParser import PageParser
             #TODO: Add referrer

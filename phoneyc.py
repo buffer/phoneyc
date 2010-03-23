@@ -14,6 +14,7 @@ Options:
     -r              , --retrieval-all               Retrieval all inline linking data.
     -c              , --cache-response              Cache the responses from the remote sites.
     -u <personality>, --user-agent=<personality>    Select a user agent (see below for values, default: 1)
+    --replace-nonascii                              Replace all non-ASCII characters with spaces(0x20) in all HTML or JS contents
 """
 
 import sys, os, shutil 
@@ -146,7 +147,8 @@ if __name__ == "__main__":
              'verbose',
              'debug=', 
              'retrieval-all',
-             'cache-response'
+             'cache-response',
+             'replace-nonascii'
             ])
     except getopt.GetoptError, exp:
         usage()
@@ -174,6 +176,8 @@ if __name__ == "__main__":
             config.retrieval_all = True
         if option[0] == '-c' or option[0] == '--cache-response':
             config.cache_response = True
+        if option[0] == '--replace-nonascii':
+            config.replace_nonascii = True
 
     config.initial_URL = args[0]
     

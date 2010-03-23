@@ -48,6 +48,9 @@ class HttpHoneyClient(object):
     def __check_pdf(self, header):
         return header.startswith("Content-Type") and header.split("Content-Type:")[1].strip() == 'application/pdf'
 
+    def __check_text(self, header):
+        return header.startswith("Content-Type") and header.split("Content-Type:")[1].strip().startswith('text')
+
     def __fetch(self, url, method="get", post_data = False, referrer = False):
         """hidden, called from get() or post()"""
         # TODO
@@ -119,11 +122,12 @@ class HttpHoneyClient(object):
         for header in self.headers.split("\r\n"):
             if self.__check_pdf(header):
                 from PDF.PDFAnalyzer import PDFAnalyzer
-                
+
                 p = PDFAnalyzer(res)
                 p.run()
                 return ''
-
+                
+                
         # "\xef\xbb\xbf" is the head of UTF-8, may cause spidermonkey to crash
         if _cb.contents.startswith("\xef\xbb\xbf"):
             res = _cb.contents[3:]
