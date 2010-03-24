@@ -7,7 +7,6 @@ import traceback
 basedir = os.path.dirname(os.getcwd())
 sys.path.append(basedir)
 
-from HTTP.HttpHoneyClient import HttpHoneyClient
 from ActiveX.ActiveX import *
 from Window import Window
 from PageParser import PageParser

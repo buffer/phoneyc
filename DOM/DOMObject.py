@@ -2,7 +2,6 @@ import sys
 import traceback
 import dataetc
 from Array import Array
-from HTTP.HttpHoneyClient import hc
 from CSSStyleDeclaration import CSSStyleDeclaration
 from unknown import unknown
 

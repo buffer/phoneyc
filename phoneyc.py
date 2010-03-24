@@ -27,7 +27,6 @@ from binascii import hexlify
 site.addsitedir('lib/python')
 
 import config
-from DOM.DOM import DOM
 import magic
 
 DOWNLOADS_DIR = "log/downloads"
@@ -182,6 +181,8 @@ if __name__ == "__main__":
     config.initial_URL = args[0]
     
     check_logdirs()
+
+    from DOM.DOM import DOM
     phoneycdom = DOM(config.initial_URL)
     alerts = phoneycdom.analyze()
     if config.verboselevel >= config.VERBOSE_ALERT:
