@@ -139,7 +139,7 @@ def report(alerts):
 if __name__ == "__main__":
     args = sys.argv[1:]
     try:
-        options, args = getopt.getopt(args, 'hu:l:vd:rc',
+        options, args = getopt.getopt(args, 'hu:l:vd:rcn',
             ['help', 
              'user-agent=', 
              'logfile=', 
