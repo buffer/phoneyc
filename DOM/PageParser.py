@@ -16,11 +16,6 @@ class PageParser(SGMLParser):
         self.current    = 0
         self.text       = ''
         self.script     = """
-                            window.eval = eval;
-                            function CollectGarbage() {};
-                            function Image() {};
-                            function quit() {};
-                            function prompt() {};
                         """
         self.in_Script  = False
         self.endearly   = False # for some cases, such as location is changed, the parser will stop early.

@@ -15,6 +15,10 @@ class Document(DOMObject):
         self.activeElement        = None
         self.contentWindow        = window
         self.URL                  = url
+        if window.__dict__['__referrer']:
+            self.referrer = window.__dict__['__referrer']
+        else:
+            self.referrer = ''
         self.__dict__['all']      = []
         self.__init_document(headers)
 

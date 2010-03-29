@@ -18,6 +18,11 @@ def alert(x):
     if config.verboselevel >= config.VERBOSE_ALERT:
         print '[ALERT] '+x
 
+class Image(object):
+    def __init__(self):
+        config.VERBOSE(config.VERBOSE_DEBUG, "[DEBUG] in Window.py: New Image() object.")
+
+
 class Window(object):
     def __init__(self, root, url, referrer = False):
         self.__dict__['__root']   = root
@@ -61,11 +66,16 @@ class Window(object):
         context.add_global("setInterval"  , self.setInterval)
         context.add_global("SetInterval"  , self.setInterval)
         context.add_global("ActiveXObject", ActiveXObject)
+        context.add_global("Image", Image)
         context.add_global("navigator"    , Navigator())
         context.add_global("screen"       , unknown())
         context.add_global("eval"         , self.eval)
         
         context.execute("Event = function(){}")
+
+        context.execute("function CollectGarbage() {};")
+        context.execute("function quit() {};")
+        context.execute("function prompt() {};")
 
         for clsname in dataetc.classlist:
             exec 'class ' + clsname + '(DOMObject):\n\t'\
@@ -76,6 +86,7 @@ class Window(object):
         self.__dict__['__cx'] = context
         self.__dict__['__sl'] = []
         self.__dict__['__fl'] = [document]
+        context.execute("window.eval = eval;")
 
     def __init_html(self):
         scheme = self.__dict__['__scheme']
