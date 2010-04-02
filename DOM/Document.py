@@ -86,8 +86,9 @@ class Document(DOMObject):
         return self.tempArray
 
     def write(self, html):
+        html=str(html)
         config.VERBOSE(config.VERBOSE_DEBUG, '[DEBUG] in Document.py Document.write(ln)...')
-        config.VERBOSE(config.VERBOSE_DETAIL, str(html))
+        config.VERBOSE(config.VERBOSE_DETAIL, html)
         if 'parser' not in self.contentWindow.__dict__['__sl'][-1].__dict__:
             self.contentWindow.__dict__['__sl'][-1].parser = \
             PageParser(self.contentWindow,
@@ -97,6 +98,7 @@ class Document(DOMObject):
             self.contentWindow.__dict__['__sl'][-1].parser.feed(html)
 
     def writeln(self, html):
+        html=str(html)
         self.write(html+'\n')
 
 
