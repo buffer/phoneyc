@@ -10,7 +10,7 @@ Options:
     -h              , --help                        Display this help information.
     -l <filename>   , --logfile=<filename>          Output file name for logs.
     -v              , --verbose                     Explain what is being done (DEBUG mode).
-    -d <debuglevel> , --debug=<debuglevel>          Debug Level.
+    -d <debuglevel> , --debug=<debuglevel>          Debug Level, 1-10.
     -r              , --retrieval-all               Retrieval all inline linking data.
     -c              , --cache-response              Cache the responses from the remote sites.
     -u <personality>, --user-agent=<personality>    Select a user agent (see below for values, default: 1)
