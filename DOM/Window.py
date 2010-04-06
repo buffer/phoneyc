@@ -11,17 +11,9 @@ from Navigator import Navigator
 from ActiveX.ActiveX import *
 from unknown import unknown
 from DOMObject import DOMObject
+from ClassFactory import DOMObjectFactory
 from HTTP.HttpHoneyClient import hc
 import dataetc
-
-def alert(x):
-    if config.verboselevel >= config.VERBOSE_ALERT:
-        print '[ALERT] '+x
-
-class Image(object):
-    def __init__(self):
-        config.VERBOSE(config.VERBOSE_DEBUG, "[DEBUG] in Window.py: New Image() object.")
-
 
 class Window(object):
     def __init__(self, root, url, referrer = False):
@@ -53,35 +45,34 @@ class Window(object):
     def __init_context(self):
         if config.verboselevel >= config.VERBOSE_DEBUG:
             print '[DEBUG] in Window.py: New Document created by Window, url='+self.__dict__['__url']
+        
         document = Document(self, self.__dict__['__url'], self.__dict__['__headers'])
 
         context = self.__dict__['__rt'].new_context(alertlist = [])
         
         context.add_global('window'       , self)
-        context.add_global('self'       , self)
+        context.add_global('self'         , self)
         context.add_global('document'     , document)
         context.add_global('location'     , document.location)
-        context.add_global("alert"        , alert)
+        context.add_global("alert"        , self.alert)
         context.add_global("setTimeout"   , self.setTimeout)
         context.add_global("setInterval"  , self.setInterval)
         context.add_global("SetInterval"  , self.setInterval)
         context.add_global("ActiveXObject", ActiveXObject)
-        context.add_global("Image", Image)
         context.add_global("navigator"    , Navigator())
         context.add_global("screen"       , unknown())
         context.add_global("eval"         , self.eval)
         
         context.execute("Event = function(){}")
-
         context.execute("function CollectGarbage() {};")
         context.execute("function quit() {};")
         context.execute("function prompt() {};")
 
         for clsname in dataetc.classlist:
-            exec 'class ' + clsname + '(DOMObject):\n\t'\
-                    + '\t' + 'def __init__(self, window, clsname, parser = None):\n\t'\
-                    + '\t\t' + 'self.tagName = "' + dataetc.classtotag(clsname) + '"' 
-            exec 'context.add_global("' + clsname + '",' + clsname + ')'
+            inits = {'window' : self, 
+                     'tagName': dataetc.classtotag(clsname),
+                     'parser' : None}
+            context.add_global(clsname, DOMObjectFactory(clsname, inits))
 
         self.__dict__['__cx'] = context
         self.__dict__['__sl'] = []
@@ -118,7 +109,7 @@ class Window(object):
 
     def attachEvent(self, sEvent, fpNotify):
         if dataetc.isevent(sEvent, 'window'):
-            self.__dict__[sEvent]=fpNotify
+            self.__dict__[sEvent] = fpNotify
         # print "********************* [WARNING] *************************"
         # print "No emulation available for window.attachEvent"
         # print "Event   : " + sEvent
@@ -141,4 +132,8 @@ class Window(object):
                     os.environ['PHONEYC_LASTSCRIPT'] = script
             except KeyError:
                 os.environ['PHONEYC_LASTSCRIPT'] = script
+
+    def alert(self, s):
+        if config.verboselevel >= config.VERBOSE_ALERT:
+            print '[ALERT] ' + str(s)
 
