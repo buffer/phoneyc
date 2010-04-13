@@ -185,11 +185,10 @@ if __name__ == "__main__":
     from DOM.DOM import DOM
     phoneycdom = DOM(config.initial_URL)
     alerts = phoneycdom.analyze()
-    if config.verboselevel >= config.VERBOSE_ALERT:
-        if alerts:
-            report(alerts)
-        else:
-            print "No Shellcode/Heapspray Alerts."
+    if alerts:
+        report(alerts)
+    else:
+        print "No Shellcode/Heapspray Alerts."
 
     binaries_dir = os.listdir(BINARIES_DIR)
     for file in binaries_dir:

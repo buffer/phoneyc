@@ -58,7 +58,8 @@ class unknownObject(object):
 class ActiveXObject(unknownObject):
     def __init__(self, cls, clstype = 'name'):
         if config.verboselevel >= config.VERBOSE_WARNING:
-            print "[WARNING] New ActiveX Object: "+cls
+            print "[WARNING] New ActiveX Object: " + cls
+
         unknownObject.__init__(self, cls)
         filename = ''
         if clstype == 'id':
@@ -71,8 +72,23 @@ class ActiveXObject(unknownObject):
                 filename = clsnamelist[cls]
 
         self.__dict__['__name'] = filename
-        if filename:
-            exec load_src(filename)
+        self.check_raise_warning(filename, cls)
+        exec load_src(filename)
+
+    def is_enabled_mock_activex(self):
+        return int(os.environ['PHONEYC_MOCK_ACTIVEX'])
+
+    def raise_warning(self, cls):
+        print "[WARNING] Unknown ActiveX Object: %s" % (cls, )
+        raise UserWarning
+
+    def check_raise_warning(self, filename, cls):
+        if not filename:
+            self.raise_warning(cls)
+
+        module = "ActiveX/modules/%s" % (filename, )
+        if not self.is_enabled_mock_activex() and not os.access(module, os.F_OK):
+            self.raise_warning(cls)
 
 
 def load_src(filename):

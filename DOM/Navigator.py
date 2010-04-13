@@ -103,7 +103,7 @@ class Navigator(object):
     # Obsolete       
     # Returns false. JavaScript taint/untaint functions removed in 
     # JavaScript 1.2[1] 
-    def taintEnabled(self, *arg): 
+    def taintEnabled(self, *arg):
         return False
 
 

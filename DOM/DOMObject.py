@@ -67,7 +67,7 @@ class DOMObject(object):
                     self.__dict__['__window'].__dict__['__cx'].execute(self.id + '.' + name + '=function(){' + val + '}')
                 else: 
                     self.__dict__[name] = cx.execute('function(){' + val + '}')
-            except: 
+            except:
                 pass
             return
 

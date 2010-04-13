@@ -56,7 +56,7 @@ class DOM:
             #print window.document
             #print window.document.all
             for i in window.document.all:
-                if 'onclick' in i.__dict__: 
+                if 'onclick' in i.__dict__:
                     try:
                         i.onclick()
                     except:

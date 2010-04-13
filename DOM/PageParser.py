@@ -1,5 +1,5 @@
 import sys, os, re
-import traceback
+import traceback, exceptions
 from sgmllib import SGMLParser, SGMLParseError
 
 import dataetc
@@ -63,7 +63,10 @@ class PageParser(SGMLParser):
 
         for k, v in attrs:
             if k == 'classid':
-                domobj = ActiveXObject(v, 'id')
+                try:
+                    domobj = ActiveXObject(v, 'id')
+                except UserWarning:
+                    pass
                 # ActiveX object may be initiallized by classid or classname.
                 # If created by 'object' tag, classid will be used. Check out 
                 # the class definition in 'ActiveX/ActiveX.py' for more.
@@ -161,7 +164,20 @@ class PageParser(SGMLParser):
                 exc = traceback.format_exc()
                 self.__last_try(exc)
 
+    def disable_mock_activex(self):
+        os.environ['PHONEYC_MOCK_ACTIVEX'] = '0'
+
+    def enable_mock_activex(self):
+        os.environ['PHONEYC_MOCK_ACTIVEX'] = '1'
+
+    def is_enabled_mock_activex(self):
+        return int(os.environ['PHONEYC_MOCK_ACTIVEX'])
+
+    def check_mock_activex(self, e):
+        return e.__class__ == exceptions.UserWarning and not self.is_enabled_mock_activex()
+
     def end_script(self):
+        self.disable_mock_activex()
         if self.ignoreScript:
             self.ignoreScript = False
             return
@@ -169,22 +185,54 @@ class PageParser(SGMLParser):
         if self.endearly: 
             return
 
+        self.saved_script = self.script
+        self.do_end_script()
+        self.disable_mock_activex()
+
+    def do_end_script(self):
+        self.script    = self.saved_script
         self.in_Script = False
-        self.literal = 0
+        self.literal   = 0
+        mock_active    = False
+
+        # Let's explain what's going on here since it's
+        # not so straightforward...
         try:
-            self.__dict__['__window'].__dict__['__cx'].execute(self.script+';') # execute script here
+            # First attempt to execute the script code
             config.VERBOSE(config.VERBOSE_DEBUG,'[DEBUG] in PageParser.py End SCRIPT tag, executing inline script...')
             config.VERBOSE(config.VERBOSE_DETAIL, self.script+';')
+            self.__dict__['__window'].__dict__['__cx'].execute(self.script+';') # execute script here
         except Exception, e:
+            # Something went wrong! Let's take a look at the possible cause
+            # of such error
+            if self.check_mock_activex(e):
+                # Being here means we raised a UserWarning exception (take a
+                # look at ActiveX/ActiveX.py for additional deatils). This 
+                # means we were unable to instantiate an ActiveX object because 
+                # there's not an emulation script for it or because it doesn't 
+                # exist at all. The latter case could be used to defeat our 
+                # universal ActiveX object which is disabled during the first 
+                # attempt in order to emulate what should be the behaviour of a 
+                # real browser. In order to have a better understanding of what's 
+                # going on we enable the universal ActiveX object and move on. 
+                self.enable_mock_activex()
+                mock_active = True
             try:
+                # An error occurred during the execution. We analyze the raised
+                # exception in order to determine if it's a TypeError instance.
+                # In such case we try to identify the error location within the
+                # script, patching it and executing it again. 
                 self.__last_try(traceback.format_exc())
             except Exception, e:
-                config.VERBOSE(config.VERBOSE_DETAIL, 'Error executing:\n' + self.script)
-                traceback.print_exc(file=sys.stdout)
+                # No luck!
+                if config.verboselevel >= config.VERBOSE_DEBUG:
+                    traceback.print_exc(file = sys.stdout)
+                    try:
+                        if isinstance(self.__dict__['__window'].__dict__['__sl'][-1].src, str): 
+                            print self.__dict__['__window'].__dict__['__sl'][-1].src
+                    except Exception, e:
+                        pass
 
-                if isinstance(self.__dict__['__window'].__dict__['__sl'][-1].src, str): 
-                    print self.__dict__['__window'].__dict__['__sl'][-1].src
-    
         try: 
             self.__dict__['__window'].__dict__['__cx'].execute('')
         except: 
@@ -202,6 +250,12 @@ class PageParser(SGMLParser):
             scr.parser.close()
         self.script = ''
         self.unknown_endtag('script')
+
+        # The universal ActiveX object was enabled so give this script a last
+        # try with this feature on. This path is useful for identifying missing 
+        # ActiveX objects which need to be emulated.
+        if mock_active:
+            self.do_end_script()
 
     def start_iframe(self, attrs):
         self.unknown_starttag('iframe', attrs)
