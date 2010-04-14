@@ -69,7 +69,7 @@ class Location(object):
                     if directory == '.':
                         continue
                     elif directory == '..':
-                        if len(base_path_split) > 0:
+                        if len(base_path_split) > 1:
                             base_path_split = base_path_split[:-1]
                     else:
                         base_path_split.append(directory)

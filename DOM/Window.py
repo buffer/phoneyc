@@ -123,8 +123,10 @@ class Window(object):
         self.setTimeout(f, delay)
 
     def eval(self, script):
+        script=str(script)
         try:
-            self.__dict__['__cx'].execute(script)
+            ret = self.__dict__['__cx'].execute(script)
+            return ret
         except:
             try:
                 envbase = os.environ['PHONEYC_LASTSCRIPT']
