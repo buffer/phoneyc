@@ -3,6 +3,7 @@ import sys, os
 import traceback
 import urlparse
 import re
+import types
 
 import config
 from honeyjs import Runtime
