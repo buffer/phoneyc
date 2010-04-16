@@ -1,9 +1,13 @@
 import sys 
 import traceback
+import urlparse
+
 import dataetc
 from Array import Array
 from CSSStyleDeclaration import CSSStyleDeclaration
 from unknown import unknown
+import config
+from HTTP.HttpHoneyClient import hc
 
 class DOMObject(object):
     def __init__(self, window, tag, parser):
@@ -89,7 +93,17 @@ class DOMObject(object):
             from PageParser import PageParser
             self.parser = PageParser(self.__dict__['__window'], self, val)
             return
-
+        
+        if name == 'src':
+            urlsrc = self.__dict__['__window'].document.location.fix_url(val)
+            if config.retrieval_all:
+                hc.get(urlsrc, self.__dict__['__window'].document.location.href)
+            scheme, netloc, path, query, fragment = urlparse.urlsplit(urlsrc)
+            if scheme not in ('http','file','https','ftp'):
+                config.VERBOSE(config.VERBOSE_WARNING, "[WARNING] Got unknown scheme: %s in %s.%s ."%(urlsrc,self.tagName, name));
+                if 'onerror' in self.__dict__:
+                    config.VERBOSE(config.VERBOSE_DEBUG, "[DEBUG] Calling onerror of %s."%(self.tagName));
+                    self.onerror()
         self.__dict__[name] = val
 
     def focus(self):

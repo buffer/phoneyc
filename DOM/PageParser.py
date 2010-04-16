@@ -289,8 +289,6 @@ class PageParser(SGMLParser):
         if config.retrieval_all:
             if 'src' in domobj.__dict__:
                 src = self.__dict__['__window'].document.location.fix_url(domobj.src)
-                if config.verboselevel >= config.VERBOSE_DEBUG:
-                    print '[DEBUG] in PageParser.py: Fetching src '+src
                 script, headers = hc.get(src, self.__dict__['__window'].document.location.href)
                 # if config.replace_nonascii:
                 #     script = re.sub('[\x80-\xff]',' ',script)

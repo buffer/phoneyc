@@ -52,7 +52,7 @@ class Location(object):
         
         # fix up relative URLs to absolute URLs
         scheme, netloc, path, query, fragment = urlparse.urlsplit(url)
-        if scheme not in ('http', 'https'):
+        if len(scheme) == 0:
             if url.startswith('/'): 
                 url = '%s://%s%s'   % (base_scheme, base_netloc, url)
             elif url.startswith('?'): 
