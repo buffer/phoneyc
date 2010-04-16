@@ -124,6 +124,8 @@ class Window(object):
 
     def eval(self, script):
         script=str(script)
+        config.VERBOSE(config.VERBOSE_DEBUG, "[DEBUG] Got eval, evaling...")
+        config.VERBOSE(config.VERBOSE_DETAIL, script)
         try:
             ret = self.__dict__['__cx'].execute(script)
             return ret
