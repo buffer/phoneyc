@@ -205,7 +205,7 @@ class PageParser(SGMLParser):
         except Exception, e:
             # Something went wrong! Let's take a look at the possible cause
             # of such error
-            if self.check_mock_activex(e):
+            if config.universal_activex and self.check_mock_activex(e):
                 # Being here means we raised a UserWarning exception (take a
                 # look at ActiveX/ActiveX.py for additional deatils). This 
                 # means we were unable to instantiate an ActiveX object because 

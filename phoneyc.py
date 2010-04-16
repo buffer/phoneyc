@@ -15,6 +15,7 @@ Options:
     -c              , --cache-response              Cache the responses from the remote sites.
     -u <personality>, --user-agent=<personality>    Select a user agent (see below for values, default: 1)
     -n              , --replace-nonascii            Replace all non-ASCII characters with spaces(0x20) in all HTML or JS contents
+    -m              , --universal-activex           Enable Universal ActiveX object 
 """
 
 import sys, os, shutil 
@@ -139,7 +140,7 @@ def report(alerts):
 if __name__ == "__main__":
     args = sys.argv[1:]
     try:
-        options, args = getopt.getopt(args, 'hu:l:vd:rcn',
+        options, args = getopt.getopt(args, 'hu:l:vd:rcnm',
             ['help', 
              'user-agent=', 
              'logfile=', 
@@ -147,7 +148,8 @@ if __name__ == "__main__":
              'debug=', 
              'retrieval-all',
              'cache-response',
-             'replace-nonascii'
+             'replace-nonascii',
+             'universal-activex'
             ])
     except getopt.GetoptError, exp:
         usage()
@@ -177,6 +179,11 @@ if __name__ == "__main__":
             config.cache_response = True
         if option[0] == '-n' or option[0] == '--replace-nonascii':
             config.replace_nonascii = True
+        if option[0] == '-m' or option[0] == '--universal-activex':
+            config.universal_activex = True
+
+        if config.verboselevel > config.VERBOSE_WARNING:
+            config.universal_activex = True
 
     config.initial_URL = args[0]
     
