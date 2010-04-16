@@ -123,9 +123,10 @@ class Window(object):
         self.setTimeout(f, delay)
 
     def eval(self, script):
-        script=str(script)
         config.VERBOSE(config.VERBOSE_DEBUG, "[DEBUG] Got eval, evaling...")
-        config.VERBOSE(config.VERBOSE_DETAIL, script)
+        config.VERBOSE(config.VERBOSE_DETAIL, str(script))
+        if not type(script) in types.StringTypes:
+            return script
         try:
             ret = self.__dict__['__cx'].execute(script)
             return ret
