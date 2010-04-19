@@ -72,8 +72,10 @@ class ActiveXObject(unknownObject):
                 filename = clsnamelist[cls]
 
         self.__dict__['__name'] = filename
-        self.check_raise_warning(filename, cls)
-        exec load_src(filename)
+        if not config.universal_activex:
+            self.check_raise_warning(filename, cls)
+        if filename:
+            exec load_src(filename)
 
     def is_enabled_mock_activex(self):
         return int(os.environ['PHONEYC_MOCK_ACTIVEX'])
