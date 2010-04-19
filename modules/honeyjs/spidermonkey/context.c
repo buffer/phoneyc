@@ -13,6 +13,7 @@
 #include "spidermonkey.h"
 
 #include <time.h> // After spidermonkey.h so after Python.h
+#include <regex.h>
 
 #include <jsobj.h>
 #include <jscntxt.h>
@@ -673,6 +674,46 @@ success:
     return ret;
 }
 
+
+PyObject*
+Context_patch_script(Context* self, PyObject* args, PyObject* kwargs)
+{
+    char *str = NULL;
+    PyObject* ret = NULL;
+
+    JS_BeginRequest(self->cx);
+    if(!PyArg_ParseTuple(args, "s", &str)) goto error;
+
+    regex_t regstr;
+    regmatch_t pm[30];
+    memset(pm, 0, 30 * sizeof(regmatch_t));
+    const size_t nmatch = 30;
+
+    if(regcomp(&regstr, ";[ \f\r\n\t]*finally",REG_NEWLINE))  goto error;
+
+    int len = strlen(str);
+    char *newstr = malloc(len+1);
+    strcpy(newstr,str);
+    
+    int r = regexec (&regstr, newstr, nmatch, pm, 0);
+    if(r == 0){
+        int x;
+        for (x = 0; x<nmatch && pm[x].rm_so!=-1; ++x)
+        {
+            newstr[pm[x].rm_so] = ' ';
+        }
+    }
+    
+    regfree(&regstr);
+    ret = PyString_FromString(newstr);
+    
+    free(newstr);
+error:
+    JS_EndRequest(self->cx);
+    return ret;
+}
+
+
 PyObject*
 Context_gc(Context* self, PyObject* args, PyObject* kwargs)
 {
@@ -756,6 +797,12 @@ static PyMethodDef Context_methods[] = {
         (PyCFunction)Context_execute,
         METH_VARARGS,
         "Execute JavaScript source code."
+    },
+    {
+        "patch_script",
+        (PyCFunction)Context_patch_script,
+        METH_VARARGS,
+        "Patch script for spidermonkey-compatible."
     },
     {
         "gc",

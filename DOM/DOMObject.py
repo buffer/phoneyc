@@ -66,9 +66,11 @@ class DOMObject(object):
             # i think i find a way to handle this, but there could 
             # be some cases it cannot cover.
             val = str(val)+';'
+            cx = self.__dict__['__window'].__dict__['__cx'];
+            val = cx.patch_script(val);
             try:
                 if 'id' in self.__dict__:
-                    self.__dict__['__window'].__dict__['__cx'].execute(self.id + '.' + name + '=function(){' + val + '}')
+                    cx.execute(self.id + '.' + name + '=function(){' + val + '}')
                 else: 
                     self.__dict__[name] = cx.execute('function(){' + val + '}')
             except:

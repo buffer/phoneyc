@@ -28,7 +28,7 @@ class DOM:
         for window in self.windows:
             for i in window.__dict__['__timeout']:
                 try:
-                    window.__dict__['__cx'].execute(i + ";1;")
+                    window.__dict__['__cx'].execute(window.__dict__['__cx'].patch_script(i) + ";1;")
                     continue
                 except:
                     pass
@@ -42,13 +42,13 @@ class DOM:
 
             # Added this try clause while analyzing Fragus Exploit Kit
             try:
-                window.__dict__['__cx'].execute(i + "\";1;")
+                window.__dict__['__cx'].execute(window.__dict__['__cx'].patch_script(i + "\";1;"))
                 continue
             except:
                 pass
 
             try:
-                window.__dict__['__cx'].execute('if(typeof ' + i + '=="function") ' + i +'()')
+                window.__dict__['__cx'].execute(window.__dict__['__cx'].patch_script('if(typeof ' + i + '=="function") ' + i +'()'))
                 continue
             except:
                 pass

@@ -159,7 +159,9 @@ class PageParser(SGMLParser):
 
         if self.__patch_script(exc):
             try:
-                self.__dict__['__window'].__dict__['__cx'].execute(self.script)
+                self.__dict__['__window'].__dict__['__cx'].execute(
+                    self.__dict__['__window'].__dict__['__cx'].patch_script(self.script)
+                    )
             except Exception, e:
                 exc = traceback.format_exc()
                 self.__last_try(exc)
@@ -201,7 +203,9 @@ class PageParser(SGMLParser):
             # First attempt to execute the script code
             config.VERBOSE(config.VERBOSE_DEBUG,'[DEBUG] in PageParser.py End SCRIPT tag, executing inline script...')
             config.VERBOSE(config.VERBOSE_DETAIL, self.script+';')
-            self.__dict__['__window'].__dict__['__cx'].execute(self.script+';') # execute script here
+            self.__dict__['__window'].__dict__['__cx'].execute(
+                self.__dict__['__window'].__dict__['__cx'].patch_script(self.script+';') # execute script here
+                )
         except Exception, e:
             # Something went wrong! Let's take a look at the possible cause
             # of such error
