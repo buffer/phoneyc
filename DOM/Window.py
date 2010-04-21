@@ -129,7 +129,7 @@ class Window(object):
         if not type(script) in types.StringTypes:
             return script
         try:
-            ret = self.__dict__['__cx'].execute(self.__dict__['__cx'].patch_script(self.__dict__['__cx'].script))
+            ret = self.__dict__['__cx'].execute(self.__dict__['__cx'].patch_script(script))
             return ret
         except:
             try:
