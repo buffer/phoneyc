@@ -40,19 +40,6 @@ class DOM:
                     traceback.print_exc(file=sys.stdout)
                     
 
-            # Added this try clause while analyzing Fragus Exploit Kit
-            try:
-                window.__dict__['__cx'].execute(i + "\";1;")
-                continue
-            except:
-                pass
-
-            try:
-                window.__dict__['__cx'].execute('if(typeof ' + i + '=="function") ' + i +'()')
-                continue
-            except:
-                pass
-
             #print window.document
             #print window.document.all
             for i in window.document.all:
