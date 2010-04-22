@@ -15,6 +15,7 @@ class DOM:
     def __init__(self, url):
         self.windows = []
         self.url     = url
+        os.environ['PHONEYC_MOCK_ACTIVEX'] = '0'
 
     def parse(self):
         window = Window(self, self.url, False)
