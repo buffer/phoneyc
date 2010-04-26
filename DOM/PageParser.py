@@ -202,10 +202,9 @@ class PageParser(SGMLParser):
         try:
             # First attempt to execute the script code
             config.VERBOSE(config.VERBOSE_DEBUG,'[DEBUG] in PageParser.py End SCRIPT tag, executing inline script...')
-            config.VERBOSE(config.VERBOSE_DETAIL, self.script+';')
-            self.__dict__['__window'].__dict__['__cx'].execute(
-                self.__dict__['__window'].__dict__['__cx'].patch_script(self.script+';') # execute script here
-                )
+            script = self.__dict__['__window'].__dict__['__cx'].patch_script(self.script+';')
+            config.VERBOSE(config.VERBOSE_DETAIL, script)
+            self.__dict__['__window'].__dict__['__cx'].execute(script)
         except Exception, e:
             # Something went wrong! Let's take a look at the possible cause
             # of such error
@@ -261,6 +260,7 @@ class PageParser(SGMLParser):
         if mock_active:
             self.do_end_script()
 
+
     def start_iframe(self, attrs):
         self.unknown_starttag('iframe', attrs)
         src = self.DOM_stack[-1].src
@@ -275,8 +275,14 @@ class PageParser(SGMLParser):
             # parser = PageParser(window, window.document, window.__dict__['__html'])
             # parser.close()
 
+    def start_frame(self, attrs):
+        self.start_iframe(attrs)
+
     def end_iframe(self):
         self.unknown_endtag('iframe')
+
+    def end_frame(self):
+        self.end_iframe()
 
     def unknown_starttag(self, tag, attrs):
         if config.verboselevel >= config.VERBOSE_DEBUG:
