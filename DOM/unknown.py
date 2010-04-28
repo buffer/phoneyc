@@ -18,8 +18,8 @@ class unknown(object):
         return unknown()
 
     def __setattr__(self, name, val):
-        if config.verboselevel >= config.VERBOSE_DEBUG:
-            print "[DEBUG] in unknown.py: Attr %s set to: %s" % (name, val, )
+        config.VERBOSE(config.VERBOSE_DEBUG, 
+                       "[DEBUG] in unknown.py: Attr %s set to: %s" % (name, val, ))
 
     def __setitem__(self, key, val): 
         pass

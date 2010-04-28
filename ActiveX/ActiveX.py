@@ -57,8 +57,7 @@ class unknownObject(object):
 
 class ActiveXObject(unknownObject):
     def __init__(self, cls, clstype = 'name'):
-        if config.verboselevel >= config.VERBOSE_WARNING:
-            print "[WARNING] New ActiveX Object: " + cls
+        config.VERBOSE(config.VERBOSE_WARNING, "[WARNING] New ActiveX Object: " + cls)
 
         unknownObject.__init__(self, cls)
         filename = ''
@@ -107,8 +106,7 @@ def load_src(filename):
         return script
 
 def add_alert(alert):
-    if config.verboselevel >= config.VERBOSE_ALERT:
-        print alert
+    config.VERBOSE(config.VERBOSE_ALERT, '[ALERT] '+alert)
 
 def add_event(target, evttype, *arg):
     invstack = [target]
@@ -133,8 +131,7 @@ def add_event(target, evttype, *arg):
 
 def write_log(filename):
     if not eventlist:
-        if config.verboselevel >= config.VERBOSE_DEBUG:
-            print '[DEBUG] in ActiveX.py: No ActiveXObject found.'
+        config.VERBOSE(config.VERBOSE_DEBUG, '[DEBUG] in ActiveX.py: No ActiveXObject found.')
         return
 
     try:

@@ -79,8 +79,8 @@ def download(url):
         c.perform()
         code = c.getinfo(pycurl.HTTP_CODE) 
         if code == 404:
-            if config.verboselevel >= config.VERBOSE_DEBUG:
-                print "[DEBUG] 404 File Not Found: "+url
+            config.VERBOSE(config.VERBOSE_DEBUG,
+                           "[DEBUG] 404 File Not Found: "+url)
             fd.close()
             os.remove(filename)
             return
@@ -103,9 +103,6 @@ def download(url):
     newfilename = "%s/%s" % (BINARIES_DIR, h.hexdigest(), )
     shutil.move(filename, newfilename)
     fd.close()
-
-    if config.verboselevel >= config.VERBOSE_DEBUG:
-        print "[DEBUG] Downloaded File: %s from %s" % (h.hexdigest(), url)
 
 def report(alerts):
     for alert in alerts:
@@ -182,7 +179,7 @@ if __name__ == "__main__":
         if option[0] == '-m' or option[0] == '--universal-activex':
             config.universal_activex = True
 
-        if config.verboselevel > config.VERBOSE_WARNING:
+        if config.verboselevel >= config.VERBOSE_DEBUG:
             config.universal_activex = True
 
     config.initial_URL = args[0]

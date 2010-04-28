@@ -72,8 +72,9 @@ class PageParser(SGMLParser):
                 # the class definition in 'ActiveX/ActiveX.py' for more.
 
         if not domobj:
-            if config.verboselevel >= config.VERBOSE_DEBUG:
-                print "[DEBUG] in PageParser.py: Ignoring(ignoreObj) start_object attrs: " +str(attrs)
+            config.VERBOSE(config.VERBOSE_DEBUG,
+                           "[DEBUG] in PageParser.py: Ignoring(ignoreObj) start_object attrs: "
+                           +str(attrs))
             self.ignoreObj = True
             return
 

@@ -44,8 +44,9 @@ class Window(object):
         self.__dict__['__rt'].switch_tracing(1)
 
     def __init_context(self):
-        if config.verboselevel >= config.VERBOSE_DEBUG:
-            print '[DEBUG] in Window.py: New Document created by Window, url='+self.__dict__['__url']
+        config.VERBOSE(config.VERBOSE_DEBUG,
+                       '[DEBUG] in Window.py: New Document created by Window, url='
+                       +self.__dict__['__url'])
         
         document = Document(self, self.__dict__['__url'], self.__dict__['__headers'])
 
@@ -140,6 +141,5 @@ class Window(object):
                 os.environ['PHONEYC_LASTSCRIPT'] = script
 
     def alert(self, s):
-        if config.verboselevel >= config.VERBOSE_ALERT:
-            print '[ALERT] ' + str(s)
+        config.VERBOSE(config.VERBOSE_ALERT, '[ALERT] ' + str(s))
 
