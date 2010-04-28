@@ -82,8 +82,7 @@ class HttpHoneyClient(object):
         if url.find("/",8) < 0:
            url += "/"
         url = urllib2.unquote(url)  
-        if config.verboselevel >= config.VERBOSE_DEBUG:
-           print "[DEBUG] in HttpHoneyClient.py: Fetching "+url+' Referrer:'+str(referrer)
+        config.VERBOSE(config.VERBOSE_REFGRAPH, '[REFGRAPH] "'+str(referrer)+'"->"'+url+'"')
 
         self.__saveurl(url)
         c = pycurl.Curl()
@@ -106,8 +105,6 @@ class HttpHoneyClient(object):
                         c.setopt(pycurl.REFERER, str(referrer))
                 except Exception, e:
                         traceback.print_exc()
-                        if config.verboselevel >= config.VERBOSE_DEBUG:
-                                print "[DEBUG] in HttpHoneyClient.py Referrer is "+str(referrer)
  
         try:
                 c.perform()
