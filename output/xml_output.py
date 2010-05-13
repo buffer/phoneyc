@@ -1715,8 +1715,7 @@ class hashes(GeneratedsSuper):
 class hash(GeneratedsSuper):
     subclass = None
     superclass = None
-    def __init__(self, algorithn=None, algorithm=None, valueOf_=''):
-        self.algorithn = _cast(None, algorithn)
+    def __init__(self, algorithm=None, valueOf_=''):
         self.algorithm = _cast(None, algorithm)
         self.valueOf_ = valueOf_
     def factory(*args_, **kwargs_):
@@ -1725,8 +1724,6 @@ class hash(GeneratedsSuper):
         else:
             return hash(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_algorithn(self): return self.algorithn
-    def set_algorithn(self, algorithn): self.algorithn = algorithn
     def get_algorithm(self): return self.algorithm
     def set_algorithm(self, algorithm): self.algorithm = algorithm
     def getValueOf_(self): return self.valueOf_
@@ -1742,8 +1739,6 @@ class hash(GeneratedsSuper):
         else:
             outfile.write('/>\n')
     def exportAttributes(self, outfile, level, namespace_='', name_='hash'):
-        if self.algorithn is not None:
-            outfile.write(' algorithn=%s' % (quote_attrib(self.algorithn), ))
         if self.algorithm is not None:
             outfile.write(' algorithm=%s' % (quote_attrib(self.algorithm), ))
     def exportChildren(self, outfile, level, namespace_='', name_='hash'):
@@ -1767,9 +1762,6 @@ class hash(GeneratedsSuper):
         if self.hasContent_():
             self.exportLiteralChildren(outfile, level, name_)
     def exportLiteralAttributes(self, outfile, level, name_):
-        if self.algorithn is not None:
-            showIndent(outfile, level)
-            outfile.write('algorithn = %s,\n' % (self.algorithn,))
         if self.algorithm is not None:
             showIndent(outfile, level)
             outfile.write('algorithm = %s,\n' % (self.algorithm,))
@@ -1784,8 +1776,6 @@ class hash(GeneratedsSuper):
             nodeName_ = child_.nodeName.split(':')[-1]
             self.buildChildren(child_, nodeName_)
     def buildAttributes(self, attrs):
-        if attrs.get('algorithn'):
-            self.algorithn = attrs.get('algorithn').value
         if attrs.get('algorithm'):
             self.algorithm = attrs.get('algorithm').value
     def buildChildren(self, child_, nodeName_):
