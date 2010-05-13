@@ -1,3 +1,8 @@
+default:
+	@echo "please chose your platform: debian, gentoo, ubuntu, or osx"
+	@echo "and type \"Make <platform>\""
+	@exit
+
 debian:python-debian pkgconfig-debian nspr-debian ldconfig-debian xulrunner-debian libemu phoneyc_modules
 ubuntu:python-debian pkgconfig-debian nspr-debian ldconfig-debian xulrunner-debian libemu phoneyc_modules
 gentoo:pkgconfig-gentoo nspr-gentoo xulrunner-gentoo ldconfig-gentoo libemu phoneyc_modules
