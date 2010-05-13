@@ -90,7 +90,6 @@
                             <xs:complexType>
                               <xs:simpleContent msdata:ColumnName="hash_Text" msdata:Ordinal="2">
                                 <xs:extension base="xs:string">
-                                  <xs:attribute name="algorithn" type="xs:hexBinary" />
                                   <xs:attribute name="algorithm" type="xs:hexBinary" />
                                 </xs:extension>
                               </xs:simpleContent>
