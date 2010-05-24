@@ -129,7 +129,7 @@ def platform_config():
             #"/usr/include/mozjs",
             "/opt/libemu/include"
         ],
-        "library_dirs": ["/usr/local/lib/","/opt/libemu/lib"],
+        "library_dirs": ["/usr/local/lib/","/opt/libemu/lib/libemu/","/opt/libemu/lib"],
         "libraries": ["emu"],
         "extra_link_args": []
     }
