@@ -5,7 +5,7 @@ from distutils.core import setup, Extension
 libemu = Extension('libemu',
                     sources = ['libemu_module.c'],
                     include_dirs = ['@includedir@', '/opt/libemu/include'],
-                    library_dirs = ['@libdir@', '/opt/libemu/lib/libemu'],
+                    library_dirs = ['@libdir@', '/opt/libemu/lib'],
                     libraries = ['emu'],
                     )
 
