@@ -17,6 +17,6 @@ setup(
     author_email = 'czj.pub@gmail.com, gw@mwcollect.org',
     url = 'http://code.google.com/p/phoneyc/, http://libemu.mwcollect.org/',
     ext_modules=[
-        Extension("libemu_module", ["libemu_module.c"],**pkgconfig('libemu')),
+        Extension("libemu", ["libemu_module.c"],**pkgconfig('libemu')),
     ],
 )
