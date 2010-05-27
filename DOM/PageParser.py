@@ -102,8 +102,7 @@ class PageParser(SGMLParser):
 
         for k, v in attrs: 
             if k.lower() == 'language' and not v.lower().startswith('javascript'):
-                if config.verboselevel >= config.VERBOSE_DEBUG:
-                    print "[DEBUG] in PageParser.py: Ignoring(ignoreScript) start_object attrs: " +str(attrs)
+                config.VERBOSE(config.VERBOSE_DEBUG, "[DEBUG] in PageParser.py: Ignoring(ignoreScript) start_object attrs: " +str(attrs))
                 self.ignoreScript = True
                 return
 

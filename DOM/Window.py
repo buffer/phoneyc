@@ -33,7 +33,9 @@ class Window(object):
         scheme, netloc, path, query, fragment = urlparse.urlsplit(url)
         if scheme:
             self.__dict__['__scheme'] = str(scheme)
-            self.__dict__['__url']    = str(url)
+            # Convert netloc to lowercase. This is what a normal browser will
+            # do. Some obfuscation may use this feature
+            self.__dict__['__url']    = urlparse.urlunsplit((scheme,netloc.lower(),path,query,fragment))
         else:
             self.__init_url(str("http://" + url))
 
@@ -44,10 +46,6 @@ class Window(object):
         self.__dict__['__rt'].switch_tracing(1)
 
     def __init_context(self):
-        config.VERBOSE(config.VERBOSE_DEBUG,
-                       '[DEBUG] in Window.py: New Document created by Window, url='
-                       +self.__dict__['__url'])
-        
         document = Document(self, self.__dict__['__url'], self.__dict__['__headers'])
 
         context = self.__dict__['__rt'].new_context(alertlist = [])

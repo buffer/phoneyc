@@ -52,6 +52,12 @@ class Location(object):
         
         # fix up relative URLs to absolute URLs
         scheme, netloc, path, query, fragment = urlparse.urlsplit(url)
+
+        # Convert netloc to lowercase. This is what a normal browser will do.
+        # Some obfuscation may use this feature
+        if scheme == "http":
+            netloc = netloc.lower()
+            url = urlparse.urlunsplit((scheme,netloc,path,query,fragment))
         if len(scheme) == 0:
             if url.startswith('/'): 
                 url = '%s://%s%s'   % (base_scheme, base_netloc, url)
