@@ -1,11 +1,11 @@
 default:
 	@echo "please chose your platform: debian, gentoo, ubuntu, or osx"
-	@echo "and type \"Make <platform>\""
+	@echo "and type \"make <platform>\""
 	@exit
 
-debian:python-debian pkgconfig-debian nspr-debian ldconfig-debian xulrunner-debian libemu phoneyc_modules
-ubuntu:python-debian pkgconfig-debian nspr-debian ldconfig-debian xulrunner-debian libemu phoneyc_modules
-gentoo:pkgconfig-gentoo nspr-gentoo xulrunner-gentoo ldconfig-gentoo libemu phoneyc_modules
+debian:python-debian pkgconfig-debian setuptools-debian nspr-debian ldconfig-debian xulrunner-debian libemu phoneyc_modules
+ubuntu:python-debian pkgconfig-debian setuptools-debian nspr-debian ldconfig-debian xulrunner-debian libemu phoneyc_modules
+gentoo:pkgconfig-gentoo setuptools-gentoo nspr-gentoo xulrunner-gentoo ldconfig-gentoo libemu phoneyc_modules
 osx:pkgconfig-osx nspr-osx xulrunner-osx libemu phoneyc_modules
 
 python-debian:
@@ -20,6 +20,9 @@ nspr-debian:
 xulrunner-debian:
 	apt-get install xulrunner-dev
 
+setuptools-debian:
+	apt-get install python-setuptools
+
 pkgconfig-gentoo:
 	emerge -u dev-util/pkgconfig
 
@@ -28,6 +31,9 @@ nspr-gentoo:
 
 xulrunner-gentoo:
 	emerge -u net-libs/xulrunner
+
+setuptools-gentoo:
+	emerge -u dev-python/setuptools
 
 pkgconfig-osx:
 	port install pkgconfig
