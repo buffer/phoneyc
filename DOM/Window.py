@@ -139,5 +139,5 @@ class Window(object):
                 os.environ['PHONEYC_LASTSCRIPT'] = script
 
     def alert(self, s):
-        config.VERBOSE(config.VERBOSE_ALERT, '[ALERT] ' + str(s))
+        config.VERBOSE(config.VERBOSE_DEBUG, '[DEBUG] alertmsg:' + str(s))
 
