@@ -45,10 +45,12 @@ xulrunner-osx:
 	port install xulrunner
 
 ldconfig-debian:
-	echo "/opt/libemu/lib/libemu" > /etc/ld.so.conf.d/libemu.conf
+	echo "/opt/libemu/lib" > /etc/ld.so.conf.d/libemu.conf
+	echo "/opt/libemu/lib/libemu" >> /etc/ld.so.conf.d/libemu.conf
 
 ldconfig-gentoo:
-	echo "/opt/libemu/lib/libemu" > /etc/ld.so.conf.d/libemu.conf
+	echo "/opt/libemu/lib" > /etc/ld.so.conf.d/libemu.conf
+	echo "/opt/libemu/lib/libemu" >> /etc/ld.so.conf.d/libemu.conf
 
 libemu:
 	ldconfig;							      \
