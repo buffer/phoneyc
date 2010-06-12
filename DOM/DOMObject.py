@@ -93,13 +93,15 @@ class DOMObject(object):
             try:
                 val=str(val)
                 self.__parser.html = self.__parser.html[:self.begin] + val + self.__parser.html[self.end:]
-                dev = self.end - self.begin - 1 - len(val)
+                dev = self.end - self.begin - len(val)
+                print '[[[[[[[[[[[[[[]]]]]]]]]]]]]]'+str(dev)
                 for i in self.__dict__['__window'].document.all:
+                    print '[[[[[[[[[[[[[[]]]]]]]]]]]]]]'+i.tagName+' '+str(i.begin)+' '+str(i.end)
                     if i.begin:
                         if i.begin > self.end: 
                             i.begin -= dev
                     if i.end:
-                        if i.end > self.end: 
+                        if i.end >= self.end: 
                             i.end -= dev
                 self.__parser.current -= dev
             except Exception, e: 
