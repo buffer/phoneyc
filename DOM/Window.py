@@ -141,3 +141,5 @@ class Window(object):
     def alert(self, s):
         config.VERBOSE(config.VERBOSE_DEBUG, '[DEBUG] alertmsg:' + str(s))
 
+    def close(self):
+        pass# TODO: Implement this method
