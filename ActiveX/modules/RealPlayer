@@ -1,0 +1,20 @@
+# RealMedia RealPlayer Ierpplug.DLL ActiveX Control
+# CVE-2007-5601
+
+def DoAutoUpdateRequest(arg0,arg1,arg2):
+	if len(arg0)>1000 or len(arg1)>1000:
+		add_alert('RealPlayer 10.5 ierpplug.dll overflow in DoAutoUpdateRequest()')
+
+def PlayerProperty(arg):
+        if arg == "PRODUCTVERSION":
+                return "6.0.0.0"
+	if len(arg)>1000:
+		add_alert('RealPlayer 10.5 ierpplug.dll overflow in PlayerProperty()')
+
+def Import(arg0,arg1,arg2,arg3):
+	if len(arg0)>0x8000:
+		add_alert('RealPlayer 10.5 ierpplug.dll overflow in Import()')
+
+self.DoAutoUpdateRequest=DoAutoUpdateRequest
+self.PlayerProperty=PlayerProperty
+self.Import=Import
