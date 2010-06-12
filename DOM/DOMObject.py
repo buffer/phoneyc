@@ -84,10 +84,7 @@ class DOMObject(object):
                     if len(vals) > 1:
                         vals = vals[:-1]+valstmp
                     val = self.id.join(vals)
-                    cx.execute(self.id + '.' + name + 'tmp' + '=function(){' + val + '}')
-                    self.__dict__[name] = cx.execute(self.id + '.' + name + 'tmp')
-                else: 
-                    self.__dict__[name] = cx.execute('function(){' + val + '}')
+                self.__dict__[name] = cx.execute('function(){' + val + '}')
             except:
                 traceback.print_exc()
             return
