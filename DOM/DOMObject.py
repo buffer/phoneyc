@@ -94,9 +94,7 @@ class DOMObject(object):
                 val=str(val)
                 self.__parser.html = self.__parser.html[:self.begin] + val + self.__parser.html[self.end:]
                 dev = self.end - self.begin - len(val)
-                print '[[[[[[[[[[[[[[]]]]]]]]]]]]]]'+str(dev)
                 for i in self.__dict__['__window'].document.all:
-                    print '[[[[[[[[[[[[[[]]]]]]]]]]]]]]'+i.tagName+' '+str(i.begin)+' '+str(i.end)
                     if i.begin:
                         if i.begin > self.end: 
                             i.begin -= dev
