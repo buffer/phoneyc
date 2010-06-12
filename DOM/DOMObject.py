@@ -7,7 +7,9 @@ from Array import Array
 from CSSStyleDeclaration import CSSStyleDeclaration
 from unknown import unknown
 import config
+import time
 from HTTP.HttpHoneyClient import hc
+import re
 
 class DOMObject(object):
     def __init__(self, window, tag, parser):
@@ -28,6 +30,10 @@ class DOMObject(object):
         self.childNodes = Array()
         self.style      = CSSStyleDeclaration()
         self.__dict__['__window'].document.all.append(self)
+
+        # assign an initial id to every dom node
+        varname='domnode'+str(int(time.time()*10000000))
+        self.__setattr__('id',varname)
 
     def __setattr__(self, name, val):
         if name == 'id' or name == 'name':
@@ -70,15 +76,25 @@ class DOMObject(object):
             val = cx.patch_script(val);
             try:
                 if 'id' in self.__dict__:
-                    cx.execute(self.id + '.' + name + '=function(){' + val + '}')
+                    vals = re.split('(?<=[^a-zA-Z0-9_])this(?=[^a-zA-Z0-9_])', val)
+                    valstmp = re.split('^this(?=[^a-zA-Z0-9_])', vals[0])
+                    if len(vals) > 1:
+                        vals = valstmp+vals[1:]
+                    valstmp = re.split('(?<=[^a-zA-Z0-9_])this$', vals[-1])
+                    if len(vals) > 1:
+                        vals = vals[:-1]+valstmp
+                    val = self.id.join(vals)
+                    cx.execute(self.id + '.' + name + 'tmp' + '=function(){' + val + '}')
+                    self.__dict__[name] = cx.execute(self.id + '.' + name + 'tmp')
                 else: 
                     self.__dict__[name] = cx.execute('function(){' + val + '}')
             except:
-                pass
+                traceback.print_exc()
             return
 
         if name == 'innerHTML':
             try:
+                val=str(val)
                 self.__parser.html = self.__parser.html[:self.begin] + val + self.__parser.html[self.end:]
                 dev = self.end - self.begin - 1 - len(val)
                 for i in self.__dict__['__window'].document.all:
