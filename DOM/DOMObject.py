@@ -32,40 +32,71 @@ class DOMObject(object):
         self.__dict__['__window'].document.all.append(self)
 
         # assign an initial id to every dom node
-        varname='domnode'+str(int(time.time()*10000000))
-        self.__setattr__('id',varname)
+        varname = 'domnode' + str(int(time.time()*10000000))
+        self.__setattr__('id', varname)
 
-    def __setattr__(self, name, val):
-        if name == 'id' or name == 'name':
-            self.__dict__[name] = val
-            val = val.replace(':','_').replace('-','_')
-            try:
-                if self.__dict__['__window'].__dict__['__cx'].execute('typeof ' + val + ' == "undefined"'): 
-                    self.__dict__['__window'].__dict__['__cx'].add_global(val, self)
-            except: 
-                pass
+    def handle_src(self, name, val):
+        url = self.__dict__['__window'].document.location.fix_url(val)
 
-            self.__dict__['__window'].__dict__['__fl'][-1].__setattr__(val, self)
-            return
+        if config.retrieval_all:
+            hc.get(url, self.__dict__['__window'].document.location.href)
+        
+        scheme, netloc, path, query, fragment = urlparse.urlsplit(url)
+        if scheme not in ('http','file','https','ftp'):
+            config.VERBOSE(config.VERBOSE_WARNING, "[WARNING] Got unknown scheme: %s in %s.%s ."%(url,self.tagName, name));
+            if 'onerror' in self.__dict__:
+                config.VERBOSE(config.VERBOSE_DEBUG, "[DEBUG] Calling onerror of %s."%(self.tagName));
+                self.onerror()
 
-        #src can be detect here, not implemented yet
-        #if name == 'src':
-        #   pass
-
-        if self.tagName == "iframe" and name == 'src':
+        if self.tagName == "iframe":
             from Window import Window
             from PageParser import PageParser
             window = Window(self.__dict__['__window'].__dict__['__root'],
                             self.__dict__['__window'].document.location.fix_url(val),
-                            self.__dict__['__window'].document.location.href
-                            )
+                            self.__dict__['__window'].document.location.href)
             parser = PageParser(window, window.document, window.__dict__['__html'])
-            #PageParser(self.__dict__['__window'],
-            #           self.__dict__['__window'].__dict__['__sl'][-1],
-            #           content)
             parser.close()
-            return
+
+    def handle_id(self, name, val):
+        self.__dict__[name] = val
+        val = val.replace(':','_').replace('-','_')
+        try:
+            if self.__dict__['__window'].__dict__['__cx'].execute('typeof ' + val + ' == "undefined"'):
+                self.__dict__['__window'].__dict__['__cx'].add_global(val, self)
+        except:
+            pass
+                
+        self.__dict__['__window'].__dict__['__fl'][-1].__setattr__(val, self)
+
+    def handle_name(self, name, val):
+        self.handle_id(name, val)
+
+    def handle_innerHTML(self, name, val):
+        val = str(val)
+        if self.__parser:
+            self.__parser.html = self.__parser.html[:self.begin] + val + self.__parser.html[self.end:]
+            dev = self.end - self.begin - len(val)
+            for i in self.__dict__['__window'].document.all:
+                if i.begin:
+                    if i.begin > self.end:
+                        i.begin -= dev
+                if i.end:
+                    if i.end >= self.end:
+                        i.end -= dev
             
+            self.__parser.current -= dev
+            return
+        
+        from PageParser import PageParser
+        self.__parser = PageParser(self.__dict__['__window'], self.__dict__['__window'].document, val)
+
+    def __setattr__(self, name, val):
+        handler = getattr(self, "handle_%s" % (name, ))
+        try:
+            handler(name, val)
+        except:
+            pass
+        
         #if it's an event, let it be a function
         if dataetc.isevent(name, self.tagName):
             # using 'this' in methods may cause additional problems.
@@ -87,38 +118,7 @@ class DOMObject(object):
                 self.__dict__[name] = cx.execute('function(){' + val + '}')
             except:
                 traceback.print_exc()
-            return
-
-        if name == 'innerHTML':
-            try:
-                val=str(val)
-                self.__parser.html = self.__parser.html[:self.begin] + val + self.__parser.html[self.end:]
-                dev = self.end - self.begin - len(val)
-                for i in self.__dict__['__window'].document.all:
-                    if i.begin:
-                        if i.begin > self.end: 
-                            i.begin -= dev
-                    if i.end:
-                        if i.end >= self.end: 
-                            i.end -= dev
-                self.__parser.current -= dev
-            except Exception, e: 
-                traceback.print_exc()
-
-            from PageParser import PageParser
-            self.parser = PageParser(self.__dict__['__window'], self, val)
-            return
         
-        if name == 'src':
-            urlsrc = self.__dict__['__window'].document.location.fix_url(val)
-            if config.retrieval_all:
-                hc.get(urlsrc, self.__dict__['__window'].document.location.href)
-            scheme, netloc, path, query, fragment = urlparse.urlsplit(urlsrc)
-            if scheme not in ('http','file','https','ftp'):
-                config.VERBOSE(config.VERBOSE_WARNING, "[WARNING] Got unknown scheme: %s in %s.%s ."%(urlsrc,self.tagName, name));
-                if 'onerror' in self.__dict__:
-                    config.VERBOSE(config.VERBOSE_DEBUG, "[DEBUG] Calling onerror of %s."%(self.tagName));
-                    self.onerror()
         self.__dict__[name] = val
 
     def focus(self):

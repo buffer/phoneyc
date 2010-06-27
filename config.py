@@ -16,11 +16,11 @@ VERBOSE_DETAIL  : Detail information, e.g. dump of the document.write/eval/SCRIP
 
 import time
 
-VERBOSE_ALERT   = 1
-VERBOSE_WARNING = 3
+VERBOSE_ALERT    = 1
+VERBOSE_WARNING  = 3
 VERBOSE_REFGRAPH = 4
-VERBOSE_DEBUG   = 5
-VERBOSE_DETAIL  = 10
+VERBOSE_DEBUG    = 5
+VERBOSE_DETAIL   = 10
 
 logfilename       = None
 verboselevel      = 0

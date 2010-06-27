@@ -105,12 +105,12 @@ class PageParser(SGMLParser):
                 config.VERBOSE(config.VERBOSE_DEBUG, "[DEBUG] in PageParser.py: Ignoring(ignoreScript) start_object attrs: " +str(attrs))
                 self.ignoreScript = True
                 return
-
+            
         if 'src' in self.DOM_stack[-1].__dict__:
             src = self.__dict__['__window'].document.location.fix_url(self.DOM_stack[-1].src)
             script, headers = hc.get(src, self.__dict__['__window'].document.location.href)            
             if config.replace_nonascii:
-                script = re.sub('[\x80-\xff]',' ',script)
+                script = re.sub('[\x80-\xff]', ' ', script)
             self.script += script
             self.literal = 0
        
@@ -160,8 +160,7 @@ class PageParser(SGMLParser):
         if self.__patch_script(exc):
             try:
                 self.__dict__['__window'].__dict__['__cx'].execute(
-                    self.__dict__['__window'].__dict__['__cx'].patch_script(self.script)
-                    )
+                    self.__dict__['__window'].__dict__['__cx'].patch_script(self.script))
             except Exception, e:
                 exc = traceback.format_exc()
                 self.__last_try(exc)
@@ -251,7 +250,7 @@ class PageParser(SGMLParser):
         scr = self.__dict__['__window'].__dict__['__sl'].pop()
         if scr.parser != None: 
             scr.parser.close()
-        self.script = ''
+        #self.script = ''
         self.unknown_endtag('script')
 
         # The universal ActiveX object was enabled so give this script a last
@@ -259,7 +258,6 @@ class PageParser(SGMLParser):
         # ActiveX objects which need to be emulated.
         if mock_active:
             self.do_end_script()
-
 
     def start_iframe(self, attrs):
         self.unknown_starttag('iframe', attrs)
@@ -286,7 +284,7 @@ class PageParser(SGMLParser):
 
     def unknown_starttag(self, tag, attrs):
         if config.verboselevel >= config.VERBOSE_DEBUG:
-            print "[DEBUG] in PageParser.py Parsing... Got Tag "+tag
+            print "[DEBUG] in PageParser.py Parsing... Got Tag " + tag
         if self.endearly: 
             return
        
@@ -303,16 +301,22 @@ class PageParser(SGMLParser):
                 # if config.replace_nonascii:
                 #     script = re.sub('[\x80-\xff]',' ',script)
 
+        try:
+            begin  = self.html.lower()[self.current:].index('<' + tag)
+            start  = self.current + begin
+            offset = begin + self.html.lower()[start:].index('>') + 1
+
+            self.current += offset
+            domobj.__dict__['begin'] = self.current
+            domobj.__dict__['end']   = self.current + self.html.lower()[self.current:].index('</'+tag) 
+
+            if (tag == 'div' and attrs) or tag == 'body':
+                domobj.innerHTML = self.html[domobj.__dict__['begin']:domobj.__dict__['end']]
+        except:
+            pass
+
         self.DOM_stack[-1].appendChild(domobj)
         self.DOM_stack.append(domobj)
-
-        try:
-            begin = self.html.lower()[self.current:].index('<' + tag)
-            self.current += begin + self.html.lower()[self.current + begin:].index('>') + 1
-            domobj.begin  = self.current
-            domobj.end    = self.current + self.html.lower()[self.current:].index('</'+tag)
-        except: 
-            pass
 
         if tag == 'form': 
             self.__dict__['__window'].__dict__['__fl'].append(domobj)

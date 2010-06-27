@@ -46,9 +46,9 @@ class DOM:
             for i in window.document.all:
                 if 'onclick' in i.__dict__:
                     try:
-                        i.onclick()
+                       i.onclick()
                     except:
-                        traceback.print_exc()
+                       traceback.print_exc()
                 if 'onmouseover' in i.__dict__: 
                     try:
                         i.onmouseover()

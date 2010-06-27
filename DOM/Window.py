@@ -125,6 +125,7 @@ class Window(object):
     def eval(self, script):
         config.VERBOSE(config.VERBOSE_DEBUG, "[DEBUG] Got eval, evaling...")
         config.VERBOSE(config.VERBOSE_DETAIL, str(script))
+
         if not type(script) in types.StringTypes:
             return script
         try:
@@ -139,7 +140,7 @@ class Window(object):
                 os.environ['PHONEYC_LASTSCRIPT'] = script
 
     def alert(self, s):
-        config.VERBOSE(config.VERBOSE_DEBUG, '[DEBUG] alertmsg:' + str(s))
+        config.VERBOSE(config.VERBOSE_DEBUG, '[DEBUG] alertmsg: ' + str(s))
 
     def close(self):
         pass# TODO: Implement this method

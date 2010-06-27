@@ -94,6 +94,8 @@ class HttpHoneyClient(object):
         c.setopt(pycurl.USERAGENT, self.ua)
         #c.setopt(pycurl.VERBOSE, 1)
         c.setopt(pycurl.HEADERFUNCTION, self.header)
+        c.setopt(pycurl.CONNECTTIMEOUT, 30)
+        c.setopt(pycurl.TIMEOUT, 30) 
 
         if post_data and method.lower() == "post": 
                 c.setopt(pycurl.UPLOAD, 1)
