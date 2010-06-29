@@ -91,8 +91,8 @@ class DOMObject(object):
         self.__parser = PageParser(self.__dict__['__window'], self.__dict__['__window'].document, val)
 
     def __setattr__(self, name, val):
-        handler = getattr(self, "handle_%s" % (name, ))
         try:
+            handler = getattr(self, "handle_%s" % (name, ))
             handler(name, val)
         except:
             pass

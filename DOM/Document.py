@@ -21,7 +21,6 @@ class Document(DOMObject):
         self.__init_document(window, headers)
 
     def __init_lastmodified(self, header):
-        
         p = header.split("Last-Modified:")[1].strip()
         try:
             t = time.strptime(p, "%a, %d %b %Y %H:%M:%S GMT")

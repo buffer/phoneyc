@@ -50,18 +50,20 @@ class Window(object):
 
         context = self.__dict__['__rt'].new_context(alertlist = [])
         
-        context.add_global('window'       , self)
-        context.add_global('self'         , self)
-        context.add_global('document'     , document)
-        context.add_global('location'     , document.location)
-        context.add_global("alert"        , self.alert)
-        context.add_global("setTimeout"   , self.setTimeout)
-        context.add_global("setInterval"  , self.setInterval)
-        context.add_global("SetInterval"  , self.setInterval)
-        context.add_global("ActiveXObject", ActiveXObject)
-        context.add_global("navigator"    , Navigator())
-        context.add_global("screen"       , unknown())
-        context.add_global("eval"         , self.eval)
+        context.add_global('window'          , self)
+        context.add_global('self'            , self)
+        context.add_global('document'        , document)
+        context.add_global('location'        , document.location)
+        context.add_global("alert"           , self.alert)
+        context.add_global("setTimeout"      , self.setTimeout)
+        context.add_global("setInterval"     , self.setInterval)
+        context.add_global("SetInterval"     , self.setInterval)
+        context.add_global("attachEvent"     , self.attachEvent)
+        context.add_global("addEventListener", self.addEventListener)
+        context.add_global("ActiveXObject"   , ActiveXObject)
+        context.add_global("navigator"       , Navigator())
+        context.add_global("screen"          , unknown())
+        context.add_global("eval"            , self.eval)
         
         context.execute("Event = function(){}")
         context.execute("function CollectGarbage() {};")
@@ -115,6 +117,10 @@ class Window(object):
         # print "Event   : " + sEvent
         # print "Handler : " + str(fpNotify)
         # print "*********************************************************"
+
+    def addEventListener(self, type, listener, useCapture = False):
+        if dataetc.isevent(type, 'window'):
+            self.__dict__[sEvent] = fpNotify
 
     def setTimeout(self, f, delay):
         self.__dict__['__timeout'].append(f)

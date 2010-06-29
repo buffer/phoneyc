@@ -17,56 +17,57 @@ class DOM:
         self.url     = url
         os.environ['PHONEYC_MOCK_ACTIVEX'] = '0'
 
+    def do_execute(self, window, parser, element):
+        f = 'function(){' + element + '}'
+    
+        try:
+            window.__dict__['__cx'].execute(f)
+        except:
+            try:
+                window.__dict__['__cx'].execute(parser.script + f)
+            except:
+                traceback.print_exc()
+
     def parse(self):
-        window = Window(self, self.url, False)
-        parser = PageParser(window, window.document, window.__dict__['__html'])
+        top_window = Window(self, self.url, False)
+        parser = PageParser(top_window, top_window.document, top_window.__dict__['__html'])
         parser.close()
 
         for window in self.windows:
             parser = PageParser(window, window.document, window.__dict__['__html'])
-            parser.close()
+            window.top = top_window
 
-        for window in self.windows:
             for i in window.__dict__['__timeout']:
                 try:
-                    window.__dict__['__cx'].execute(window.__dict__['__cx'].patch_script(i) + ";1;")
-                    continue
+                    window.__dict__['__cx'].execute(window.__dict__['__cx'].patch_script(i)+ ";1;")
                 except:
+                    #traceback.print_exc()
                     pass
 
             if 'onload' in window.__dict__:
                 try:
                     window.onload()
                 except:
-                    traceback.print_exc(file=sys.stdout)
+                    print window.onload
+                    traceback.print_exc()
                     
-
-            #print window.document
-            #print window.document.all
             for i in window.document.all:
                 if 'onclick' in i.__dict__:
-                    try:
-                       i.onclick()
-                    except:
-                       traceback.print_exc()
-                if 'onmouseover' in i.__dict__: 
-                    try:
-                        i.onmouseover()
-                    except:
-                        traceback.print_exc()
+                    self.do_execute(window, parser, i.onclick)
+                if 'onmouseover' in i.__dict__:
+                    self.do_execute(window, parser, i.onmouseover)
                 if 'onmouseout' in i.__dict__: 
-                    try:
-                        i.onmouseout()
-                    except:
-                        traceback.print_exc()
+                    self.do_execute(window, parser, i.onmouseout)
 
             if 'onunload' in window.__dict__:
                 try:
                     window.onunload()
                 except:
-                    traceback.print_exc(file=sys.stdout)
-                    
+                    print window.onunload
+                    traceback.print_exc()
 
+            parser.close()
+                    
     def traverse(self, dom, k):
         for i in dom.children:
             for j in range(k): 
