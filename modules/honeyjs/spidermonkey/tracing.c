@@ -137,7 +137,7 @@ jsval get_opcode_arg(JSContext *cx, JSScript *script, jsbytecode *pc)
 }
 
 
-JSTrapStatus js_interrupt_handler(JSContext *cx, JSScript *script, jsbytecode *pc, jsval *rval,void *closure)
+JSTrapStatus doi_check_sc_hs(JSContext *cx, JSScript *script, jsbytecode *pc, jsval *rval,void *closure)
 {
     JSOp opcode = 0;
     JSStackFrame * fp = NULL;
@@ -388,6 +388,17 @@ end:
 error:
     return  JSTRAP_ERROR;
 }
+
+JSTrapStatus js_interrupt_handler(JSContext *cx, JSScript *script, jsbytecode *pc, jsval *rval,void *closure)
+{
+    JSTrapStatus r;
+    r = doi_check_sc_hs(cx, script, pc, rval, closure); 
+    if (r == JSTRAP_ERROR){ 
+        return r; 
+    }
+    return r;
+}
+
 
 
 #if 0
