@@ -120,7 +120,7 @@ class Window(object):
 
     def addEventListener(self, type, listener, useCapture = False):
         if dataetc.isevent(type, 'window'):
-            self.__dict__[sEvent] = fpNotify
+            self.__dict__[type] = listener
 
     def setTimeout(self, f, delay):
         self.__dict__['__timeout'].append(f)
