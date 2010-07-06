@@ -26,6 +26,7 @@ class DOM:
             try:
                 window.__dict__['__cx'].execute(parser.script + f)
             except:
+                print f
                 traceback.print_exc()
 
     def parse(self):

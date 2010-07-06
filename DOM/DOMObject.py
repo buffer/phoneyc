@@ -102,21 +102,22 @@ class DOMObject(object):
             # using 'this' in methods may cause additional problems.
             # i think i find a way to handle this, but there could 
             # be some cases it cannot cover.
-            val = str(val)+';'
+            val = str(val) + ';'
             cx = self.__dict__['__window'].__dict__['__cx'];
             val = cx.patch_script(val);
             try:
                 if 'id' in self.__dict__:
-                    vals = re.split('(?<=[^a-zA-Z0-9_])this(?=[^a-zA-Z0-9_])', val)
+                    vals    = re.split('(?<=[^a-zA-Z0-9_])this(?=[^a-zA-Z0-9_])', val)
                     valstmp = re.split('^this(?=[^a-zA-Z0-9_])', vals[0])
                     if len(vals) > 1:
-                        vals = valstmp+vals[1:]
+                        vals = valstmp + vals[1:]
                     valstmp = re.split('(?<=[^a-zA-Z0-9_])this$', vals[-1])
                     if len(vals) > 1:
-                        vals = vals[:-1]+valstmp
+                        vals = vals[:-1] + valstmp
                     val = self.id.join(vals)
                 self.__dict__[name] = cx.execute('function(){' + val + '}')
             except:
+                print val
                 traceback.print_exc()
         
         self.__dict__[name] = val
