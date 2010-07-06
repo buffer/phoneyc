@@ -1,9 +1,0 @@
-../test/2mix.html
-../test/ms09002-mod.html
-../test/qvod.html
-../test/qvodsrc.html
-../test/realplayer-mod.html
-../test/ssreader_0day.html
-../test/ssreader.html
-../test/ssreader_noplus.html
-../test/stormplayer.html

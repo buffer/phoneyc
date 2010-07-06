@@ -1,3 +1,0 @@
-1. The PageParser.py writes the script more than once to the file, thus, a extractjs in collectscript.py has been written to extract js from the collected script file. This write_script method in PageParser doesnot capture script of 2mix.html test file.
-2. The unescape calls and arguments are caught using the string.partition method, this doesnot captures the unescape call in the stormplayer.html test file.
-3. Bayes_classifier needs to be modified to work with the feature.txt file.

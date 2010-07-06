@@ -1,8 +1,0 @@
-obf="T",docframe="T",white=13,comment=0
-0.076904296875
-obf="T",docframe="T",white=49,comment=0
-0.0128173828125
-obf="T",docframe="T",white=26,comment=1
-0.0128173828125
-obf="T",docframe="T",white=18,comment=3
-0.01708984375

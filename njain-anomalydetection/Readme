@@ -1,5 +1,0 @@
-1. PageParser.py writes Javascript found in the pages to a file in the 'log' folder.
-2. collectscript.py collects the js from this script and extracts features from this js; writing the features to feature.txt
-3. bayes_classifier.py is fed with this feature.txt, currently training_data.txt, in the learning stage.
-4. The classify method of the classifier is called after the classifier has been trained using a training features to classify the test_data.txt
-5. the probability of the features to belong to the malicious class is calculated and written to a result_prob.txt file.
