@@ -1,0 +1,16 @@
+obf=T,docframe=F,white=13,comment=3;class=safe
+obf=T,docframe=F,white=23,comment=23;class=safe
+obf=T,docframe=T,white=13,comment=0;class=Mal
+obf=T,docframe=T,white=15,comment=1.3;class=Mal
+obf=T,docframe=F,white=12,comment=3;class=Mal
+obf=T,docframe=T,white=12,comment=0;class=Mal
+obf=F,docframe=F,white=31,comment=30;class=safe
+obf=T,docframe=T,white=9,comment=1;class=Mal
+obf=T,docframe=F,white=18,comment=2;class=Mal
+obf=F,docframe=T,white=6,comment=3;class=Mal
+obf=T,docframe=F,white=39,comment=24;class=safe
+obf=T,docframe=T,white=14,comment=3;class=Mal
+obf=F,docframe=T,white=56,comment=13;class=safe
+obf=F,docframe=T,white=45,comment=23;class=safe
+obf=F,docframe=F,white=34,comment=3;class=safe
+obf=T,docframe=T,white=43,comment=38;class=safe

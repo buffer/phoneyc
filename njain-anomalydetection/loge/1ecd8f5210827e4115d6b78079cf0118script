@@ -1,0 +1,27 @@
+
+                        
+  document.write("\x3ca id\x3d\x22b-query-icon\x22 onclick\x3d\x22document.getElementById(\x26quot;searchthis\x26quot;).submit();\x22 title\x3d\x22Search this blog\x22\x3e\x3c/a\x3e");
+;;
+  document.write("\x3ca id\x3d\x22b-flag-this\x22 class\x3d\x22b-link\x22 tabindex\x3d\x226\x22 title\x3d\x22Notify Blogger about objectionable content on this page.\x22 onclick\x3d\x22window.open(\x26quot;http://www.google.com/support/blogger/bin/request.py?page\\x3dmain_tos\\x26blog_ID\\x3d7885177434994542510\\x26blog_URL\\x3dhttp://contagiodump.blogspot.com/\x26quot;)\x22\x3e\x3cspan class\x3d\x22flag-text\x22\x3eReport Abuse\x3c/span\x3e\x3c/a\x3e");
+;;
+        function closePopup(wnd) {
+          
+          setTimeout(function() {
+              wnd.open('', '_self', '');
+              wnd.close();
+          }, 100);
+        }
+      ;;
+                        
+  document.write("\x3ca id\x3d\x22b-query-icon\x22 onclick\x3d\x22document.getElementById(\x26quot;searchthis\x26quot;).submit();\x22 title\x3d\x22Search this blog\x22\x3e\x3c/a\x3e");
+;;
+  document.write("\x3ca id\x3d\x22b-flag-this\x22 class\x3d\x22b-link\x22 tabindex\x3d\x226\x22 title\x3d\x22Notify Blogger about objectionable content on this page.\x22 onclick\x3d\x22window.open(\x26quot;http://www.google.com/support/blogger/bin/request.py?page\\x3dmain_tos\\x26blog_ID\\x3d7885177434994542510\\x26blog_URL\\x3dhttp://contagiodump.blogspot.com/\x26quot;)\x22\x3e\x3cspan class\x3d\x22flag-text\x22\x3eReport Abuse\x3c/span\x3e\x3c/a\x3e");
+;;
+        function closePopup(wnd) {
+          
+          setTimeout(function() {
+              wnd.open('', '_self', '');
+              wnd.close();
+          }, 100);
+        }
+      ;;

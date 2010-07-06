@@ -1,0 +1,21 @@
+new Image().src = 'http://img02.taobaocdn.com/tps/i2/T1iedyXlFcXXXXXXXX-489-62.png';new Image().src = 'http://img08.taobaocdn.com/tps/i8/T1xPJCXeVkXXXXXXXX-170-394.png';new Image().src = 'http://img02.taobaocdn.com/tps/i2/T16WJqXaXeXXXXXXXX-32-32.gif';;;
+if (window.screen.availWidth > 1024) {
+    alimama_pid="mm_12852562_1778064_8781385"; 
+    alimama_sizecode="100"; 
+    alimama_width=950; 
+    alimama_height=90; 
+    alimama_type="i";
+
+    document.write('<scr'+'ipt src="http://a.alimama.cn/inf.js">');
+}
+;;new Image().src = 'http://img02.taobaocdn.com/tps/i2/T1iedyXlFcXXXXXXXX-489-62.png';new Image().src = 'http://img08.taobaocdn.com/tps/i8/T1xPJCXeVkXXXXXXXX-170-394.png';new Image().src = 'http://img02.taobaocdn.com/tps/i2/T16WJqXaXeXXXXXXXX-32-32.gif';;;
+if (window.screen.availWidth > 1024) {
+    alimama_pid="mm_12852562_1778064_8781385"; 
+    alimama_sizecode="100"; 
+    alimama_width=950; 
+    alimama_height=90; 
+    alimama_type="i";
+
+    document.write('<scr'+'ipt src="http://a.alimama.cn/inf.js">');
+}
+;;

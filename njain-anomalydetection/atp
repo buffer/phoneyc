@@ -1,0 +1,18 @@
+python phoneyc.py -d 10 file:///home/neha/phoneyc/../test/2mix.html
+
+python phoneyc.py -d 10 file:///home/neha/phoneyc/../test/ms09002-mod.html
+
+python phoneyc.py -d 10 file:///home/neha/phoneyc/../test/qvod.html
+
+python phoneyc.py -d 10 file:///home/neha/phoneyc/../test/qvodsrc.html
+
+python phoneyc.py -d 10 file:///home/neha/phoneyc/../test/realplayer-mod.html
+
+python phoneyc.py -d 10 file:///home/neha/phoneyc/../test/ssreader_0day.html
+
+python phoneyc.py -d 10 file:///home/neha/phoneyc/../test/ssreader.html
+
+python phoneyc.py -d 10 file:///home/neha/phoneyc/../test/ssreader_noplus.html
+
+python phoneyc.py -d 10 file:///home/neha/phoneyc/../test/stormplayer.html
+

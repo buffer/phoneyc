@@ -1,0 +1,18 @@
+ActiveXObject.Flash.classid=clsid:D27CDB6E-AE6D-11cf-96B8-444553540000
+ActiveXObject.Flash.codebase=http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,28,0
+Warning: attribute codebase length = 88
+ActiveXObject.Flash.width=120
+ActiveXObject.Flash.height=300
+ActiveXObject.Flash.appendChild
+ActiveXObject.appendChild.Flash(<DOM.DOMObject.DOMObject object at 0xb761db0c>,)
+ActiveXObject.Flash.onload
+ActiveXObject.onload.Flash()
+ActiveXObject.Flash.classid=clsid:D27CDB6E-AE6D-11cf-96B8-444553540000
+ActiveXObject.Flash.codebase=http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,28,0
+Warning: attribute codebase length = 88
+ActiveXObject.Flash.width=120
+ActiveXObject.Flash.height=300
+ActiveXObject.Flash.appendChild
+ActiveXObject.appendChild.Flash(<DOM.DOMObject.DOMObject object at 0xb75bec0c>,)
+ActiveXObject.Flash.onload
+ActiveXObject.onload.Flash()
