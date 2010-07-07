@@ -117,8 +117,12 @@ class DOMObject(object):
                     val = self.id.join(vals)
                 self.__dict__[name] = cx.execute('function(){' + val + '}')
             except:
-                print val
-                traceback.print_exc()
+                try:
+                    p = val.decode('string-escape')
+                    self.__dict__[name] = cx.execute('function(){' + p + '}')
+                except:
+                    print val
+                    traceback.print_exc()
         
         self.__dict__[name] = val
 

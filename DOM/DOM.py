@@ -19,15 +19,25 @@ class DOM:
 
     def do_execute(self, window, parser, element):
         f = 'function(){' + element + '}'
-    
+
+        if not self.__do_execute(window, parser, f):
+            return
+
+        result = self.__do_execute(window, parser, f.decode('string-escape'))
+        if result:
+            print f
+            print result
+
+    def __do_execute(self, window, parser, f):
         try:
             window.__dict__['__cx'].execute(f)
         except:
             try:
                 window.__dict__['__cx'].execute(parser.script + f)
             except:
-                print f
-                traceback.print_exc()
+                return str(traceback.format_exc())
+
+        return None
 
     def parse(self):
         top_window = Window(self, self.url, False)
@@ -47,7 +57,8 @@ class DOM:
 
             if 'onload' in window.__dict__:
                 try:
-                    window.onload()
+                    window.__dict__['__cx'].execute(str(window.onload))
+                    #window.onload()
                 except:
                     print window.onload
                     traceback.print_exc()
@@ -62,7 +73,8 @@ class DOM:
 
             if 'onunload' in window.__dict__:
                 try:
-                    window.onunload()
+                    window.__dict__['__cx'].execute(str(window.onunload))
+                    #window.onunload()
                 except:
                     print window.onunload
                     traceback.print_exc()
