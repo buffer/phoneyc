@@ -54,8 +54,8 @@ ldconfig-gentoo:
 
 libemu:
 	ldconfig;							      \
-	git clone git://git.carnivore.it/libemu.git /opt/libemu;	      \
-	cd /opt/libemu;                                                       \
+	git clone git://git.carnivore.it/libemu.git /opt/libemu-trunk;	      \
+	cd /opt/libemu-trunk;                                                 \
 	autoreconf -v -i && ./configure --prefix=/opt/libemu && make install; \
 	cd -;
 
