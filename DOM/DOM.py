@@ -18,7 +18,7 @@ class DOM:
         os.environ['PHONEYC_MOCK_ACTIVEX'] = '0'
 
     def do_execute(self, window, parser, element):
-        f = 'function(){' + element + '}'
+        f = element
 
         if not self.__do_execute(window, parser, f):
             return
