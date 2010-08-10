@@ -3,7 +3,7 @@
 
 
 def LaunchApp(prog, args, unk):
-    print "HP Info Center LaunchApp called to run: " + prog + " " + args
+    add_alert("HP Info Center LaunchApp called to run: " + prog + " " + args)
 	
 def SetRegValue(key, section, keyname, value):
     add_alert("HP Info Center SetRegValue: " + key + "/" + section + "/" + keyname + " set to " + value)

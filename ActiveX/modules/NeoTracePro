@@ -1,0 +1,9 @@
+# NeoTraceExplorer.NeoTraceLoader ActiveX control (NeoTraceExplorer.dll)
+# CVE-2006-06707
+
+def TraceTarget(arg):
+	if len(arg)>255:
+		add_alert('NeoTracePro.TraceTarget overflow in arg0')
+
+self.TraceTarget=TraceTarget
+	

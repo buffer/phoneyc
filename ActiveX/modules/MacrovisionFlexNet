@@ -1,0 +1,31 @@
+# MacrovisionJob, MacrovisionFlexNet
+# CVE-2007-2419, CVE-2007-5660, CVE-2007-6654, CVE-2007-0321, CVE-2007-0328
+
+
+
+
+def CreateJob(name,arg,job_id):
+	add_alert('Macrovision ActiveX maybe download by AddFile()')
+
+
+def DownloadAndExecute(arg0,arg1,arg2,arg3,arg4):
+	if len(arg1)>512:	
+		add_alert('Macrovision DownloadAndExecute( ) overflow')
+
+def AddFileEx(arg0,arg1,arg2,arg3,arg4,arg5,arg6):
+	if len(arg2)>512:
+		add_alert('Macrovision AddFileEx() overflow')
+
+
+
+
+
+self.CreateJob=CreateJob
+self.DownloadAndExecute=DownloadAndExecute
+self.AddFileEx=AddFileEx
+
+
+
+
+
+

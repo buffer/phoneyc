@@ -6,6 +6,36 @@ from CLSID import clsidlist, clsnamelist
 
 eventlist = []
 funname   = []
+Attr2Fun={}
+Attr2Fun['StromMpsURL']='SetURL'
+Attr2Fun['StromMpsbackImage']='SetbackImage'
+Attr2Fun['StromMpstitleImage']='SettitleImage'
+Attr2Fun['YahooMessengerYwcvwrserver']='Setserver'
+Attr2Fun['PPlayerFlvPlayerUrl']='SetFlvPlayerUrl'
+Attr2Fun['PPlayerLogo']='SetLogo'
+Attr2Fun['DominoGeneral_ServerName']='SetGeneral_ServerName'
+Attr2Fun['DominoGeneral_JunctionName']='SetGeneral_JunctionName'
+Attr2Fun['DominoMail_MailDbPath']='SetMail_MailDbPath'
+Attr2Fun['QvodCtrlURL']='SetURL'
+Attr2Fun['QvodCtrlurl']='SetURL'
+Attr2Fun['RtspVaPgCtrlMP4Prefix']='SetMP4Prefix'
+Attr2Fun['FileUploaderHandwriterFilename']='SetHandwriterFilename'
+Attr2Fun['FacebookPhotoUploaderExtractIptc']='SetExtractIptc'
+Attr2Fun['FacebookPhotoUploaderExtractExif']='SetExtractExif'
+Attr2Fun['MyspaceUploaderAction']='SetAction'
+Attr2Fun['DLinkMPEGUrl']='SetUrl'
+Attr2Fun['SymantecBackupExec_DOWText0']='Set_DOWText0'
+Attr2Fun['SymantecBackupExec_DOWtext6']='Set_DOWText6'
+Attr2Fun['SymantecBackupExec_MonthText0']='Set_MonthText0'
+Attr2Fun['SymantecBackupExec_MonthText11']='Set_MonthText11'
+Attr2Fun['RediffBolDownloaderAttackurl']='Seturl'
+Attr2Fun['CreativeSoftAttackcachefolder']='Setcacherfolder'
+Attr2Fun['MicrosoftWorks7AttackWksPictureInterface']='SetWksPictureInterface'
+Attr2Fun['RealPlayerConsole']='SetConsole'
+Attr2Fun['DirectShowdata']='Setdata'
+
+
+
 
 
 class unknownObject(object):
@@ -56,40 +86,47 @@ class unknownObject(object):
 
 
 class ActiveXObject(unknownObject):
-    def __init__(self, cls, clstype = 'name'):
-        config.VERBOSE(config.VERBOSE_WARNING, "[WARNING] New ActiveX Object: " + cls)
+	def __init__(self, cls, clstype = 'name'):
+		config.VERBOSE(config.VERBOSE_WARNING, "[WARNING] New ActiveX Object: " + cls)
 
-        unknownObject.__init__(self, cls)
-        filename = ''
-        if clstype == 'id':
-            if len(cls) >= 6 and cls[0:6] == 'clsid:':
-                cls = cls[6:].upper()
-            if cls in clsidlist.keys(): 
-                filename = clsidlist[cls]
-        else:
-            if cls in clsnamelist: 
-                filename = clsnamelist[cls]
+		unknownObject.__init__(self, cls)
+		filename = ''
+		if clstype == 'id':
+			if len(cls) >= 6 and (cls[0:6] == 'clsid:' or cls[0:6] == 'CLSID:'):
+				cls = cls[6:].upper()
+			if cls in clsidlist.keys(): 
+				filename = clsidlist[cls]
+		else:
+			if cls in clsnamelist: 
+				filename = clsnamelist[cls]
 
-        self.__dict__['__name'] = filename
-        if not config.universal_activex:
-            self.check_raise_warning(filename, cls)
-        if filename:
-            exec load_src(filename)
+		self.__dict__['__name'] = filename
+#		config.VERBOSE(config.VERBOSE_WARNING, config.universal_activex)
+		if not config.universal_activex:
+			self.check_raise_warning(filename, cls)
+		if filename:
+			exec load_src(filename)
 
-    def is_enabled_mock_activex(self):
-        return int(os.environ['PHONEYC_MOCK_ACTIVEX'])
+	def is_enabled_mock_activex(self):
+		return int(os.environ['PHONEYC_MOCK_ACTIVEX'])
 
-    def raise_warning(self, cls):
-        print "[WARNING] Unknown ActiveX Object: %s" % (cls, )
-        raise UserWarning
+	def raise_warning(self, cls):
+		print "[WARNING] Unknown ActiveX Object: %s" % (cls, )
+		raise UserWarning
 
-    def check_raise_warning(self, filename, cls):
-        if not filename:
-            self.raise_warning(cls)
+	def check_raise_warning(self, filename, cls):
+		if not filename:
+			self.raise_warning(cls)
 
-        module = "ActiveX/modules/%s" % (filename, )
-        if not self.is_enabled_mock_activex() and not os.access(module, os.F_OK):
-            self.raise_warning(cls)
+		module = "ActiveX/modules/%s" % (filename, )
+		if not self.is_enabled_mock_activex() and not os.access(module, os.F_OK):
+			self.raise_warning(cls)
+	
+	def __setattr__(self, name, val):
+		if Attr2Fun.has_key(self.__dict__['__name']+name) == False:
+			unknownObject.__setattr__(self, name, val)
+		else:
+			Attr2Fun[name](val);	
 
 
 def load_src(filename):
