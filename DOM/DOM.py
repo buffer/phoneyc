@@ -55,13 +55,13 @@ class DOM:
                     #traceback.print_exc()
                     pass
 
-            if 'onload' in window.__dict__:
-                try:
-                    window.__dict__['__cx'].execute(str(window.onload))
-                    #window.onload()
-                except:
-                    print window.onload
-                    traceback.print_exc()
+            # if 'onload' in window.__dict__:
+            #     try:
+            #         window.__dict__['__cx'].execute(str(window.onload))
+            #         #window.onload()
+            #     except:
+            #         print window.onload
+            #         traceback.print_exc()
                     
             for i in window.document.all:
                 if 'onclick' in i.__dict__:
@@ -70,14 +70,20 @@ class DOM:
                     self.do_execute(window, parser, i.onmouseover)
                 if 'onmouseout' in i.__dict__: 
                     self.do_execute(window, parser, i.onmouseout)
+		if 'onload' in i.__dict__:
+		    i.onload=i.onload.split(' ')[-1]
+                    self.do_execute(window, parser, i.onload)
+	        if 'unonload' in i.__dict__:
+		    i.unonload=i.unonload.split(' ')[-1]
+		    self.do_execute(window, parser, i.unonload)
 
-            if 'onunload' in window.__dict__:
-                try:
-                    window.__dict__['__cx'].execute(str(window.onunload))
-                    #window.onunload()
-                except:
-                    print window.onunload
-                    traceback.print_exc()
+            # if 'onunload' in window.__dict__:
+            #     try:
+            #         window.__dict__['__cx'].execute(str(window.onunload))
+            #         #window.onunload()
+            #     except:
+            #         print window.onunload
+            #         traceback.print_exc()
 
             parser.close()
                     
