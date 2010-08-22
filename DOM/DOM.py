@@ -238,7 +238,7 @@ class DOM:
         for window in self.windows:
             parser = window.__dict__['__parser']
         
-            #self.handle_events(window, parser)
+            self.handle_events(window, parser)
             self.exec_js(window, parser)
 
             for i in window.__dict__['__timeout']:

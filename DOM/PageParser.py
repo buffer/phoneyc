@@ -2,6 +2,7 @@ import sys, os, re, cgi
 import traceback, exceptions
 from sgmllib import SGMLParser, SGMLParseError
 
+import config
 import dataetc
 from honeyjs import Runtime
 from ActiveX.ActiveX import *  
@@ -27,6 +28,39 @@ class PageParser(SGMLParser):
             self.feed(self.html)
         except:
             traceback.print_exc()
+
+    def emulate_timeout(self, name, value):
+        method_name = "_Window__window_%s_setTimeout" % (config.browserTag, )
+        method = getattr(self.__dict__['__window'], method_name)
+        lvalue = value.lower()
+        if lvalue.startswith('javascript:'):
+            value = value[11:].strip()
+        if value.startswith('return'):
+            value = value[6:].strip()
+
+        method(value, 0)
+
+    def start_a(self, attrs):
+        self.start_input(attrs)
+
+    def end_a(self):
+        pass
+
+    def start_input(self, attrs):
+        for name, value in attrs:
+            if name.lower() == 'onclick':
+                self.emulate_timeout(name, value)
+
+    def end_input(self):
+        pass
+
+    def start_body(self, attrs):
+        for name, value in attrs:
+            if name.lower() == 'onload':
+                self.emulate_timeout(name, value)
+
+    def end_body(self):
+        pass
 
     def html_fix(self, html):
         self.html = ''
