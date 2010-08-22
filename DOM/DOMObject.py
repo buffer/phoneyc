@@ -61,9 +61,10 @@ class DOMObject(object):
         self.__dict__[name] = val
         val = val.replace(':','_').replace('-','_')
         try:
-            if self.__dict__['__window'].__dict__['__cx'].execute('typeof ' + val + ' == "undefined"'):
-                self.__dict__['__window'].__dict__['__cx'].add_global(val, self)
+            #if self.__dict__['__window'].__dict__['__cx'].execute('typeof ' + val + ' == "undefined"'):
+            self.__dict__['__window'].__dict__['__cx'].add_global(val, self)
         except:
+            traceback.print_exc()
             pass
                 
         self.__dict__['__window'].__dict__['__fl'][-1].__setattr__(val, self)
@@ -138,6 +139,7 @@ class DOMObject(object):
     def __getattr__(self, name):
         if name == 'innerHTML': 
             return self.__parser.html[self.begin:self.end]
+        
         return unknown()
 
     def appendChild(self, dom):

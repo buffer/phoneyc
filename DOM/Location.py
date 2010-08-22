@@ -4,6 +4,8 @@ class Location(object):
     def __init__(self, document, url):
         self.__dict__['__document'] = document
         self.__dict__['href']       = url
+        self.__dict__['search']     = url
+        self.__dict__['hash']       = ''
 
     def toString(self):
         return self.href
@@ -37,8 +39,7 @@ class Location(object):
         from PageParser import PageParser
 
         #TODO: Add referrer
-        window = Window(self.__dict__['__document'].contentWindow.__dict__['__root'],
-                        self.fix_url(url))
+        window = Window(self.__dict__['__document'].contentWindow.__dict__['__root'], self.fix_url(url))
         parser = PageParser(window, window.document, window.__dict__['__html'])
         parser.close()
         return url
@@ -49,8 +50,10 @@ class Location(object):
     def fix_url(self, url):
         base = self.__dict__['__document'].URL
         base_scheme, base_netloc, base_path, base_query, base_fragment = urlparse.urlsplit(base)
-        
+         
         # fix up relative URLs to absolute URLs
+        if not isinstance(url, str):
+            return 'blank:'
         scheme, netloc, path, query, fragment = urlparse.urlsplit(url)
 
         # Convert netloc to lowercase. This is what a normal browser will do.

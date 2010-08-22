@@ -164,6 +164,7 @@ if __name__ == "__main__":
                     config.appCodeName  = str(ua[3])
                     config.appName      = str(ua[4])
                     config.appVersion   = str(ua[5])
+                    config.browserTag   = str(ua[6])
         if option[0] == '-l' or option[0] == '--logfile':
             config.logfilename = option[1]
         if option[0] == '-v' or option[0] == '--verbose':

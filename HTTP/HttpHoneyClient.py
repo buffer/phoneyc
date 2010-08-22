@@ -79,10 +79,10 @@ class HttpHoneyClient(object):
         sys.setdefaultencoding('utf-8')
         _cb = ReadCallback()
 
-        if url.find("/",8) < 0:
+        if url.find("/", 8) < 0:
            url += "/"
         url = urllib2.unquote(url)  
-        config.VERBOSE(config.VERBOSE_REFGRAPH, '[REFGRAPH] "'+str(referrer)+'"->"'+url+'"')
+        config.VERBOSE(config.VERBOSE_REFGRAPH, '[REFGRAPH] "' + str(referrer) + '"->"' + url + '"')
 
         self.__saveurl(url)
         c = pycurl.Curl()
@@ -98,20 +98,19 @@ class HttpHoneyClient(object):
         c.setopt(pycurl.TIMEOUT, 30) 
 
         if post_data and method.lower() == "post": 
-                c.setopt(pycurl.UPLOAD, 1)
-                c.setopt(pycurl.READFUNCTION, post_data)
-                c.setopt(pycurl.INFILESIZE, len(post_data))
+            c.setopt(pycurl.UPLOAD, 1)
+            c.setopt(pycurl.READFUNCTION, post_data)
+            c.setopt(pycurl.INFILESIZE, len(post_data))
 
         if referrer: 
-                try:
-                        c.setopt(pycurl.REFERER, str(referrer))
-                except Exception, e:
-                        traceback.print_exc()
+            try:
+                c.setopt(pycurl.REFERER, str(referrer))
+            except Exception, e:
+                traceback.print_exc()
  
         try:
-                c.perform()
+            c.perform()
         except Exception, e:
-                
             return ''
 
         c.close()
@@ -121,7 +120,6 @@ class HttpHoneyClient(object):
         for header in self.headers.split("\r\n"):
             if self.__check_pdf(header):
                 from PDF.PDFAnalyzer import PDFAnalyzer
-
                 p = PDFAnalyzer(res)
                 p.run()
                 return ''

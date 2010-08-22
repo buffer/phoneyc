@@ -36,6 +36,5 @@ def PrintSnapshot(SnapshotPath = None, CompressedPath = None):
 		fd = open(filename, 'wb')
 		fd.write(content)
 		fd.close()
-		store(content)
 	
 self.PrintSnapshot = PrintSnapshot
