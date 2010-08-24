@@ -10,7 +10,7 @@ from DOMObject import DOMObject
 from HTTP.HttpHoneyClient import hc
 
 class PageParser(SGMLParser):
-    def __init__(self, window, document, html):
+    def __init__(self, window, document, html, dynamic = False):
         SGMLParser.__init__(self)
         self.DOM_stack  = [document] # doc is usually document, but if the parser is called by document.write, doc is the script object
         self.current    = 0
@@ -20,6 +20,7 @@ class PageParser(SGMLParser):
         self.endearly   = False # for some cases, such as location is changed, the parser will stop early.
         self.ignoreObj  = False
         self.ignoreScript = False
+        self.dynamic    = dynamic
         self.__dict__['__window'] = window
         self.__dict__['__window'].__dict__['__parser'] = self
 
@@ -39,28 +40,6 @@ class PageParser(SGMLParser):
             value = value[6:].strip()
 
         method(value, 0)
-
-    def start_a(self, attrs):
-        self.start_input(attrs)
-
-    def end_a(self):
-        pass
-
-    def start_input(self, attrs):
-        for name, value in attrs:
-            if name.lower() == 'onclick':
-                self.emulate_timeout(name, value)
-
-    def end_input(self):
-        pass
-
-    def start_body(self, attrs):
-        for name, value in attrs:
-            if name.lower() == 'onload':
-                self.emulate_timeout(name, value)
-
-    def end_body(self):
-        pass
 
     def html_fix(self, html):
         self.html = ''
@@ -164,6 +143,17 @@ class PageParser(SGMLParser):
         
         if self.__dict__['__window'].__dict__['__sl'] == []:
             self.endearly = True
+       
+        script = self.DOM_stack[-1].__dict__['script']
+
+        if self.dynamic:
+            script = self.DOM_stack[-1].__dict__['script']
+            window = self.__dict__['__window']
+            try:
+                window.__dict__['__cx'].execute(script)
+            except:
+                pass
+            self.dynamic = False
 
     def start_iframe(self, attrs):
         self.unknown_starttag('iframe', attrs)
@@ -201,8 +191,11 @@ class PageParser(SGMLParser):
         domobj = DOMObject(self.__dict__['__window'], tag, self)
         #sometimes k in tag is not really attrname, so a transform is needed.
         #note that this is IE way. In firefox transform is done in DOMObject.setAttribute()
-        for k, v in attrs:
-            domobj.setAttribute(dataetc.attrTrans(k, tag), v)
+        for name, value in attrs:
+            domobj.setAttribute(dataetc.attrTrans(name, tag), value)
+            if dataetc.isevent(name.lower(), tag):
+                self.emulate_timeout(name, value)
+
 
         if tag == 'script':
             domobj.__dict__['script'] = ''

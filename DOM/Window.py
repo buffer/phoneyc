@@ -246,7 +246,7 @@ class Window(object):
         try:
             self.__dict__['__html'], headers = hc.get(url, referrer)
             if config.replace_nonascii:
-                self.__dict__['__html'] = re.sub('[\x80-\xff]',' ',self.__dict__['__html'])
+                self.__dict__['__html'] = re.sub('[\x80-\xff]', ' ', self.__dict__['__html'])
             for header in headers.splitlines():
                 self.__dict__['__headers'].append(header)
         except Exception, e:  

@@ -236,18 +236,21 @@ class DOM:
         parser = PageParser(self.top_window, self.top_window.document, self.top_window.__dict__['__html'])
 
         for window in self.windows:
-            parser = window.__dict__['__parser']
-        
-            self.handle_events(window, parser)
-            self.exec_js(window, parser)
+            self.parse_window(window)
 
-            for i in window.__dict__['__timeout']:
-                try:
-                    script = str(i)
-                    self.exec_script(window, script)
-                except:
-                    traceback.print_exc()
-                    pass
+    def parse_window(self, window):
+        parser = window.__dict__['__parser']
+        
+        self.handle_events(window, parser)
+        self.exec_js(window, parser)
+
+        for i in window.__dict__['__timeout']:
+            try:
+                script = str(i)
+                self.exec_script(window, script)
+            except:
+                traceback.print_exc()
+                pass
                     
     def traverse(self, dom, k):
         for i in dom.children:

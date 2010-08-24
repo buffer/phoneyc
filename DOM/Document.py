@@ -64,6 +64,7 @@ class Document(DOMObject):
         self.contentWindow        = window
         self.URL                  = window.__dict__['__url']
         self.__dict__['all']      = []
+        self.__dict__['__dynamic'] = []
         self.__init_document(window.__dict__['__headers'])
 
     def __init_lastmodified(self, header):
@@ -263,11 +264,12 @@ class Document(DOMObject):
         config.VERBOSE(config.VERBOSE_DEBUG, '[DEBUG] in Document.py Document.write(ln)...')
         config.VERBOSE(config.VERBOSE_DETAIL, str(text))
 
-        if 'parser' not in self.contentWindow.__dict__['__sl'][-1].__dict__:
-            p = PageParser(self.contentWindow, self.contentWindow.__dict__['__sl'][-1], str(text))
-            self.contentWindow.__dict__['__sl'][-1].parser = p
-        else:
-            self.contentWindow.__dict__['__sl'][-1].parser.feed(str(text))
+        self.__dict__['__dynamic'].append(text) 
+        content = ''.join(self.__dict__['__dynamic'])
+        p = PageParser(self.contentWindow,
+                       self.contentWindow.__dict__['__sl'][-1], 
+                       content,
+                       True)
 
     def writeln(self, line):
         """
@@ -280,6 +282,6 @@ class Document(DOMObject):
 
         line is string containing a line of text.
         """
-        self.write(str(line) + '\n')
+        self.write(line + "\n")
 
 

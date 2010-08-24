@@ -13,7 +13,7 @@ Options:
     -d <debuglevel> , --debug=<debuglevel>          Debug Level, 1-10.
     -r              , --retrieval-all               Retrieval all inline linking data.
     -c              , --cache-response              Cache the responses from the remote sites.
-    -u <personality>, --user-agent=<personality>    Select a user agent (see below for values, default: 1)
+    -u <personality>, --user-agent=<personality>    Select a user agent (see below for values, default: 2)
     -n              , --replace-nonascii            Replace all non-ASCII characters with spaces(0x20) in all HTML or JS contents
     -m              , --universal-activex           Enable Universal ActiveX object 
 """
@@ -49,7 +49,7 @@ def usage():
     print USAGE_TEXT
     print "User Agents:"
     for ua in config.UserAgents:
-        print "    [%d] %s" % (ua[0], ua[1], )
+        print "    [%2d] %s" % (ua[0], ua[1], )
     print ""
     sys.exit(1)
 

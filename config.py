@@ -37,12 +37,14 @@ appVersion      = "4.0 (compatible; MSIE 6.1; Windows XP; .NET CLR 1.1.4322; .NE
 browserTag      = "ie61"
 
 UserAgents = [
+    # Windows XP personalities
+
     (1,
-     "Internet Explorer 6.0 (Windows 2000)",
-     "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0; .NET CLR 1.1.4322; .NET CLR 2.0.50727)",
+     "Internet Explorer 6.0 (Windows XP)",
+     "Mozilla/4.0 (Windows;  MSIE 6.0;  Windows NT 5.1;  SV1; .NET CLR 2.0.50727)",
      "Mozilla",
      "Microsoft Internet Explorer",
-     "4.0 (compatible; MSIE 6.0; Windows NT 5.0; .NET CLR 1.1.4322; .NET CLR 2.0.50727)",
+     "4.0 (Windows;  MSIE 6.0;  Windows NT 5.1;  SV1; .NET CLR 2.0.50727)",
      "ie60",
     ),
     (2, 
@@ -67,7 +69,23 @@ UserAgents = [
      "Mozilla",
      "Microsoft Internet Explorer",
      "4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; (R1 1.5); .NET CLR 1.1.4322; .NET CLR 2.0.50727)",
-     "ie80",
+     "ie80",)
+    ,
+    (5,
+     "Internet Explorer 6.0 (Windows 2000)",
+     "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0; .NET CLR 1.1.4322; .NET CLR 2.0.50727)",
+     "Mozilla",
+     "Microsoft Internet Explorer",
+     "4.0 (compatible; MSIE 6.0; Windows NT 5.0; .NET CLR 1.1.4322; .NET CLR 2.0.50727)",
+     "ie60",
+    ),
+    (6,
+     "Internet Explorer 8.0 (Windows 2000)",
+     "Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 5.0; Trident/4.0; InfoPath.1; SV1; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729; .NET CLR 3.0.04506.30)",
+     "Mozilla",
+     "Microsoft Internet Explorer",
+     "5.0 (compatible; MSIE 8.0; Windows NT 5.0; Trident/4.0; InfoPath.1; SV1; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729; .NET CLR 3.0.04506.30)",
+     "ie60",
     ),
 ]
 
