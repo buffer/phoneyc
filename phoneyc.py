@@ -124,7 +124,7 @@ def report(alerts):
                     print "Downloading from URL: %s" % url
                     download(url)
 
-        if alert.atype == "ALERT_HEAPSPRAY":
+        if alert.atype == "ALERT_HEAPSPRAY" and alert.entropy < 1:
             print "|--------AID:" + str(alert.aid) + "----------"
             print "|ATYPE:"       + str(alert.atype)
             print "|MESSAGE:"     + str(alert.msg)
