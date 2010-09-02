@@ -79,9 +79,9 @@ class HttpHoneyClient(object):
         sys.setdefaultencoding('utf-8')
         _cb = ReadCallback()
 
+        url = urllib2.unquote(url)  
         if url.find("/", 8) < 0:
            url += "/"
-        url = urllib2.unquote(url)  
         config.VERBOSE(config.VERBOSE_REFGRAPH, '[REFGRAPH] "' + str(referrer) + '"->"' + url + '"')
 
         self.__saveurl(url)
