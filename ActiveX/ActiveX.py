@@ -1,38 +1,12 @@
-import os
 
+import os
 import config
 from binascii import hexlify
 from CLSID import clsidlist, clsnamelist
+from Attr2Fun import Attr2Fun
 
 eventlist = []
 funname   = []
-Attr2Fun={}
-Attr2Fun['StromMpsURL']='SetURL'
-Attr2Fun['StromMpsbackImage']='SetbackImage'
-Attr2Fun['StromMpstitleImage']='SettitleImage'
-Attr2Fun['YahooMessengerYwcvwrserver']='Setserver'
-Attr2Fun['PPlayerFlvPlayerUrl']='SetFlvPlayerUrl'
-Attr2Fun['PPlayerLogo']='SetLogo'
-Attr2Fun['DominoGeneral_ServerName']='SetGeneral_ServerName'
-Attr2Fun['DominoGeneral_JunctionName']='SetGeneral_JunctionName'
-Attr2Fun['DominoMail_MailDbPath']='SetMail_MailDbPath'
-Attr2Fun['QvodCtrlURL']='SetURL'
-Attr2Fun['QvodCtrlurl']='SetURL'
-Attr2Fun['RtspVaPgCtrlMP4Prefix']='SetMP4Prefix'
-Attr2Fun['FileUploaderHandwriterFilename']='SetHandwriterFilename'
-Attr2Fun['FacebookPhotoUploaderExtractIptc']='SetExtractIptc'
-Attr2Fun['FacebookPhotoUploaderExtractExif']='SetExtractExif'
-Attr2Fun['MyspaceUploaderAction']='SetAction'
-Attr2Fun['DLinkMPEGUrl']='SetUrl'
-Attr2Fun['SymantecBackupExec_DOWText0']='Set_DOWText0'
-Attr2Fun['SymantecBackupExec_DOWtext6']='Set_DOWText6'
-Attr2Fun['SymantecBackupExec_MonthText0']='Set_MonthText0'
-Attr2Fun['SymantecBackupExec_MonthText11']='Set_MonthText11'
-Attr2Fun['RediffBolDownloaderAttackurl']='Seturl'
-Attr2Fun['CreativeSoftAttackcachefolder']='Setcacherfolder'
-Attr2Fun['MicrosoftWorks7AttackWksPictureInterface']='SetWksPictureInterface'
-Attr2Fun['RealPlayerConsole']='SetConsole'
-Attr2Fun['DirectShowdata']='Setdata'
 
 class unknownObject(object):
     def __init__(self, name, parent = None):
@@ -119,10 +93,11 @@ class ActiveXObject(unknownObject):
             self.raise_warning(cls)
 	
     def __setattr__(self, name, val):
-        if Attr2Fun.has_key(self.__dict__['__name']+name) == False:
-            unknownObject.__setattr__(self, name, val)
+        key = self.__dict__['__name'] + name
+        if key in Attr2Fun.keys():
+            Attr2Fun[name](val)
         else:
-            Attr2Fun[name](val);	
+            unknownObject.__setattr__(self, name, val)
 
 def load_src(filename):
     module = "ActiveX/modules/%s" % (filename, )
