@@ -151,7 +151,7 @@ class DOM:
                 self.last_try_script(window, script, traceback.format_exc())
             except Exception, e:
                 # No luck!
-                config.VERBOSE(config.VERBOSE_DEBUG, traceback.print_exc())
+                #config.VERBOSE(config.VERBOSE_DEBUG, traceback.print_exc())
                 try:
                     if isinstance(self.__dict__['__window'].__dict__['__sl'][-1].src, str):
                         print self.__dict__['__window'].__dict__['__sl'][-1].src
@@ -249,7 +249,7 @@ class DOM:
                 script = str(i)
                 self.exec_script(window, script)
             except:
-                traceback.print_exc()
+                #traceback.print_exc()
                 pass
                     
     def traverse(self, dom, k):

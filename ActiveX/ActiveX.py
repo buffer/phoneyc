@@ -113,7 +113,7 @@ def load_src(filename):
         return script
 
 def add_alert(alert):
-    config.VERBOSE(config.VERBOSE_ALERT, '[ALERT] '+alert)
+    config.VERBOSE(config.VERBOSE_DEFAULT, '[ALERT] ' + alert)
 
 def add_event(target, evttype, *arg):
     invstack = [target]

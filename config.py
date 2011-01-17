@@ -16,6 +16,7 @@ VERBOSE_DETAIL  : Detail information, e.g. dump of the document.write/eval/SCRIP
 
 import time
 
+VERBOSE_DEFAULT  = 0
 VERBOSE_ALERT    = 1
 VERBOSE_WARNING  = 3
 VERBOSE_REFGRAPH = 4

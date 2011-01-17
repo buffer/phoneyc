@@ -64,7 +64,7 @@ class DOMObject(object):
             #if self.__dict__['__window'].__dict__['__cx'].execute('typeof ' + val + ' == "undefined"'):
             self.__dict__['__window'].__dict__['__cx'].add_global(val, self)
         except:
-            traceback.print_exc()
+            #traceback.print_exc()
             pass
                 
         self.__dict__['__window'].__dict__['__fl'][-1].__setattr__(val, self)
@@ -123,7 +123,7 @@ class DOMObject(object):
                     self.__dict__[name] = cx.execute('function(){' + p + '}')
                 except:
                     print val
-                    traceback.print_exc()
+                    #traceback.print_exc()
         
         self.__dict__[name] = val
 

@@ -1226,6 +1226,18 @@ class Window(object):
         if dataetc.isevent(type, 'window'):
             self.__dict__[type] = listener
 
+    def __window_ie60_addEventListener(self, type, listener, useCapture = False):
+        self.__window_addEventListener(type, listener, useCapture = False)
+
+    def __window_ie61_addEventListener(self, type, listener, useCapture = False):
+        self.__window_addEventListener(type, listener, useCapture = False)
+
+    def __window_ie70_addEventListener(self, type, listener, useCapture = False):
+        self.__window_addEventListener(type, listener, useCapture = False)
+
+    def __window_ie80_addEventListener(self, type, listener, useCapture = False):
+        self.__window_addEventListener(type, listener, useCapture = False)
+
     def __window_firefox_addEventListener(self, type, listener, useCapture = False):
         self.__window_addEventListener(type, listener, useCapture = False)
 
@@ -1234,9 +1246,20 @@ class Window(object):
         if type in self.__dict__ and self.__dict__[type] == listener:
             del self.__dict__[type]
 
-    def __window_firefox_removeEventListener(self, type, listener, useCapture = False):
+    def __window_ie60_removeEventListener(self, type, listener, useCapture = False):
         self.__window_removeEventListener(type, listener, useCapture = False)
 
+    def __window_ie61_removeEventListener(self, type, listener, useCapture = False):
+        self.__window_removeEventListener(type, listener, useCapture = False)
+
+    def __window_ie70_removeEventListener(self, type, listener, useCapture = False):
+        self.__window_removeEventListener(type, listener, useCapture = False)
+
+    def __window_ie80_removeEventListener(self, type, listener, useCapture = False):
+        self.__window_removeEventListener(type, listener, useCapture = False)
+
+    def __window_firefox_removeEventListener(self, type, listener, useCapture = False):
+        self.__window_removeEventListener(type, listener, useCapture = False)
 
     def __window_eval(self, script):
         config.VERBOSE(config.VERBOSE_DEBUG, "[DEBUG] Got eval, evaling...")
@@ -1249,7 +1272,7 @@ class Window(object):
             ret = self.__dict__['__cx'].execute(self.__dict__['__cx'].patch_script(script))
             return ret
         except:
-            traceback.print_exc()
+            #traceback.print_exc()
             if script:
                 self.__dict__['__lastscript'] = script
 
